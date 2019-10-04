@@ -11,8 +11,13 @@ router.post('/', function(req, res, next) {
     today = mm+'/'+dd+'/'+yyyy;
    
     let body = req.body;
-    
-
+    console.log(body.name);
+    console.log(body.email);
+    console.log(body.password);
+    console.log(body.phone);
+    console.log(body.point);
+    console.log(body.wallet);
+    console.log(today);
     models.User.create({
       name: body.name,
       email: body.email,
@@ -31,5 +36,13 @@ router.post('/', function(req, res, next) {
       console.log("데이터 추가 실패");
       
     })
+    
   });
+
+  models.sequelize.sync({force:true}).then(()=>{
+      console.log("DB connect")
+  }).catch(err=>{
+      console.log(err);
+  }) 
+  
 module.exports = router;
