@@ -1,0 +1,7 @@
+insert into 
+Users(email,password,name,phone,point,wallet,createdAt,updatedAt)
+ VALUES ("zkdlwu94@naver.com","ehd123","kimdongwan","010-9747-5200","10000","F6F2EA8F45D8A057C9566A33F99474DA2E5C6A6604D736121650E2730C6FB0A3","2019-10-01","2019-10-01")
+
+
+
+ 
