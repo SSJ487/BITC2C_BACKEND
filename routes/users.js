@@ -1,8 +1,38 @@
 var express = require('express');
 const models = require('../models');
+var bcrypt = require('bcrypt');
 var router = express.Router();
 
-router.post('/', function(req, res, next) {
+
+
+
+//crypto confirm
+router.post('/login',(req,res,next)=>{
+  console.log("asdqwd")
+  console.log(req.body.email)
+  models.User.findOne({
+    where : {
+      email:req.body.email
+    }
+  }).then( (user)=>{
+    console.log(user);
+    if(!user){
+      res.redirect('/');
+    }else{
+      bcrypt.compare(req.body.password,user.password,(err,result)=>{
+        if(result == true){
+          res.send('Login')
+        }else{
+          res.send('Incorrect password');
+        }
+      })
+    }
+  })  
+
+
+})
+
+router.post('/create', function(req, res, next) {
     var today = new Date();
     var dd =String(today.getDate()).padStart(2,'0');
     var mm =String(today.getMonth()+1).padStart(2,'0');
@@ -11,38 +41,41 @@ router.post('/', function(req, res, next) {
     today = mm+'/'+dd+'/'+yyyy;
    
     let body = req.body;
-    console.log(body.name);
-    console.log(body.email);
-    console.log(body.password);
-    console.log(body.phone);
-    console.log(body.point);
-    console.log(body.wallet);
-    console.log(today);
-    models.User.create({
-      name: body.name,
-      email: body.email,
-      password:body.password,
-      phone : body.phone,
-      point : body.point,
-      wallet : body.wallet,
-      createdAt:today,
-      updatedAt:today
+    bcrypt.genSalt(10,(err,salt)=>{
+      if(err){
+        console.log('bcrypt.genSalt() errer:',err.message)
+      }else{
+        bcrypt.hash(body.password,salt,(err,hash)=>{
+          models.User.create({
+            name: body.name,
+            email: body.email,
+            password:hash,
+            phone : body.phone,
+            point : body.point,
+            wallet : body.wallet,
+            createdAt:today,
+            updatedAt:today,
+            emailcheck:body.emailcheck
+          })
+          .then( result => {
+            console.log("데이터 추가 완료");
+            res.send(JSON.stringify(body))
+          })
+          .catch( err => {
+            console.log("데이터 추가 실패");
+            
+          })
+    
+        })
+      }
+
+
     })
-    .then( result => {
-      console.log("데이터 추가 완료");
-      res.send(JSON.stringify(body))
-    })
-    .catch( err => {
-      console.log("데이터 추가 실패");
-      
-    })
+ 
+  
     
   });
 
-  models.sequelize.sync({force:true}).then(()=>{
-      console.log("DB connect")
-  }).catch(err=>{
-      console.log(err);
-  }) 
+  
   
 module.exports = router;
