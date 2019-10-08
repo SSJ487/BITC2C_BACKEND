@@ -2,8 +2,20 @@ var express = require('express');
 const models = require('../models');
 var bcrypt = require('bcrypt');
 var router = express.Router();
+let jwt = require("jsonwebtoken");
+let secretObj = require("../config/jwt");
 
 
+router.get("/someAPI",(req,res,next)=>{
+  let token = req.cookies.logincookie;
+  console.log(token);
+  let decoded = jwt.verify(token,secretObj.secret);
+  if(decoded){
+    res.send("token confirm")
+  }else{
+    res.send("no")
+  }
+})
 
 
 //crypto confirm
@@ -19,9 +31,21 @@ router.post('/login',(req,res,next)=>{
     if(!user){
       res.redirect('/');
     }else{
+      console.log("else dlsl")
       bcrypt.compare(req.body.password,user.password,(err,result)=>{
         if(result == true){
-          res.send('Login')
+          let token = jwt.sign({
+            email:req.body.email
+          },
+          secretObj.secret,
+          {
+            expiresIn:'5m'
+          })
+
+          res.cookie("logincookie",token);
+          res.json({
+            token:token
+          })
         }else{
           res.send('Incorrect password');
         }

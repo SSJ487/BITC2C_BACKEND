@@ -41,6 +41,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       
+      
     });
     
   },
