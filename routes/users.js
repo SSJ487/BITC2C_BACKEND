@@ -4,6 +4,7 @@ var bcrypt = require('bcrypt');
 var router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
+var request = require('request');
 
 
 router.get("/someAPI",(req,res,next)=>{
@@ -65,6 +66,7 @@ router.post('/create', function(req, res, next) {
     today = mm+'/'+dd+'/'+yyyy;
    
     let body = req.body;
+    let email = body.email;
     bcrypt.genSalt(10,(err,salt)=>{
       if(err){
         console.log('bcrypt.genSalt() errer:',err.message)
@@ -83,16 +85,25 @@ router.post('/create', function(req, res, next) {
           })
           .then( result => {
             console.log("데이터 추가 완료");
-            res.send(JSON.stringify(body))
+            res.send(JSON.stringify(body));
           })
           .catch( err => {
             console.log("데이터 추가 실패");
-            
           })
     
         })
       }
 
+      request.post({
+        url: 'http://localhost:5555/register/',
+        body: {
+          email: email
+        },
+        json: true
+      }, function (err, response, body) {
+        console.log(err);
+        res.json(body);
+      });
 
     })
  

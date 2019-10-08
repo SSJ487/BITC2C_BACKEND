@@ -20,11 +20,11 @@ app.use('/login', require('./routes/login'));
 app.use('/users', require('./routes/users'));
 app.use('/register', require('./routes/register'));
 app.use('/emailcheck', require('./routes/emailcheck'));
+app.use('/tradeboards', require('./routes/tradeboards'));
 
 
 
-
-app.listen(3000, function () {
+app.listen(5555, function () {
   console.log('Example app listening on port 3000!');
 
   // require('./models').sequelize.sync({force:flase})
