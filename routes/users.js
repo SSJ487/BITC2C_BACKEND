@@ -5,7 +5,7 @@ var router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
 
-
+//To store token in cookies
 router.get("/someAPI",(req,res,next)=>{
   let token = req.cookies.logincookie;
   console.log(token);
@@ -75,11 +75,11 @@ router.post('/create', function(req, res, next) {
             email: body.email,
             password:hash,
             phone : body.phone,
-            point : body.point,
+            point : 0,
             wallet : body.wallet,
             createdAt:today,
             updatedAt:today,
-            emailcheck:body.emailcheck
+            emailcheck:0
           })
           .then( result => {
             console.log("데이터 추가 완료");
