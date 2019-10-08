@@ -3,14 +3,19 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 var sequelize = require('./models/index').sequelize;
+var cookieParser = require('cookie-parser')
+
 
 app.use(bodyParser.json());
+app.use(cookieParser())
+
 
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
+//app.use('/auth',auth);
 app.use('/login', require('./routes/login'));
 app.use('/users', require('./routes/users'));
 app.use('/register', require('./routes/register'));
