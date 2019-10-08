@@ -5,28 +5,29 @@ module.exports = {
     let datas =[]
     let methodname;
     
-    for(let i =0;i<10;i++){
+    for(let i =0;i<100;i++){
 
       if(i%2==0){
-        methodname=sell;
+        methodname="sell";
       }else{
-        methodname=buy;
+        methodname="buy";
       }
-
+      console.log(methodname);
 
       let obj={
         type:"bitcoin",
         amount:i,
         price:i*10000,
         method:methodname,
-        status:Math.random*(3-0)+0,
-        createdAt:new Date().toISOString().replace(/T/,'').replace(/\..+/,""),
-        updatedAt:new Date().toISOString().replace(/T/,'').replace(/\..+/,"")
-      
+        status:0,
+        createdAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+        updatedAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+        SellerId:i,
+        buyerId:i+1
       }
       datas.push(obj)
     }
-
+    return queryInterface.bulkInsert('TBoard',datas,{});
   },
 
   down: (queryInterface, Sequelize) => {
