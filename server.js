@@ -20,7 +20,7 @@ app.use('/login', require('./routes/login'));
 app.use('/users', require('./routes/users'));
 app.use('/register', require('./routes/register'));
 app.use('/emailcheck', require('./routes/emailcheck'));
-
+app.use('/tradeboards', require('./routes/tradeboards'));
 
 
 
