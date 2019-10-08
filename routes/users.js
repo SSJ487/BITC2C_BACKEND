@@ -4,8 +4,9 @@ var bcrypt = require('bcrypt');
 var router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
+var request = require('request');
 
-
+//To store token in cookies
 router.get("/someAPI",(req,res,next)=>{
   let token = req.cookies.logincookie;
   console.log(token);
@@ -39,7 +40,7 @@ router.post('/login',(req,res,next)=>{
           },
           secretObj.secret,
           {
-            expiresIn:'5m'
+            expiresIn:'60m'
           })
 
           res.cookie("logincookie",token);
@@ -65,6 +66,7 @@ router.post('/create', function(req, res, next) {
     today = mm+'/'+dd+'/'+yyyy;
    
     let body = req.body;
+    let email = body.email;
     bcrypt.genSalt(10,(err,salt)=>{
       if(err){
         console.log('bcrypt.genSalt() errer:',err.message)
@@ -75,26 +77,59 @@ router.post('/create', function(req, res, next) {
             email: body.email,
             password:hash,
             phone : body.phone,
-            point : body.point,
+            point : 0,
             wallet : body.wallet,
             createdAt:today,
             updatedAt:today,
-            emailcheck:body.emailcheck
+            emailcheck:0
           })
           .then( result => {
             console.log("데이터 추가 완료");
-            res.send(JSON.stringify(body))
+            res.send(JSON.stringify(body));
+
+            // 이메일 인증으로 이동
+            request.post({
+              url: 'http://localhost:5555/register/',
+              body: {
+                email: email
+              },
+              json: true
+            }, function (err, response, body) {
+              console.log(err);
+              res.json(body);
+            });
+
           })
           .catch( err => {
             console.log("데이터 추가 실패");
-            
+            var error = JSON.stringify(err);
+            error = JSON.parse(error);
+            console.log(error);
+            console.log(error.name);
+
+            if (error.name == "SequelizeUniqueConstraintError"){
+              res.send("email 중복 오류입니다.");
+              
+              // 회원가입 페이지로 이동
+              // request.post({
+              //   url: 'http://localhost:5555/register/',
+              //   body: {
+              //     email: email
+              //   },
+              //   json: true
+              // }, function (err, response, body) {
+              //   console.log(err);
+              //   res.json(body);
+              // });
+            }
           })
     
-        })
+        });
       }
 
+     
 
-    })
+    });
  
   
     

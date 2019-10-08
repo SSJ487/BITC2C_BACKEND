@@ -1,15 +1,14 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const tradeboard = sequelize.define('tradeboard', {
-    user_target: DataTypes.STRING,
+  const TBoard = sequelize.define('TBoard', {
     type: DataTypes.STRING,
     amount: DataTypes.INTEGER,
     price: DataTypes.INTEGER,
     method: DataTypes.STRING,
     status: DataTypes.INTEGER,
-    SellerId : DataTypes.STRING,
-    BuyerId : DataTypes.STRING
+    sellerId : DataTypes.STRING,
+    buyerId : DataTypes.STRING
   }, {});
   
-  return tradeboard;
+  return TBoard;
 };

@@ -18,7 +18,7 @@ router.post('/', function (req, res, next) {
         to: email,                     // 수신 메일 주소
         subject: '안녕하세요, OOOO입니다. 이메일 인증을 해주세요.',
         html: '<p>아래의 링크를 클릭해주세요 !</p>' +
-            "<a href='http://localhost:3000/emailcheck/?email=" + email + "'>인증하기</a>"
+            "<a href='http://localhost:5555/emailcheck/?email=" + email + "'>인증하기</a>"
     };
 
     transporter.sendMail(mailOptions, function (error, info) {
