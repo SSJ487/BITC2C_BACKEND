@@ -86,26 +86,50 @@ router.post('/create', function(req, res, next) {
           .then( result => {
             console.log("데이터 추가 완료");
             res.send(JSON.stringify(body));
+
+            // 이메일 인증으로 이동
+            request.post({
+              url: 'http://localhost:5555/register/',
+              body: {
+                email: email
+              },
+              json: true
+            }, function (err, response, body) {
+              console.log(err);
+              res.json(body);
+            });
+
           })
           .catch( err => {
             console.log("데이터 추가 실패");
+            var error = JSON.stringify(err);
+            error = JSON.parse(error);
+            console.log(error);
+            console.log(error.name);
+
+            if (error.name == "SequelizeUniqueConstraintError"){
+              res.send("email 중복 오류입니다.");
+              
+              // 회원가입 페이지로 이동
+              // request.post({
+              //   url: 'http://localhost:5555/register/',
+              //   body: {
+              //     email: email
+              //   },
+              //   json: true
+              // }, function (err, response, body) {
+              //   console.log(err);
+              //   res.json(body);
+              // });
+            }
           })
     
-        })
+        });
       }
 
-      request.post({
-        url: 'http://localhost:5555/register/',
-        body: {
-          email: email
-        },
-        json: true
-      }, function (err, response, body) {
-        console.log(err);
-        res.json(body);
-      });
+     
 
-    })
+    });
  
   
     
