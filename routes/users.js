@@ -4,7 +4,6 @@ var bcrypt = require('bcrypt');
 var router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
-var request = require('request');
 const nodemailer = require('nodemailer');
 const emailcreate =require('./register')
 //To store token in cookies
@@ -81,7 +80,6 @@ router.post('/create', function (req, res, next) {
           password: hash,
           phone: body.phone,
           point: 0,
-          wallet: body.wallet,
           createdAt: today,
           updatedAt: today,
           emailcheck: 0

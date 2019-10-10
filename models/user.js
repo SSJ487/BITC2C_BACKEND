@@ -10,11 +10,10 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     phone: DataTypes.STRING,
     point: DataTypes.INTEGER,
-    wallet: DataTypes.STRING,
     emailcheck: DataTypes.INTEGER
   }, {});
   User.associate = function(models) {
-    // associations can be defined here
+    User.hasMany(models.Wallet);
   };
   return User;
 };

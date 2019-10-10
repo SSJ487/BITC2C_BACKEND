@@ -20,6 +20,9 @@ app.use('/login', require('./routes/login'));
 app.use('/users', require('./routes/users'));
 app.use('/emailcheck', require('./routes/emailcheck'));
 app.use('/tradeboards', require('./routes/tradeboards'));
+app.use('/wallet', require('./routes/wallet'));
+app.use('/mypage', require('./routes/mypage'));
+
 
 app.all('/*', function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
