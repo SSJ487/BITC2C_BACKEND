@@ -1,10 +1,11 @@
-var express = require('express');
+const express = require('express');
 const models = require('../models');
-var router = express.Router();
+const router = express.Router();
 
 
 
 router.post('/create', function (req, res, next) {
+
     var today = new Date();
     var dd = String(today.getDate()).padStart(2, '0');
     var mm = String(today.getMonth() + 1).padStart(2, '0');
@@ -58,15 +59,12 @@ router.get("/index/:page", function (req, res) {
         offset:offset,
         limit:7
     }).then(result=>{
-        res.json({
+        res.json(
             result
-        });
+        );
     }).catch(err =>{
         console.log("fail")
     })
-
-  
-    
 
 })
 
