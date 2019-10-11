@@ -1,7 +1,7 @@
 
-var express = require('express');
+const express = require('express');
 const models = require('../models');
-var router = express.Router();
+const router = express.Router();
 
 router.get('/', function (req, res, next) {
     let email = req.query.email;
@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
 
 
     models.User.update({
-        auth: "1",
+        emailcheck: "1",
     }, {
         where: { email: email }
     }).then(result => {
