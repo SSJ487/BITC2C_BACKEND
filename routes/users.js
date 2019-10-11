@@ -5,7 +5,7 @@ var router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
 const nodemailer = require('nodemailer');
-const emailcreate =require('./register')
+const emailcreate =require('./emailcreate')
 //To store token in cookies
 router.get("/someAPI", (req, res, next) => {
   let token = req.cookies.logincookie;
