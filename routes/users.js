@@ -6,7 +6,6 @@ let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
 const nodemailer = require('nodemailer');
 const emailcreate =require('./register')
-const cors = require('./../src/cors')
 
 
 
