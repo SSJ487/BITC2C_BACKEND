@@ -6,10 +6,14 @@ var sequelize = require('./models/index').sequelize;
 var cookieParser = require('cookie-parser')
 
 
+app.all('/*', function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+}); 
+
 app.use(bodyParser.json());
 app.use(cookieParser())
-
-
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -24,11 +28,7 @@ app.use('/wallet', require('./routes/wallet'));
 app.use('/mypage', require('./routes/mypage'));
 
 
-app.all('/*', function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
+
 
 app.listen(5555, function () {
   console.log('Example app listening on port 5555!');

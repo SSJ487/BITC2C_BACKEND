@@ -38,10 +38,10 @@ router.post('/login', (req, res, next) => {
           let token = jwt.sign({
             email: req.body.email
           },
-            secretObj.secret,
-            {
-              expiresIn: '5m'
-            })
+          secretObj.secret,
+          {
+            expiresIn:'60m'
+          })
 
           res.cookie("logincookie", token);
           res.json({
