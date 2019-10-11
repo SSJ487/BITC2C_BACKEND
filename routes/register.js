@@ -1,9 +1,5 @@
-const express = require('express');
-const nodemailer = require('nodemailer');
-const router = express.Router();
-
-router.post('/', function (req, res, next) {
-    let email = req.body.email;
+function emailcreate(nodemailer, nodeemail) {
+    let email = nodeemail;
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -31,6 +27,6 @@ router.post('/', function (req, res, next) {
         }
     });
 
-})
+}
 
-module.exports = router;
+module.exports = emailcreate;

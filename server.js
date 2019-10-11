@@ -1,15 +1,16 @@
-var path = require('path');
+const cors = require('cors')
+const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
-var sequelize = require('./models/index').sequelize;
-var cookieParser = require('cookie-parser')
+const sequelize = require('./models/index').sequelize;
+const cookieParser = require('cookie-parser')
 
+
+app.use(cors());
 
 app.use(bodyParser.json());
 app.use(cookieParser())
-
-
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -18,15 +19,13 @@ app.engine('html', require('ejs').renderFile);
 //app.use('/auth',auth);
 app.use('/login', require('./routes/login'));
 app.use('/users', require('./routes/users'));
-app.use('/register', require('./routes/register'));
 app.use('/emailcheck', require('./routes/emailcheck'));
 app.use('/tradeboards', require('./routes/tradeboards'));
+app.use('/wallet', require('./routes/wallet'));
+app.use('/mypage', require('./routes/mypage'));
 
-app.all('/*', function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
+
+
 
 app.listen(5555, function () {
   console.log('Example app listening on port 5555!');

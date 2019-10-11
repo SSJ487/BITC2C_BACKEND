@@ -23,9 +23,6 @@ module.exports = {
       point: {
         type: Sequelize.INTEGER
       },
-      wallet: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE
@@ -37,6 +34,16 @@ module.exports = {
       emailcheck:{
         type: Sequelize.STRING
       }
+    }, {
+      classMethods: {
+        associate: function (models) {
+          // associations can be defined here
+          Users.hasOne(models.Wallets);
+        }
+      }
+    }, {
+        timestamp: false,
+        underscored: true
     });
   },
   down: (queryInterface, Sequelize) => {
