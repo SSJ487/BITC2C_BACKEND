@@ -33,7 +33,7 @@ router.post('/login', (req, res, next) => {
   }).then((user) => {
     console.log(user);
     if (!user) {
-      res.redirect('/');
+      res.status(404).send('Email is not exist');
     } else {
       console.log("else dlsl")
       bcrypt.compare(req.body.password, user.password, (err, result) => {
@@ -46,12 +46,12 @@ router.post('/login', (req, res, next) => {
             expiresIn:'60m'
           })
 
-          res.cookie("logincookie", token);
+          res.cookie("token", token);
           res.json({
             token: token
           })
         } else {
-          res.send('Incorrect password');
+          res.status(404).send('Incorrect password');
         }
       })
     }
