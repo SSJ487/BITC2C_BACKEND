@@ -14,7 +14,7 @@ router.get('/', function (req, res, next) {
         where: { email: email }
     }).then(result => {
         console.log(result, "권한 추가 완료");
-        res.redirect('../login');
+        res.redirect('http://localhost:3000/user/login');
     }).catch(err => {
         console.log("에러!!!!!!!!!!!!!!!!!!");
         console.log(err);

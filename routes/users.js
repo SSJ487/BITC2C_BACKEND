@@ -1,11 +1,15 @@
-var express = require('express');
+const express = require('express');
 const models = require('../models');
-var bcrypt = require('bcrypt');
-var router = express.Router();
+const bcrypt = require('bcrypt');
+const router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
 const nodemailer = require('nodemailer');
 const emailcreate =require('./register')
+const cors = require('./../src/cors')
+
+
+
 //To store token in cookies
 router.get("/someAPI", (req, res, next) => {
   let token = req.cookies.logincookie;
