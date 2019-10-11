@@ -27,7 +27,7 @@ module.exports = {
       }
       datas.push(obj)
     }
-    return queryInterface.bulkInsert('TBoard',datas,{});
+    return queryInterface.bulkInsert('TBoards',datas,{});
   },
 
   down: (queryInterface, Sequelize) => {
