@@ -1,14 +1,11 @@
-const express = require('express');
+var express = require('express');
 const models = require('../models');
-const bcrypt = require('bcrypt');
-const router = express.Router();
+var bcrypt = require('bcrypt');
+var router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
 const nodemailer = require('nodemailer');
-const emailcreate =require('./register')
-
-
-
+const emailcreate =require('./emailcreate')
 //To store token in cookies
 router.get("/someAPI", (req, res, next) => {
   let token = req.cookies.logincookie;
@@ -33,7 +30,7 @@ router.post('/login', (req, res, next) => {
   }).then((user) => {
     console.log(user);
     if (!user) {
-      res.status(404).send('Email is not exist');
+      res.redirect('/');
     } else {
       console.log("else dlsl")
       bcrypt.compare(req.body.password, user.password, (err, result) => {
@@ -46,12 +43,12 @@ router.post('/login', (req, res, next) => {
             expiresIn:'60m'
           })
 
-          res.cookie("token", token);
+          res.cookie("logincookie", token);
           res.json({
             token: token
           })
         } else {
-          res.status(404).send('Incorrect password');
+          res.send('Incorrect password');
         }
       })
     }
