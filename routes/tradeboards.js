@@ -37,14 +37,6 @@ router.post('/create', function (req, res, next) {
         })
 });
 
-
-
-
-
-
-
-
-
 router.get("/index/:page", function (req, res) {
 
     let pageNum = req.params.page;
@@ -52,12 +44,64 @@ router.get("/index/:page", function (req, res) {
     let offset =0;
 
     if(pageNum>1){
-        offset=7*(pageNum-1);
+        offset=10*(pageNum-1);
     }
 
     models.TBoard.findAll({
         offset:offset,
-        limit:7
+        limit:10
+    }).then(result=>{
+        res.json(
+            result
+        );
+    }).catch(err =>{
+        console.log("fail")
+    })
+
+})
+
+router.get("/sell/:page", function (req, res) {
+
+    let pageNum = req.params.page;
+    console.log(pageNum);
+    let offset =0;
+
+    if(pageNum>1){
+        offset=10*(pageNum-1);
+    }
+
+    models.TBoard.findAll({
+        where: {
+            method : "sell"
+        },
+        offset:offset,
+        limit:10
+    }).then(result=>{
+        res.json(
+            result
+        );
+    }).catch(err =>{
+        console.log("fail")
+    })
+
+})
+
+router.get("/buy/:page", function (req, res) {
+
+    let pageNum = req.params.page;
+    console.log(pageNum);
+    let offset =0;
+
+    if(pageNum>1){
+        offset=10*(pageNum-1);
+    }
+
+    models.TBoard.findAll({
+        where: {
+            method : "buy"
+        },
+        offset:offset,
+        limit:10
     }).then(result=>{
         res.json(
             result
