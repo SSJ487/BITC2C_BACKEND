@@ -97,4 +97,5 @@ storybook-static/
 .npmrc
 changed.json
 
+config.json
 config
