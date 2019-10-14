@@ -37,6 +37,17 @@ router.post('/create', function (req, res, next) {
         })
 });
 
+router.get('/detail', (req, res) => {
+    models.TBoard.findOne({
+        where: {
+            id: req.query.id
+        }
+    }).then((result) => {
+        res.json(result);
+
+    })
+})
+
 router.get("/index/:page", function (req, res) {
 
     let pageNum = req.params.page;
