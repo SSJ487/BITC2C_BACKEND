@@ -58,9 +58,9 @@ router.get("/index/:page", function (req, res) {
         offset:offset,
         limit:7
     }).then(result=>{
-        res.json({
+        res.json(
             result
-        });
+        );
     }).catch(err =>{
         console.log("fail")
     })
