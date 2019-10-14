@@ -44,23 +44,21 @@ router.get('/tboard', function (req, res) {
     })
 });
 
-
 // 유저의 자산 코인별로 가져옴
-router.get('/coin', function (req, res) {
-    models.User.find({ 
-        attributes: ['useremail', 'username'], 
-        where: { 
-            id: 1, 
-            useremail: "admin@admin.com" 
-        } 
-    }).then((board) => {
-        console.log(board);
-        if (!board) {
+router.get('/wallet', function (req, res) {
+    models.Wallet.findAll({
+        where: {
+            UserId: req.body.userId
+        }
+    }).then((wallet) => {
+        console.log(wallet);
+        if (!wallet) {
             res.redirect('/');
         } else {
-            res.json(board);
+            res.json(wallet);
         }
     })
 });
+
 
 module.exports = router;
