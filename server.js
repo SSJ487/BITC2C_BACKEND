@@ -18,13 +18,11 @@ app.use(cookieParser())
 
 //app.use('/auth',auth);
 app.use('/users', require('./routes/users'));
-app.use('/emailcheck', require('./routes/emailcheck'));
-app.use('/tradeboards', require('./routes/tradeboards'));
+app.use('/trade', require('./routes/trade'));
 app.use('/wallet', require('./routes/wallet'));
 app.use('/mypage', require('./routes/mypage'));
-app.use('/changepwd', require('./routes/changepwd'));
-app.use('/forgotpwd', require('./routes/forgotpwd'));
-app.use('/admin', require('./routes/admin'));
+app.use('/pwd', require('./routes/pwd'));
+
 
 
 app.listen(5555, function () {
