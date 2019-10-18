@@ -2,7 +2,7 @@ const express = require('express');
 const models = require('../models');
 const router = express.Router();
 
-router.put('/tradeex',function(req,res){
+router.put('/exchange',function(req,res){
     models.TBoard.update({
         status: 1,
 
