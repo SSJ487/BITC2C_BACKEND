@@ -2,6 +2,20 @@ const express = require('express');
 const models = require('../models');
 const router = express.Router();
 
+router.put('/tradeex',function(req,res){
+    models.TBoard.update({
+        status: 1,
+
+    },{
+        where: {
+            id: res.body.id
+        }
+    }).then((user) => {
+        console.log(user);
+        
+    })
+
+})
 
 
 router.post('/create', function (req, res, next) {
@@ -36,6 +50,18 @@ router.post('/create', function (req, res, next) {
 
         })
 });
+
+router.get('/detail', (req, res) => {
+    console.log("asdas")
+    models.TBoard.findOne({
+        where: {
+            id: req.query.id
+        }
+    }).then((result) => {
+        res.json(result);
+
+    })
+})
 
 router.get("/index/:page", function (req, res) {
 

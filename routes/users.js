@@ -5,7 +5,6 @@ var router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
 const nodemailer = require('nodemailer');
-const emailcreate =require('./emailcreate')
 //To store token in cookies
 router.get("/someAPI", (req, res, next) => {
   let token = req.cookies.logincookie;
@@ -87,7 +86,7 @@ router.post('/create', function (req, res, next) {
           .then(result => {
             console.log("데이터 추가 완료");
             res.send(JSON.stringify(body));
-            emailcreate(nodemailer,email);
+            emailcreate(email);
           })
           .catch(err => {
             console.log("데이터 추가 실패");
@@ -123,5 +122,35 @@ router.post('/create', function (req, res, next) {
   // res.redirect('/');
 })
 
+function emailcreate(nodeemail) {
+  let email = nodeemail;
+
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'a01026879718@gmail.com',  // gmail 계정 아이디를 입력
+      pass: 'a01026879718'          // gmail 계정의 비밀번호를 입력
+    }
+  });
+
+  let mailOptions = {
+    from: 'a01026879718@gmail.com',    // 발송 메일 주소 (위에서 작성한 gmail 계정 아이디)
+    to: email,                     // 수신 메일 주소
+    subject: '안녕하세요, OOOO입니다. 이메일 인증을 해주세요.',
+    html: '<p>아래의 링크를 클릭해주세요 !</p>' +
+      "<a href='http://localhost:5555/emailcheck/?email=" + email + "'>인증하기</a>"
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    }
+    else {
+      console.log('Email sent: ' + info.response);
+      res.send(info.response);
+    }
+  });
+
+}
 
 module.exports = router;
