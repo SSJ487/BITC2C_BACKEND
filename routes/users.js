@@ -19,8 +19,7 @@ router.get("/someAPI", (req, res, next) => {
 
 
 //crypto confirm
-router.post('/login/', (req, res, next) => {
-  console.log("asdqwd")
+router.post('/login', (req, res, next) => {
   console.log(req.body.email)
   models.User.findOne({
     where: {
