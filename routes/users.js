@@ -23,7 +23,7 @@ router.get("/someAPI", (req, res, next) => {
 
 
 //crypto confirm
-router.post('/login', (req, res, next) => {
+router.post('/login/', (req, res, next) => {
   console.log("asdqwd")
   console.log(req.body.email)
   models.User.findOne({
@@ -52,7 +52,7 @@ router.post('/login', (req, res, next) => {
             token: token
           })
         } else {
-          res.send('Incorrect password');
+          res.redirect(404, 'Incorrect password');
         }
       })
     }
