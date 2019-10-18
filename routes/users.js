@@ -7,11 +7,15 @@ let secretObj = require("../config/jwt");
 const nodemailer = require('nodemailer');
 //To store token in cookies
 router.get("/someAPI", (req, res, next) => {
-  let token = req.cookies.logincookie;
-  console.log(token);
+  console.log("asd111")
+
+  const token = req.param('token');
+  console.log(token)
+
   let decoded = jwt.verify(token, secretObj.secret);
+ // console.log(decoded);
   if (decoded) {
-    res.send("token confirm")
+    res.send(decoded)
   } else {
     res.send("no")
   }
@@ -34,6 +38,7 @@ router.post('/login', (req, res, next) => {
       bcrypt.compare(req.body.password, user.password, (err, result) => {
         if (result == true) {
           let token = jwt.sign({
+            id : user.id,
             email: req.body.email
           },
           secretObj.secret,
