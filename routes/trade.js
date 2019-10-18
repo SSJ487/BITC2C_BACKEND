@@ -1,17 +1,44 @@
 const express = require('express');
 const models = require('../models');
 const router = express.Router();
+let jwt = require("jsonwebtoken");
+let secretObj = require("../config/jwt");
 
-router.put('/exchange',function(req,res){
+
+//디테일 화면 진행상태 변경 POST
+router.post('/exchange',function(req,res){
+    const token = req.body.token;
+    const boardId = req.body.id;
+    //const boardId= req.param('boardId');
+    console.log(token);
+    //console.log(boardId);
+    let decoded = jwt.verify(token, secretObj.secret);
+    // console.log(decoded);
+    if (decoded) {
+        //board ID값을 이용하여 front에서 type에 따라 렌더화면 변경
+        models.TBoard.findOne({
+            where: {
+                id: boardId
+            }
+        }).then((user) => {
+           console.log('data',user.method);
+            res.send(user.method)
+        })
+
+        
+    } else {
+        res.send("no")
+    }
+
     models.TBoard.update({
         status: 1,
 
     },{
         where: {
-            id: res.body.id
+            id: boardId
         }
     }).then((user) => {
-        console.log(user);
+        console.log('userID',user);
         
     })
 
