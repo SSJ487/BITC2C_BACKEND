@@ -18,7 +18,6 @@ app.use(cookieParser())
 
 //app.use('/auth',auth);
 app.use('/users', require('./routes/users'));
-app.use('/emailcheck', require('./routes/emailcheck'));
 app.use('/tradeboards', require('./routes/tradeboards'));
 app.use('/wallet', require('./routes/wallet'));
 app.use('/mypage', require('./routes/mypage'));
