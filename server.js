@@ -24,7 +24,7 @@ app.use('/wallet', require('./routes/wallet'));
 app.use('/mypage', require('./routes/mypage'));
 app.use('/changepwd', require('./routes/changepwd'));
 app.use('/forgotpwd', require('./routes/forgotpwd'));
-
+app.use('/admin', require('./routes/admin'));
 
 
 app.listen(5555, function () {

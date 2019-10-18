@@ -124,4 +124,24 @@ router.get("/buy/:page", function (req, res) {
 })
 
 
+// 거래 게시글 삭제
+router.post('/delete', function (req, res, next) {
+
+    models.TBoard.destroy({
+        where: {
+            
+        }
+    })
+        .then(result => {
+            console.log("데이터 추가 완료");
+            res.send(JSON.stringify(result));
+        })
+        .catch(err => {
+            console.log("데이터 추가 실패");
+
+        })
+});
+
+
+
 module.exports = router;

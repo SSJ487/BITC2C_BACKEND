@@ -80,7 +80,7 @@ function savetmppw(email) {
             to: email,                     // 수신 메일 주소
             subject: '안녕하세요, OOOO입니다. 이메일 인증을 해주세요.',
             html: '<p>임시비밀번호 발급: ' + tmppwd + '</p>' +
-                '<p>아래의 링크를 클릭해주세요 !</p>' +
+                '<p>비밀번호를 변경해 주세요!</p>' +
                 "<a href='http://localhost:5555/emailcheck/?email=" + email + "'>인증하기</a>"
         };
 
