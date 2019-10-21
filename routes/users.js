@@ -5,21 +5,32 @@ var router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
 const nodemailer = require('nodemailer');
+
+
 //To store token in cookies
-router.get("/someAPI", (req, res, next) => {
-  console.log("asd111")
-
-  const token = req.param('token');
-  console.log(token)
-
+router.get('/getuser',function(req,res){
+  const token = req.param('token')
+  
+  //const boardId= req.param('boardId');
+  console.log('getuser router1')
+  console.log(token);
+  
+  //console.log(boardId);
   let decoded = jwt.verify(token, secretObj.secret);
- // console.log(decoded);
+  // console.log(decoded);
   if (decoded) {
-    res.send(decoded)
+      //board ID값을 이용하여 front에서 type에 따라 렌더화면 변경
+     res.send(decoded)
+
+      
   } else {
-    res.send("no")
+      res.send("no")
   }
+
+ 
+
 })
+
 
 
 //crypto confirm
