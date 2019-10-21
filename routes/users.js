@@ -26,12 +26,24 @@ router.get('/getuser',function(req,res){
   } else {
       res.send("no")
   }
-
- 
-
 })
 
+//이메일 확인 요청 링크 클릭시 오는 라우터
+router.get('/emailcheck', function (req, res) {
+  let email = req.query.email;
+  console.log(email);
 
+  models.User.update({
+    emailcheck: "1",
+  },{
+    where: {email: email}
+  }).then(result => {
+    console.log(result, "  권한 추가 완료");
+    res.redirect("http://localhost:3000/user/login")
+  }).catch(err => {
+    console.log(err, "   에러!!!");
+  });
+})
 
 //crypto confirm
 router.post('/login', (req, res, next) => {
@@ -153,7 +165,7 @@ function emailcreate(nodeemail) {
     to: email,                     // 수신 메일 주소
     subject: '안녕하세요, OOOO입니다. 이메일 인증을 해주세요.',
     html: '<p>아래의 링크를 클릭해주세요 !</p>' +
-      "<a href='http://localhost:5555/emailcheck/?email=" + email + "'>인증하기</a>"
+      "<a href='http://localhost:5555/users/emailcheck/?email=" + email + "'>인증하기</a>"
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
