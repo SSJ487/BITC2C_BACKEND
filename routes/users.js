@@ -17,7 +17,7 @@ router.get('/getuser',function(req,res){
   
   //console.log(boardId);
   let decoded = jwt.verify(token, secretObj.secret);
-  // console.log(decoded);
+  console.log(decoded);
   if (decoded) {
       //board ID값을 이용하여 front에서 type에 따라 렌더화면 변경
      res.send(decoded)
