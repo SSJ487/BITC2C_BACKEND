@@ -12,14 +12,16 @@ module.exports = {
       }else{
         methodname="buy";
       }
-      console.log(methodname);
-
+      
+      const priceRandom = parseInt(Math.random() * (10000000-10000)+10000)
+      const statusRandom = parseInt(Math.random() * (3-0)+0 )
+      
       let obj={
         type:"bitcoin",
         amount:i,
-        price:i*10000,
+        price:priceRandom,
         method:methodname,
-        status:0,
+        status:statusRandom,
         createdAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
         updatedAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
         SellerId:i,
@@ -31,12 +33,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    /*
-      Add reverting commands here.
-      Return a promise to correctly handle asynchronicity.
-
-      Example:
-      return queryInterface.bulkDelete('People', null, {});
-    */
+   return queryInterface.bulkDelete('TBoards',null,{});
   }
 };
