@@ -24,7 +24,7 @@ router.get('/getuser',function(req,res){
 
       
   } else {
-      res.send("no")
+      res.send("error")
   }
 })
 
