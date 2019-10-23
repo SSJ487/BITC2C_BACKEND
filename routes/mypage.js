@@ -66,7 +66,7 @@ router.get('/wallet', function (req, res) {
         }
     }).catch(err => {
         console.log(err, "지갑에러");
-        res.send({data: "지갑없음"});
+        res.json({data: {type:'', address: '', amount:''}});
     });
 });
 
