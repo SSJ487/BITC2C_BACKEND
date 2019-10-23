@@ -44,7 +44,7 @@ router.get('/tboard', function (req, res) {
     }).then((board) => {
         console.log(board);
         if (!board) {
-            res.redirect('/');
+            res.status(404).send('거래 정보가 없습니다.');
         } else {
             res.json(board);
         }
@@ -60,7 +60,7 @@ router.get('/wallet', function (req, res) {
     }).then((wallet) => {
         console.log("wallet: ",wallet);
         if (!wallet) {
-            res.redirect('/');
+            res.status(404)('유저 지갑이 없습니다.');
         } else {
             res.json(wallet);
         }

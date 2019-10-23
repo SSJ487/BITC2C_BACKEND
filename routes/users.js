@@ -60,21 +60,20 @@ router.post('/login', (req, res, next) => {
       console.log("else dlsl")
       bcrypt.compare(req.body.password, user.password, (err, result) => {
         if (result == true) {
-          let token = jwt.sign({
+          let authToken = jwt.sign({
             id : user.id,
             email: req.body.email
           },
           secretObj.secret,
           {
-            expiresIn:'60m'
+            expiresIn:'10s'
           })
-
-          res.cookie("logincookie", token);
+          res.cookie("logincookie", authToken);
           res.json({
-            token: token
+            token: authToken
           })
         } else {
-          res.redirect(404, 'Incorrect password');
+          res.status(404).send('Incorrect password');
         }
       })
     }
@@ -119,10 +118,11 @@ router.post('/create', function (req, res, next) {
             error = JSON.parse(error);
             console.log(error);
             console.log(error.name);
-
             if (error.name == "SequelizeUniqueConstraintError") {
-              res.send("email 중복 오류입니다.");
-
+              res.status(404).send("이미 가입된 이메일입니다.");
+            } else {
+              res.status(404).send(error);
+            }
               // 회원가입 페이지로 이동
               // request.post({
               //   url: 'http://localhost:5555/register/',
@@ -134,7 +134,7 @@ router.post('/create', function (req, res, next) {
               //   console.log(err);
               //   res.json(body);
               // });
-            }
+
           })
 
       });

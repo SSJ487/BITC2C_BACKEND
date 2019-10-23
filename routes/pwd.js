@@ -26,7 +26,7 @@ router.post('/change', (req, res, next) => {
                     res.send(updatepw(body.email, body.newpassword));
                 }
                 else {
-                    res.send("비밀번호가 틀렸습니다.");
+                    res.status(404).send("비밀번호가 틀렸습니다.")
                 }
             })
         }
@@ -85,7 +85,7 @@ router.post('/forgot', (req, res, next) => {
     }).then((user) => {
         console.log(user);
         if (!user) {
-            res.send("입력정보 오류!!!!");
+            res.status(404).send("입력정보 오류!!!!");
         } else {
             savetmppw(body.email);
         }
