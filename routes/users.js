@@ -24,7 +24,7 @@ router.get('/getuser',function(req,res){
 
       
   } else {
-      res.send("no")
+      res.send("error")
   }
 })
 
@@ -50,7 +50,8 @@ router.post('/login', (req, res, next) => {
   console.log(req.body.email)
   models.User.findOne({
     where: {
-      email: req.body.email
+      email: req.body.email,
+      emailcheck: '1'
     }
   }).then((user) => {
     console.log(user);
