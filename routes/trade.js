@@ -5,6 +5,24 @@ let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
 
 
+router.get("/orderling",(req,res)=>{
+    const method = req.param('method')
+    let order = "DESC";
+    if(!req.param('order')){
+        order="ASC";
+    }
+
+    models.TBoard.findAll({
+        order:[[method,order]]
+    }).then(result =>{
+        res.json(result);
+    }).catch(err=>{
+        console.log(err);
+    })
+})
+
+
+
 //디테일 화면 진행상태 변경 POST
 router.post('/exchange',function(req,res){
     const token = req.body.token;
@@ -92,6 +110,16 @@ router.get('/detail', (req, res) => {
 
 router.get("/index/:page", function (req, res) {
 
+    const method = req.param('method')
+    let order = "DESC";
+
+    let level = req.param('order');
+
+    if(level==="false"){
+        
+        order="ASC";
+    }
+   
     let pageNum = req.params.page;
     console.log(pageNum);
     let offset =0;
@@ -100,20 +128,42 @@ router.get("/index/:page", function (req, res) {
         offset=10*(pageNum-1);
     }
 
-    models.TBoard.findAll({
-        offset:offset,
-        limit:10
-    }).then(result=>{
-        res.json(
-            result
-        );
-    }).catch(err =>{
-        console.log("fail")
-    })
+    if(method){
+        models.TBoard.findAll({
+            offset:offset,
+            limit:10,
+            order:[[method,order]]
+        }).then(result =>{
+            res.json(result);
+        }).catch(err=>{
+            console.log(err);
+        })
+    }else {
+        models.TBoard.findAll({
+            offset:offset,
+            limit:10,
+        }).then(result=>{
+            res.json(
+                result
+            );
+        }).catch(err =>{
+            console.log("fail")
+        })
+    }
+    
 
 })
 
 router.get("/sell/:page", function (req, res) {
+    const method = req.param('method')
+    let order = "DESC";
+
+    let level = req.param('order');
+
+    if(level==="false"){
+        
+        order="ASC";
+    }
 
     let pageNum = req.params.page;
     console.log(pageNum);
@@ -123,24 +173,50 @@ router.get("/sell/:page", function (req, res) {
         offset=10*(pageNum-1);
     }
 
-    models.TBoard.findAll({
-        where: {
-            method : "sell"
-        },
-        offset:offset,
-        limit:10
-    }).then(result=>{
-        res.json(
-            result
-        );
-    }).catch(err =>{
-        console.log("fail")
-    })
+    if(method){
+        models.TBoard.findAll({
+            offset:offset,
+            limit:10,
+            where:{
+                method : "sell"
+            },
+            order:[[method,order]]
+        }).then(result =>{
+            res.json(result);
+        }).catch(err=>{
+            console.log(err);
+        })
+    }else{
+        models.TBoard.findAll({
+            where: {
+                method : "sell"
+            },
+            offset:offset,
+            limit:10
+        }).then(result=>{
+            res.json(
+                result
+            );
+        }).catch(err =>{
+            console.log("fail")
+        })
+    }
+    
 
 })
 
 router.get("/buy/:page", function (req, res) {
 
+    const method = req.param('method')
+    let order = "DESC";
+
+    let level = req.param('order');
+
+    if(level==="false"){
+        
+        order="ASC";
+    }
+
     let pageNum = req.params.page;
     console.log(pageNum);
     let offset =0;
@@ -149,19 +225,36 @@ router.get("/buy/:page", function (req, res) {
         offset=10*(pageNum-1);
     }
 
-    models.TBoard.findAll({
-        where: {
-            method : "buy"
-        },
-        offset:offset,
-        limit:10
-    }).then(result=>{
-        res.json(
-            result
-        );
-    }).catch(err =>{
-        console.log("fail")
-    })
+    if(method){
+        models.TBoard.findAll({
+            offset:offset,
+            limit:10,
+            where:{
+                method : "buy"
+            },
+            order:[[method,order]]
+        }).then(result =>{
+            res.json(result);
+        }).catch(err=>{
+            console.log(err);
+        })
+    }else{
+        models.TBoard.findAll({
+            where: {
+                method : "buy"
+            },
+            offset:offset,
+            limit:10
+        }).then(result=>{
+            res.json(
+                result
+            );
+        }).catch(err =>{
+            console.log("fail")
+        })
+    }
+
+   
 
 })
 

@@ -9,14 +9,21 @@ router.get('/user', function (req, res) {
 
     models.User.findOne({
         where: {
-            email: req.body.email
+            id: req.param('id')
         }
     }).then((user) => {
-        console.log(user);
+        console.log("user: ",user);
         if (!user) {
             res.redirect('/');
         } else {
-            res.json(user);
+            res.json({
+                id: user.dataValues.id,
+                name: user.dataValues.name,
+                email: user.dataValues.email,
+                phone: user.dataValues.phone,
+                point: user.dataValues.point,
+                createdAt: user.dataValues.createdAt
+            });
         }
     })
 });
@@ -27,10 +34,10 @@ router.get('/tboard', function (req, res) {
         where: {
             [Op.or]: [
                 {
-                    sellerId: req.body.userId
+                    sellerId: req.param('id')
                 },
                 {
-                    buyerId: req.body.userId
+                    buyerId: req.param('id')
                 }
             ]
         }
@@ -48,10 +55,10 @@ router.get('/tboard', function (req, res) {
 router.get('/wallet', function (req, res) {
     models.Wallet.findAll({
         where: {
-            UserId: req.body.userId
+            UserId: req.param('id')
         }
     }).then((wallet) => {
-        console.log(wallet);
+        console.log("wallet: ",wallet);
         if (!wallet) {
             res.redirect('/');
         } else {
