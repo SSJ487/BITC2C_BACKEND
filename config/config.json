@@ -2,7 +2,7 @@
   "local": {
     "username": "kim",
     "password": "kim",
-    "database": "test",
+    "database": "kim",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
@@ -21,9 +21,9 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "4444",
-    "database": "scv",
+    "username": "kim",
+    "password": "kim",
+    "database": "test",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }

@@ -16,15 +16,14 @@ router.get('/getuser',function(req,res){
   console.log(token);
   
   //console.log(boardId);
-  let decoded = jwt.verify(token, secretObj.secret);
-  console.log(decoded);
-  if (decoded) {
-     
-     res.send(decoded)
-
-      
-  } else {
-      res.send("error")
+  try{
+    let decoded = jwt.verify(token, secretObj.secret)
+    if (decoded) {
+      res.send(decoded)
+    }
+    console.log(decoded);
+  } catch (e) {
+    res.status(401).send(e)
   }
 })
 
@@ -38,10 +37,10 @@ router.get('/emailcheck', function (req, res) {
   },{
     where: {email: email}
   }).then(result => {
-    console.log(result, "  권한 추가 완료");
+    console.log(result, "권한 추가 완료");
     res.redirect("http://localhost:3000/user/login")
   }).catch(err => {
-    console.log(err, "   에러!!!");
+    console.log(err, "에러!!!");
   });
 })
 
@@ -67,7 +66,7 @@ router.post('/login', (req, res, next) => {
           },
           secretObj.secret,
           {
-            expiresIn:'10s'
+            expiresIn:'60m'
           })
           res.cookie("logincookie", authToken);
           res.json({

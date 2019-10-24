@@ -6,7 +6,6 @@ const Op = sequelize.Op;
 
 // 유저 정보만 가져옴
 router.get('/user', function (req, res) {
-
     models.User.findOne({
         where: {
             id: req.param('id')
@@ -14,7 +13,7 @@ router.get('/user', function (req, res) {
     }).then((user) => {
         console.log("user: ",user);
         if (!user) {
-            res.redirect('/');
+            res.status(404).send('User is not exist');
         } else {
             res.json({
                 id: user.dataValues.id,
@@ -25,6 +24,8 @@ router.get('/user', function (req, res) {
                 createdAt: user.dataValues.createdAt
             });
         }
+    }).catch((e) =>{
+        res.status(401).send(e)
     })
 });
 
