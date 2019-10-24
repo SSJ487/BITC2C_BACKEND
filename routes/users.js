@@ -16,23 +16,15 @@ router.get('/getuser',function(req,res){
   console.log(token);
   
   //console.log(boardId);
-<<<<<<< HEAD
+  
   let decoded = jwt.verify(token, secretObj.secret);
   console.log(decoded);
   if (decoded) {
+     
      res.send(decoded)
+
   } else {
       res.send("error")
-=======
-  try{
-    let decoded = jwt.verify(token, secretObj.secret)
-    if (decoded) {
-      res.send(decoded)
-    }
-    console.log(decoded);
-  } catch (e) {
-    res.status(401).send(e)
->>>>>>> master
   }
 })
 
@@ -46,10 +38,10 @@ router.get('/emailcheck', function (req, res) {
   },{
     where: {email: email}
   }).then(result => {
-    console.log(result, "권한 추가 완료");
+    console.log(result, "  권한 추가 완료");
     res.redirect("http://localhost:3000/user/login")
   }).catch(err => {
-    console.log(err, "에러!!!");
+    console.log(err, "   에러!!!");
   });
 })
 
@@ -58,8 +50,7 @@ router.post('/login', (req, res, next) => {
   console.log(req.body.email)
   models.User.findOne({
     where: {
-      email: req.body.email,
-      emailcheck: '1'
+      email: req.body.email
     }
   }).then((user) => {
     console.log(user);
@@ -69,24 +60,27 @@ router.post('/login', (req, res, next) => {
       console.log("else dlsl")
       bcrypt.compare(req.body.password, user.password, (err, result) => {
         if (result == true) {
-          let authToken = jwt.sign({
+          let token = jwt.sign({
             id : user.id,
             email: req.body.email
           },
           secretObj.secret,
           {
-            expiresIn:'10m'
+            expiresIn:'60m'
           })
-          res.cookie("logincookie", authToken);
+
+          res.cookie("logincookie", token);
           res.json({
-            token: authToken
+            token: token
           })
         } else {
-          res.status(404).send('Incorrect password');
+          res.redirect(404, 'Incorrect password');
         }
       })
     }
   })
+
+
 })
 
 
@@ -95,6 +89,7 @@ router.post('/create', function (req, res, next) {
   var dd = String(today.getDate()).padStart(2, '0');
   var mm = String(today.getMonth() + 1).padStart(2, '0');
   var yyyy = today.getFullYear();
+
 
   today = mm + '/' + dd + '/' + yyyy;
 
@@ -127,11 +122,10 @@ router.post('/create', function (req, res, next) {
             error = JSON.parse(error);
             console.log(error);
             console.log(error.name);
+
             if (error.name == "SequelizeUniqueConstraintError") {
-              res.status(404).send("이미 가입된 이메일입니다.");
-            } else {
-              res.status(404).send(error);
-            }
+              res.send("email 중복 오류입니다.");
+
               // 회원가입 페이지로 이동
               // request.post({
               //   url: 'http://localhost:5555/register/',
@@ -143,7 +137,7 @@ router.post('/create', function (req, res, next) {
               //   console.log(err);
               //   res.json(body);
               // });
-
+            }
           })
 
       });
