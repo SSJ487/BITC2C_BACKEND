@@ -19,10 +19,7 @@ router.get('/getuser',function(req,res){
   let decoded = jwt.verify(token, secretObj.secret);
   console.log(decoded);
   if (decoded) {
-     
      res.send(decoded)
-
-      
   } else {
       res.send("error")
   }
@@ -67,7 +64,7 @@ router.post('/login', (req, res, next) => {
           },
           secretObj.secret,
           {
-            expiresIn:'60m'
+            expiresIn:'10m'
           })
 
           res.cookie("logincookie", token);
