@@ -16,6 +16,7 @@ router.get('/getuser',function(req,res){
   console.log(token);
   
   //console.log(boardId);
+<<<<<<< HEAD
   try{
     let decoded = jwt.verify(token, secretObj.secret)
     if (decoded) {
@@ -24,6 +25,14 @@ router.get('/getuser',function(req,res){
     console.log(decoded);
   } catch (e) {
     res.status(401).send(e)
+=======
+  let decoded = jwt.verify(token, secretObj.secret);
+  console.log(decoded);
+  if (decoded) {
+     res.send(decoded)
+  } else {
+      res.send("error")
+>>>>>>> s
   }
 })
 
@@ -66,7 +75,7 @@ router.post('/login', (req, res, next) => {
           },
           secretObj.secret,
           {
-            expiresIn:'60m'
+            expiresIn:'10m'
           })
           res.cookie("logincookie", authToken);
           res.json({
