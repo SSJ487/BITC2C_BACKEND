@@ -111,9 +111,11 @@ router.get('/detail', (req, res) => {
 router.get("/index/:page", function (req, res) {
 
     const method = req.param('method')
-    let order = "DESC";
-
+    const cointype =req.param('type');
     let level = req.param('order');
+
+    let order = "DESC";
+    
 
     if(level==="false"){
         
@@ -132,7 +134,10 @@ router.get("/index/:page", function (req, res) {
         models.TBoard.findAll({
             offset:offset,
             limit:10,
-            order:[[method,order]]
+            order:[[method,order]],
+            where:{
+                type:cointype
+            }
         }).then(result =>{
             res.json(result);
         }).catch(err=>{
@@ -142,6 +147,9 @@ router.get("/index/:page", function (req, res) {
         models.TBoard.findAll({
             offset:offset,
             limit:10,
+            where:{
+                type:cointype
+            }
         }).then(result=>{
             res.json(
                 result
@@ -156,6 +164,7 @@ router.get("/index/:page", function (req, res) {
 
 router.get("/sell/:page", function (req, res) {
     const method = req.param('method')
+    const cointype =req.param('type');
     let order = "DESC";
 
     let level = req.param('order');
@@ -178,7 +187,8 @@ router.get("/sell/:page", function (req, res) {
             offset:offset,
             limit:10,
             where:{
-                method : "sell"
+                method : "sell",
+                type:cointype
             },
             order:[[method,order]]
         }).then(result =>{
@@ -189,7 +199,8 @@ router.get("/sell/:page", function (req, res) {
     }else{
         models.TBoard.findAll({
             where: {
-                method : "sell"
+                method : "sell",
+                type:cointype
             },
             offset:offset,
             limit:10
@@ -207,11 +218,13 @@ router.get("/sell/:page", function (req, res) {
 
 router.get("/buy/:page", function (req, res) {
 
-    const method = req.param('method')
-    let order = "DESC";
-
+    const method = req.param('method');
+    const cointype =req.param('type');
     let level = req.param('order');
 
+    let order = "DESC";
+
+    
     if(level==="false"){
         
         order="ASC";
@@ -230,7 +243,8 @@ router.get("/buy/:page", function (req, res) {
             offset:offset,
             limit:10,
             where:{
-                method : "buy"
+                method : "buy",
+                type:cointype
             },
             order:[[method,order]]
         }).then(result =>{
@@ -241,7 +255,8 @@ router.get("/buy/:page", function (req, res) {
     }else{
         models.TBoard.findAll({
             where: {
-                method : "buy"
+                method : "buy",
+                type:cointype
             },
             offset:offset,
             limit:10
