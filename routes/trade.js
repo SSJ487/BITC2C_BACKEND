@@ -25,7 +25,7 @@ router.get("/orderling",(req,res)=>{
 
 //디테일 화면 진행상태 변경 POST
 router.post('/exchange',function(req,res){
-    const token = req.body.token;
+    const token = req.headers.authorization.split(' ')[1]
     const boardId = req.body.id;
     //const boardId= req.param('boardId');
     console.log(token);
@@ -92,9 +92,8 @@ router.post('/create', function (req, res, next) {
         })
         .catch(err => {
             console.log("데이터 추가 실패");
-
         })
-});
+})
 
 router.get('/detail', (req, res) => {
     console.log("asdas")
@@ -104,7 +103,8 @@ router.get('/detail', (req, res) => {
         }
     }).then((result) => {
         res.json(result);
-
+    }).catch((e) =>{
+        console.log(e)
     })
 })
 
