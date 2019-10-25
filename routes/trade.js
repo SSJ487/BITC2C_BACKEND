@@ -112,12 +112,10 @@ router.get("/index/:page", function (req, res) {
     const sellcoin = req.param('sellcoin')
     const buycoin = req.param('buycoin')
 
-    console.log('sellcoin = ',sellcoin);
-    console.log('buycoin = ',buycoin);
-    const method = req.param('method')
-    const cointype =req.param('type');
+    let method = req.param('method')
     let level = req.param('order');
-
+    console.log('method =',method);
+    console.log('level=',level)
     let order = "DESC";
     
 
@@ -133,15 +131,14 @@ router.get("/index/:page", function (req, res) {
     if(pageNum>1){
         offset=10*(pageNum-1);
     }
-
-    
+    if(method===undefined){
         models.TBoard.findAll({
             offset:offset,
             limit:10,
             where:{
                 selltoken:sellcoin,
                 buytoken:buycoin
-            }
+            },
         }).then(result=>{
             res.json(
                 result
@@ -149,6 +146,25 @@ router.get("/index/:page", function (req, res) {
         }).catch(err =>{
             console.log("fail")
         })
+    }else{
+        models.TBoard.findAll({
+            offset:offset,
+            limit:10,
+            where:{
+                selltoken:sellcoin,
+                buytoken:buycoin
+            },
+            order:[[method,order]]
+        }).then(result=>{
+            res.json(
+                result
+            );
+        }).catch(err =>{
+            console.log("fail")
+        })
+    }
+    
+       
     
     
 
