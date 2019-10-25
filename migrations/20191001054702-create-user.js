@@ -38,7 +38,7 @@ module.exports = {
       classMethods: {
         associate: function (models) {
           // associations can be defined here
-          Users.hasOne(models.Wallets);
+          Users.hasMany(models.Wallets);
         }
       }
     }, {

@@ -23,10 +23,10 @@ router.post('/change', (req, res, next) => {
                 if (result == true) {
                     console.log("true!!!!!!!!!");
 
-                    res.send(updatepw(body.email, body.newpassword));
+                    res.send({data: updatepw(body.email, body.newpassword)});
                 }
                 else {
-                    res.send("비밀번호가 틀렸습니다.");
+                    res.status(404).send("비밀번호가 틀렸습니다.")
                 }
             })
         }
@@ -80,12 +80,12 @@ router.post('/forgot', (req, res, next) => {
     models.User.findOne({
         where: {
             email: body.email,
-            phone: body.phone
+            name: body.name
         }
     }).then((user) => {
         console.log(user);
         if (!user) {
-            res.send("입력정보 오류!!!!");
+            res.status(404).send("입력정보 오류!!!!");
         } else {
             savetmppw(body.email);
         }
@@ -148,7 +148,7 @@ function savetmppw(email) {
             subject: '안녕하세요, OOOO입니다. 이메일 인증을 해주세요.',
             html: '<p>임시비밀번호 발급: ' + tmppwd + '</p>' +
                 '<p>비밀번호를 변경해 주세요!</p>' +
-                "<a href='http://localhost:5555/emailcheck/?email=" + email + "'>인증하기</a>"
+                "<a href='http://localhost:5555/users/emailcheck/?email=" + email + "'>인증하기</a>"
         };
 
         transporter.sendMail(mailOptions, function (error, info) {

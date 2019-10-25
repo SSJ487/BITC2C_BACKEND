@@ -261,7 +261,6 @@ router.get("/buy/:page", function (req, res) {
 
 // 거래 게시글 삭제
 router.post('/delete', function (req, res, next) {
-
     models.TBoard.destroy({
         where: {
             
@@ -276,7 +275,5 @@ router.post('/delete', function (req, res, next) {
 
         })
 });
-
-
 
 module.exports = router;

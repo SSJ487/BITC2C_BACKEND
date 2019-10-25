@@ -14,7 +14,7 @@ router.get('/users', (req, res, next) => {
         console.log(users);
         if (!users) {
             console.log("NOBODY!!!!");
-            res.redirect('/');
+            res.status(404).send('');
         } else {
             console.log("FOUND ALL")
             res.send(users);
