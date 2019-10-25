@@ -7,18 +7,6 @@ let secretObj = require("../config/jwt")
 const nodemailer = require('nodemailer')
 
 
-//token expired
-router.get('/tokenExpired', function (req, res) {
-    const token = req.headers.authorization.split(' ')[1]
-    console.log(token)
-    jwt.verify(token, secretObj.secret, function (err, decode) {
-        if(err){
-            return res.status(401).send(err)
-        }
-        res.send(decode)
-    })
-})
-
 //토큰을 이용하여 유저정보 가져오기
 router.get('/getuser', function (req, res) {
     const token = req.headers.authorization.split(' ')[1]
