@@ -3,9 +3,12 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
+const server = require('http').createServer(app)
+
 const sequelize = require('./models/index').sequelize;
 const cookieParser = require('cookie-parser')
 
+var router = express.Router();
 
 app.use(cors());
 
@@ -24,8 +27,57 @@ app.use('/mypage', require('./routes/mypage'));
 app.use('/pwd', require('./routes/pwd'));
 
 
+//socket io 추가
+app.io = require('socket.io')(server, {
+  handlePreflightRequest: (req, res) => {
+    const headers = {
+      "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
+      "Access-Control-Allow-Credentials": true
+    };
+    res.writeHead(200, headers);
+    res.end();
+  }
+});
 
-app.listen(5555, function () {
+
+
+var clients = [];
+
+app.io.on('connection', (socket) => {
+
+  console.log("a user connected");
+
+  socket.on('login', (data) => {
+    console.log('user connect!!!');
+    var clientInfo = new Object();
+    clientInfo.uid = data.uid;
+    clientInfo.id = socket.id;
+    clients.push(clientInfo);
+  });
+  
+
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  socket.on('alarm', (msg) => {
+    console.log('alarm요청!!!');
+    socket.emit('alarm', msg);
+  });
+
+});
+
+
+// socket io 통신
+app.get('/alarm', function (req, res, next) {
+  console.log('alarm 통신')
+  app.io.emit('alarm')
+});
+
+
+server.listen(5555, function () {
   console.log('Example app listening on port 5555!');
 
   // require('./models').sequelize.sync({force:flase})
