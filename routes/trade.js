@@ -25,7 +25,7 @@ router.get("/orderling",(req,res)=>{
 
 //디테일 화면 진행상태 변경 POST
 router.post('/exchange',function(req,res){
-    const token = req.body.token;
+    const token = req.headers.authorization.split(' ')[1]
     const boardId = req.body.id;
     //const boardId= req.param('boardId');
     console.log(token);
@@ -92,9 +92,8 @@ router.post('/create', function (req, res, next) {
         })
         .catch(err => {
             console.log("데이터 추가 실패");
-
         })
-});
+})
 
 router.get('/detail', (req, res) => {
     console.log("asdas")
@@ -104,16 +103,21 @@ router.get('/detail', (req, res) => {
         }
     }).then((result) => {
         res.json(result);
-
+    }).catch((e) =>{
+        console.log(e)
     })
 })
 
 router.get("/index/:page", function (req, res) {
+    const sellcoin = req.param('sellcoin')
+    const buycoin = req.param('buycoin')
 
-    const method = req.param('method')
-    let order = "DESC";
-
+    let method = req.param('method')
     let level = req.param('order');
+    console.log('method =',method);
+    console.log('level=',level)
+    let order = "DESC";
+    
 
     if(level==="false"){
         
@@ -127,21 +131,30 @@ router.get("/index/:page", function (req, res) {
     if(pageNum>1){
         offset=10*(pageNum-1);
     }
-
-    if(method){
+    if(method===undefined){
         models.TBoard.findAll({
             offset:offset,
             limit:10,
-            order:[[method,order]]
-        }).then(result =>{
-            res.json(result);
-        }).catch(err=>{
-            console.log(err);
+            where:{
+                selltoken:sellcoin,
+                buytoken:buycoin
+            },
+        }).then(result=>{
+            res.json(
+                result
+            );
+        }).catch(err =>{
+            console.log("fail")
         })
-    }else {
+    }else{
         models.TBoard.findAll({
             offset:offset,
             limit:10,
+            where:{
+                selltoken:sellcoin,
+                buytoken:buycoin
+            },
+            order:[[method,order]]
         }).then(result=>{
             res.json(
                 result
@@ -151,11 +164,15 @@ router.get("/index/:page", function (req, res) {
         })
     }
     
+       
+    
+    
 
 })
 
 router.get("/sell/:page", function (req, res) {
     const method = req.param('method')
+    const cointype =req.param('type');
     let order = "DESC";
 
     let level = req.param('order');
@@ -178,7 +195,8 @@ router.get("/sell/:page", function (req, res) {
             offset:offset,
             limit:10,
             where:{
-                method : "sell"
+                method : "sell",
+                type:cointype
             },
             order:[[method,order]]
         }).then(result =>{
@@ -189,7 +207,8 @@ router.get("/sell/:page", function (req, res) {
     }else{
         models.TBoard.findAll({
             where: {
-                method : "sell"
+                method : "sell",
+                type:cointype
             },
             offset:offset,
             limit:10
@@ -207,11 +226,13 @@ router.get("/sell/:page", function (req, res) {
 
 router.get("/buy/:page", function (req, res) {
 
-    const method = req.param('method')
-    let order = "DESC";
-
+    const method = req.param('method');
+    const cointype =req.param('type');
     let level = req.param('order');
 
+    let order = "DESC";
+
+    
     if(level==="false"){
         
         order="ASC";
@@ -230,7 +251,8 @@ router.get("/buy/:page", function (req, res) {
             offset:offset,
             limit:10,
             where:{
-                method : "buy"
+                method : "buy",
+                type:cointype
             },
             order:[[method,order]]
         }).then(result =>{
@@ -241,7 +263,8 @@ router.get("/buy/:page", function (req, res) {
     }else{
         models.TBoard.findAll({
             where: {
-                method : "buy"
+                method : "buy",
+                type:cointype
             },
             offset:offset,
             limit:10
