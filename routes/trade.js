@@ -27,8 +27,7 @@ router.get("/orderling",(req,res)=>{
 router.post('/exchange',function(req,res){
     const token = req.headers.authorization.split(' ')[1]
     const boardId = req.body.id;
-    //const boardId= req.param('boardId');
-    console.log(token);
+   
     //console.log(boardId);
     let decoded = jwt.verify(token, secretObj.secret);
     // console.log(decoded);
@@ -39,7 +38,7 @@ router.post('/exchange',function(req,res){
                 id: boardId
             }
         }).then((user) => {
-           console.log('data',user.method);
+   
             res.send(user.method)
         })
 
@@ -56,7 +55,7 @@ router.post('/exchange',function(req,res){
             id: boardId
         }
     }).then((user) => {
-        console.log('userID',user);
+   
         
     })
 
@@ -76,10 +75,10 @@ router.post('/create', function (req, res, next) {
    
     
     models.TBoard.create({
-        type: body.type,
-        amount: body.amount,
-        price: body.price,
-        method: body.method,
+        selltoken: body.selltoken,
+        buytoken: body.buytoken,
+        selltokenamount: body.selltokenamount,
+        buytokenamount: body.buytokenamount,
         status: body.status,
         sellerId: body.sellerId,
         buyerId: body.buyerId,
@@ -96,7 +95,7 @@ router.post('/create', function (req, res, next) {
 })
 
 router.get('/detail', (req, res) => {
-    console.log("asdas")
+    
     models.TBoard.findOne({
         where: {
             id: req.query.id
@@ -114,8 +113,7 @@ router.get("/index/:page", function (req, res) {
 
     let method = req.param('method')
     let level = req.param('order');
-    console.log('method =',method);
-    console.log('level=',level)
+    
     let order = "DESC";
     
 

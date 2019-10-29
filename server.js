@@ -46,10 +46,10 @@ var clients = [];
 
 app.io.on('connection', (socket) => {
 
-  console.log("a user connected");
+  
 
   socket.on('login', (data) => {
-    console.log('user connect!!!');
+
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
@@ -59,11 +59,11 @@ app.io.on('connection', (socket) => {
 
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+
   });
 
   socket.on('alarm', (msg) => {
-    console.log('alarm요청!!!');
+   
     socket.emit('alarm', msg);
   });
 
@@ -72,7 +72,7 @@ app.io.on('connection', (socket) => {
 
 // socket io 통신
 app.get('/alarm', function (req, res, next) {
-  console.log('alarm 통신')
+ 
   app.io.emit('alarm')
 });
 
