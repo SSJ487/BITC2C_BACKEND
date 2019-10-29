@@ -9,6 +9,7 @@ const nodemailer = require('nodemailer')
 
 //토큰을 이용하여 유저정보 가져오기
 router.get('/getuser', function (req, res) {
+    console.log(req.headers.authorization)
     const token = req.headers.authorization.split(' ')[1]
     console.log("token", token)
     //const boardId= req.param('boardId');
