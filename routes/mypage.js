@@ -11,7 +11,7 @@ router.get('/user', function (req, res) {
             id: req.param('id')
         }
     }).then((user) => {
-        console.log("user: ",user);
+        ("user: ",user);
         if (!user) {
             res.status(404).send('User is not exist');
         } else {
@@ -43,7 +43,7 @@ router.get('/tboard', function (req, res) {
             ]
         }
     }).then((board) => {
-        console.log(board);
+        (board);
         if (!board) {
             res.status(404).send('거래 정보가 없습니다.');
         } else {
@@ -59,14 +59,14 @@ router.get('/wallet', function (req, res) {
             UserId: req.param('id')
         }
     }).then((wallet) => {
-        console.log("wallet: ",wallet);
+        ("wallet: ",wallet);
         if (!wallet) {
             res.status(404)('유저 지갑이 없습니다.');
         } else {
             res.json(wallet);
         }
     }).catch(err => {
-        console.log(err, "지갑에러");
+        (err, "지갑에러");
         res.json({data: {type:'', address: '', amount:''}});
     });
 });
