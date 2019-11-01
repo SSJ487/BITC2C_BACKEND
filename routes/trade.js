@@ -83,7 +83,8 @@ router.post('/create', function (req, res, next) {
         sellerId: body.sellerId,
         buyerId: body.buyerId,
         createdAt: today,
-        updatedAt: today
+        updatedAt: today,
+        Expirydate: "2040-12-30 24:00:00"
     })
         .then(result => {
             console.log("데이터 추가 완료");
@@ -91,6 +92,7 @@ router.post('/create', function (req, res, next) {
         })
         .catch(err => {
             console.log("데이터 추가 실패");
+            console.log(err)
         })
 })
 

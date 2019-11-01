@@ -10,6 +10,8 @@ const cookieParser = require('cookie-parser')
 
 var router = express.Router();
 
+var clients =[];
+
 app.use(cors());
 
 app.use(bodyParser.json());
@@ -46,10 +48,22 @@ var clients = [];
 
 app.io.on('connection', (socket) => {
 
-  
+  console.log("a user connected");
+  console.log("socket ID: ", socket.id);
+
+  socket.on('storeClientInfo', (data) => {
+    var clientInfo = new Object();
+    console.log("socket ID: ", data.id);
+    clientInfo.customId = data.customId;
+    clientInfo.clientId = socket.id;
+    clients.push(clientInfo);
+  })
+
+
+
 
   socket.on('login', (data) => {
-
+    console.log('user connect!!!');
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
@@ -58,12 +72,12 @@ app.io.on('connection', (socket) => {
   
 
 
-  socket.on('disconnect', () => {
-
+  socket.on('disconnect', (msg) => {
+    console.log('user disconnected: ', msg);
   });
 
   socket.on('alarm', (msg) => {
-   
+    console.log('alarm요청!!!');
     socket.emit('alarm', msg);
   });
 
@@ -72,8 +86,9 @@ app.io.on('connection', (socket) => {
 
 // socket io 통신
 app.get('/alarm', function (req, res, next) {
- 
-  app.io.emit('alarm')
+  console.log('alarm 통신')
+
+  app.io.emit('alarm', "ㅁㄴㄻㅇ나ㅣ러마")
 });
 
 
