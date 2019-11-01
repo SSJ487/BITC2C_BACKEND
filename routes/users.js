@@ -55,7 +55,7 @@ router.post('/login', (req, res, next) => {
             res.redirect('/')
         } else {
             console.log("else dlsl")
-            const expires = "10m"
+            const expires = "60m"
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (result == true) {
                     let authToken = jwt.sign({
@@ -139,8 +139,6 @@ router.post('/create', function (req, res, next) {
             })
         }
     })
-
-
     // res.redirect('/');
 })
 

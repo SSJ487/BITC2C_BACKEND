@@ -46,10 +46,7 @@ var clients = [];
 
 app.io.on('connection', (socket) => {
 
-  
-
   socket.on('login', (data) => {
-
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
@@ -72,8 +69,7 @@ app.io.on('connection', (socket) => {
 
 // socket io 통신
 app.get('/alarm', function (req, res, next) {
- 
-  app.io.emit('alarm')
+  app.io.emit('alarm', {msg : "aaa"})
 });
 
 
