@@ -45,13 +45,16 @@ app.io = require('socket.io')(server, {
 var clients = [];
 
 app.io.on('connection', (socket) => {
+<<<<<<< HEAD
   const req = socket.request;
   //console.log('SOCKET.REQUEST = ',req);
   
   
 
+=======
+  console.log('connect!')
+>>>>>>> d5fb036f827c15b2a10eb8e5192acfc928f34d6a
   socket.on('login', (data) => {
-
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
@@ -61,11 +64,10 @@ app.io.on('connection', (socket) => {
 
 
   socket.on('disconnect', () => {
-
+    console.log('disconnect')
   });
 
   socket.on('alarm', (msg) => {
-   
     socket.emit('alarm', msg);
   });
 
@@ -74,8 +76,7 @@ app.io.on('connection', (socket) => {
 
 // socket io 통신
 app.get('/alarm', function (req, res, next) {
- 
-  app.io.emit('alarm')
+  app.io.emit('alarm', {msg : "aaa"})
 });
 
 

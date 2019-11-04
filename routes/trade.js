@@ -38,25 +38,19 @@ router.post('/exchange',function(req,res){
                 id: boardId
             }
         }).then((user) => {
-   
             res.send(user.method)
         })
-
-        
     } else {
         res.send("no")
     }
 
     models.TBoard.update({
         status: 1,
-
     },{
         where: {
             id: boardId
         }
     }).then((user) => {
-   
-        
     })
 
 })
