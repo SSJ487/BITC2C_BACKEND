@@ -66,7 +66,7 @@ router.post('/create', function (req, res, next) {
     today = mm + '/' + dd + '/' + yyyy;
 
     let body = req.body;
-   
+    console.log('body=',body);
     
     models.TBoard.create({
         selltoken: body.selltoken,
@@ -74,10 +74,12 @@ router.post('/create', function (req, res, next) {
         selltokenamount: body.selltokenamount,
         buytokenamount: body.buytokenamount,
         status: body.status,
+        contractwallet:'asdasfasf',
         sellerId: body.sellerId,
         buyerId: body.buyerId,
         createdAt: today,
-        updatedAt: today
+        updatedAt: today,
+        Expirydate:today
     })
         .then(result => {
             console.log("데이터 추가 완료");
