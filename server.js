@@ -25,7 +25,7 @@ app.use('/trade', require('./routes/trade'));
 app.use('/wallet', require('./routes/wallet'));
 app.use('/mypage', require('./routes/mypage'));
 app.use('/pwd', require('./routes/pwd'));
-
+app.use('/web3', require('./routes/web3'));
 
 //socket io 추가
 app.io = require('socket.io')(server, {

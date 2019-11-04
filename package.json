@@ -23,7 +23,9 @@
     "request": "^2.88.0",
     "sequelize": "^5.19.2",
     "sequelize-cli": "^5.5.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.3.0",
+    "truffle-contract": "^4.0.31",
+    "web3": "^1.2.2"
   },
   "repository": {
     "type": "git",
