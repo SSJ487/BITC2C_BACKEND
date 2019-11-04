@@ -45,7 +45,7 @@ app.io = require('socket.io')(server, {
 var clients = [];
 
 app.io.on('connection', (socket) => {
-
+  console.log('connect!')
   socket.on('login', (data) => {
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
@@ -56,11 +56,10 @@ app.io.on('connection', (socket) => {
 
 
   socket.on('disconnect', () => {
-
+    console.log('disconnect')
   });
 
   socket.on('alarm', (msg) => {
-   
     socket.emit('alarm', msg);
   });
 

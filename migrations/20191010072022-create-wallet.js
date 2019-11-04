@@ -6,7 +6,6 @@ module.exports = {
         type: Sequelize.INTEGER,
         primaryKey: true
       },
-      type: Sequelize.STRING,
       address: {
         type: Sequelize.STRING,
         unique: true
