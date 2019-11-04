@@ -45,7 +45,9 @@ app.io = require('socket.io')(server, {
 var clients = [];
 
 app.io.on('connection', (socket) => {
-
+  const req = socket.request;
+  //console.log('SOCKET.REQUEST = ',req);
+  
   
 
   socket.on('login', (data) => {

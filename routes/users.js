@@ -11,7 +11,7 @@ const nodemailer = require('nodemailer')
 router.get('/getuser', function (req, res) {
    
     const token = req.headers.authorization.split(' ')[1]
-
+    console.log('toekn ?',token);
     //const boardId= req.param('boardId');
     //console.log(boardId);
     try {
