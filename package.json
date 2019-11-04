@@ -13,6 +13,7 @@
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
+    "crypto": "^1.0.1",
     "ejs": "^2.7.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
@@ -20,7 +21,11 @@
     "nodemailer": "^6.3.0",
     "nodemon": "^1.19.3",
     "request": "^2.88.0",
-    "sequelize": "^5.19.2"
+    "sequelize": "^5.19.2",
+    "sequelize-cli": "^5.5.1",
+    "socket.io": "^2.3.0",
+    "truffle-contract": "^4.0.31",
+    "web3": "^1.2.2"
   },
   "repository": {
     "type": "git",

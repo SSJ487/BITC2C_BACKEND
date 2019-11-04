@@ -6,15 +6,14 @@ const Op = sequelize.Op;
 
 // 유저 정보만 가져옴
 router.get('/user', function (req, res) {
-
     models.User.findOne({
         where: {
             id: req.param('id')
         }
     }).then((user) => {
-        console.log("user: ",user);
+        ("user: ",user);
         if (!user) {
-            res.redirect('/');
+            res.status(404).send('User is not exist');
         } else {
             res.json({
                 id: user.dataValues.id,
@@ -25,6 +24,8 @@ router.get('/user', function (req, res) {
                 createdAt: user.dataValues.createdAt
             });
         }
+    }).catch((e) =>{
+        res.status(401).send(e)
     })
 });
 
@@ -42,9 +43,9 @@ router.get('/tboard', function (req, res) {
             ]
         }
     }).then((board) => {
-        console.log(board);
+        (board);
         if (!board) {
-            res.redirect('/');
+            res.status(404).send('거래 정보가 없습니다.');
         } else {
             res.json(board);
         }
@@ -58,14 +59,14 @@ router.get('/wallet', function (req, res) {
             UserId: req.param('id')
         }
     }).then((wallet) => {
-        console.log("wallet: ",wallet);
+        ("wallet: ",wallet);
         if (!wallet) {
-            res.redirect('/');
+            res.status(404)('유저 지갑이 없습니다.');
         } else {
             res.json(wallet);
         }
     }).catch(err => {
-        console.log(err, "지갑에러");
+        (err, "지갑에러");
         res.json({data: {type:'', address: '', amount:''}});
     });
 });

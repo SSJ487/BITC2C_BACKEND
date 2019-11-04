@@ -10,16 +10,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      type: {
+      selltoken: {
         type: Sequelize.STRING
       },
-      amount: {
+      buytoken: {
+        type: Sequelize.STRING
+      },
+      selltokenamount: {
         type: Sequelize.INTEGER
       },
-      price: {
+      buytokenamount: {
         type: Sequelize.INTEGER
       },
-      method: {
+      contractwallet: {
         type: Sequelize.STRING
       },
       status: {
@@ -39,7 +42,10 @@ module.exports = {
       buyerId: {
         type: Sequelize.STRING
       },
-      
+      Expirydate:{
+        allowNull: false,
+        type: Sequelize.DATE
+      }
       
     });
     
