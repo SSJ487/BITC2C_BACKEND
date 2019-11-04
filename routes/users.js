@@ -9,8 +9,9 @@ const nodemailer = require('nodemailer')
 
 //토큰을 이용하여 유저정보 가져오기
 router.get('/getuser', function (req, res) {
+   
     const token = req.headers.authorization.split(' ')[1]
-    console.log("token", token)
+
     //const boardId= req.param('boardId');
     //console.log(boardId);
     try {
@@ -26,7 +27,7 @@ router.get('/getuser', function (req, res) {
 //이메일 확인 요청 링크 클릭시 오는 라우
 router.get('/emailcheck', function (req, res) {
     let email = req.query.email
-    console.log(email)
+   
 
     models.User.update({
         emailcheck: "1",
@@ -49,11 +50,11 @@ router.post('/login', (req, res, next) => {
             emailcheck: '1'
         }
     }).then((user) => {
-        console.log(user)
+      
         if (!user) {
             res.redirect('/')
         } else {
-            console.log("else dlsl")
+           
             const expires = "10m"
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (result == true) {

@@ -10,9 +10,9 @@ var web3 = new Web3(web3Provider);
 
 router.post('/create',(req,res)=>{
     web3.eth.personal.newAccount(req.body.walletpassword).then((response)=>{
-        console.log(response);
+
     })
-    console.log('reqbody =',req.body);
+ 
     res.json('dongwan');
 
 })
