@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.STRING,
         unique: true
       },
-      amount: Sequelize.INTEGER
+
     }, {
       classMethods: {
         associate: function (models) {

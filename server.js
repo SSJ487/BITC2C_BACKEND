@@ -45,15 +45,12 @@ app.io = require('socket.io')(server, {
 var clients = [];
 
 app.io.on('connection', (socket) => {
-<<<<<<< HEAD
   const req = socket.request;
   //console.log('SOCKET.REQUEST = ',req);
   
   
 
-=======
   console.log('connect!')
->>>>>>> d5fb036f827c15b2a10eb8e5192acfc928f34d6a
   socket.on('login', (data) => {
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
