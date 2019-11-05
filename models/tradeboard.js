@@ -5,6 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     buytoken: DataTypes.STRING,
     selltokenamount: DataTypes.INTEGER,
     buytokenamount: DataTypes.INTEGER,
+    contractwallet: DataTypes.STRING,
     status: DataTypes.INTEGER,
     sellerId : DataTypes.STRING,
     buyerId : DataTypes.STRING,

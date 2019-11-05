@@ -11,7 +11,6 @@ router.post('/create', function (req, res, next) {
         UserId: body.id,
         type: body.type,
         address: body.address,
-        amount: body.amount
     })
         .then(result => {
             console.log("creating!!!!")

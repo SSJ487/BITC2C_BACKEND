@@ -66,10 +66,10 @@ app.io.on('connection', (socket) => {
   })
 
 
-
+  const req = socket.request;
+  //console.log('SOCKET.REQUEST = ',req);
 
   socket.on('login', (data) => {
-    console.log('user connect!!!');
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
@@ -81,6 +81,7 @@ app.io.on('connection', (socket) => {
   socket.on('disconnect', (msg) => {
     console.log('user disconnected: ', msg);
   });
+
 
   // socket io 통신
   app.post('/alarm', function (req, res, next) {
@@ -102,7 +103,6 @@ app.io.on('connection', (socket) => {
 
 
 
-
 server.listen(5555, function () {
   console.log('Example app listening on port 5555!');
 
@@ -113,4 +113,3 @@ server.listen(5555, function () {
 });
 
 sequelize.sync();
-
