@@ -9,4 +9,6 @@ module.exports = (sequelize, DataTypes) => {
     }, {});
 
     return QBoard;
-};
+}; 
+
+// 20191105

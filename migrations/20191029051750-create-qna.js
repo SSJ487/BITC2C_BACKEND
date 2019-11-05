@@ -29,3 +29,5 @@ module.exports = {
     return queryInterface.dropTable('qnas');
   }
 };
+
+// 20191105
