@@ -55,9 +55,9 @@ router.post('/login', (req, res, next) => {
             res.redirect('/')
         } else {
 
-
             console.log("else dlsl")
-            const expires = "60m"
+            const expires = "50m"
+
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (result == true) {
                     let authToken = jwt.sign({
@@ -108,7 +108,6 @@ router.post('/create', function (req, res, next) {
                     emailcheck: 0
                 })
                     .then(result => {
-
                         console.log("데이터 추가 완료")
                         res.send(JSON.stringify(body))
                         emailcreate(email)

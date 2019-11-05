@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     buyerId : DataTypes.STRING,
     Expirydate :DataTypes.DATE
   }, {});
-  
+  // TBoard.associate = function (models) {
+  //   TBoard.hasMany(models.Alarm);
+  // };
   return TBoard;
 };
