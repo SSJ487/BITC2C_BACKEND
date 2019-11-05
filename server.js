@@ -8,6 +8,7 @@ const server = require('http').createServer(app)
 const sequelize = require('./models/index').sequelize;
 const cookieParser = require('cookie-parser')
 
+const alarm = require('./routes/alarm');
 var router = express.Router();
 
 var clients =[];
@@ -27,7 +28,7 @@ app.use('/trade', require('./routes/trade'));
 app.use('/wallet', require('./routes/wallet'));
 app.use('/mypage', require('./routes/mypage'));
 app.use('/pwd', require('./routes/pwd'));
-
+app.use('/alarm', alarm.router);
 
 //socket io 추가
 app.io = require('socket.io')(server, {
@@ -51,19 +52,24 @@ app.io.on('connection', (socket) => {
   console.log("a user connected");
   console.log("socket ID: ", socket.id);
 
+  socket.emit('storeClientInfo');
+
   socket.on('storeClientInfo', (data) => {
     var clientInfo = new Object();
-    console.log("socket ID: ", data.id);
-    clientInfo.customId = data.customId;
+    console.log("User ID: ", data.id);
+
+    alarm.create(socket.id, data.id)
+    clientInfo.customId = data.Id;
     clientInfo.clientId = socket.id;
+
     clients.push(clientInfo);
   })
 
 
-
+  const req = socket.request;
+  //console.log('SOCKET.REQUEST = ',req);
 
   socket.on('login', (data) => {
-    console.log('user connect!!!');
     var clientInfo = new Object();
     clientInfo.uid = data.uid;
     clientInfo.id = socket.id;
@@ -76,20 +82,25 @@ app.io.on('connection', (socket) => {
     console.log('user disconnected: ', msg);
   });
 
-  socket.on('alarm', (msg) => {
-    console.log('alarm요청!!!');
-    socket.emit('alarm', msg);
+
+  // socket io 통신
+  app.post('/alarm', function (req, res, next) {
+    console.log('alarm 통신 ', req.body.id)
+    alarm.find(req.body.id).then((user) => {
+      user = JSON.parse(JSON.stringify(user));
+
+      console.log("find alarm object", user)
+
+      console.log("found alarm object one: ", user.socketId);
+
+      socket.to(user.socketId).emit('alarm', "안뇽하세용");
+    })
+
   });
 
 });
 
 
-// socket io 통신
-app.get('/alarm', function (req, res, next) {
-  console.log('alarm 통신')
-
-  app.io.emit('alarm', "ㅁㄴㄻㅇ나ㅣ러마")
-});
 
 
 server.listen(5555, function () {
@@ -102,4 +113,3 @@ server.listen(5555, function () {
 });
 
 sequelize.sync();
-
