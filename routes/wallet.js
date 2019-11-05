@@ -6,8 +6,7 @@ var router = express.Router();
 
 router.post('/create', function (req, res, next) {
     let body = req.body;
-
-
+    
     models.Wallet.create({
         UserId: body.id,
         type: body.type,
@@ -15,7 +14,7 @@ router.post('/create', function (req, res, next) {
         amount: body.amount
     })
         .then(result => {
-  
+            console.log("creating!!!!")
             res.send(JSON.stringify(result));
         })
         .catch(err => {

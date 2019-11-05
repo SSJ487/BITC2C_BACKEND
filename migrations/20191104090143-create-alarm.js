@@ -1,22 +1,21 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Wallets', {
+    return queryInterface.createTable('Alarms', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      type: {
-        type: Sequelize.STRING,
+      status: {
+        type: Sequelize.INTEGER
       },
-      address: {
-        type: Sequelize.STRING,
-        unique: true
+      socketId: {
+        type: Sequelize.STRING
       },
-      amount: {
-        type: Sequelize.INTEGER,
+      tableId: {
+        type: Sequelize.INTEGER
       },
       UserId: {
         type: Sequelize.INTEGER,
@@ -36,9 +35,9 @@ module.exports = {
       underscored: true // foreignKey 에 CamelCase 대신 snake_case 를 사용하려면 underscored 를 true 로 지정한다.
     });
 
-    
+
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Wallets');
+    return queryInterface.dropTable('Alarms');
   }
 };
