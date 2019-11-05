@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       unique: true
     },
-    amount: DataTypes.INTEGER,
     UserId: DataTypes.INTEGER
   }, { timestamp: false});
   Wallet.associate = function (models) {

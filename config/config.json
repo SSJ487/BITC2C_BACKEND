@@ -1,22 +1,40 @@
 {
   "local": {
+<<<<<<< HEAD
     "username": "root",
     "password": "1q2w3e4r",
     "database": "question",
+=======
+    "username": "kim",
+    "password": "kim",
+    "database": "test",
+>>>>>>> e52b2c223428477fd9b575c55e66904dccc881b0
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "development": {
+<<<<<<< HEAD
     "username": "root",
     "password": "1q2w3e4r",
     "database": "question",
+=======
+    "username": "kim",
+    "password": "kim",
+    "database": "test",
+>>>>>>> e52b2c223428477fd9b575c55e66904dccc881b0
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
+<<<<<<< HEAD
     "username": "root",
     "password": "1q2w3e4r",
     "database": "question",
+=======
+    "username": "kim",
+    "password": "kim",
+    "database": "test",
+>>>>>>> e52b2c223428477fd9b575c55e66904dccc881b0
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
