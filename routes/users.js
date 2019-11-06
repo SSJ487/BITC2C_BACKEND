@@ -108,6 +108,12 @@ router.post('/create', function (req, res, next) {
                     emailcheck: 0
                 })
                     .then(result => {
+
+                    models.Wallet.create({
+                        address:body.wallet,
+                        type:"ETH",
+                        UserId:result.id
+                    })
                         console.log("데이터 추가 완료")
                         res.send(JSON.stringify(body))
                         emailcreate(email)
