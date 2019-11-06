@@ -22,9 +22,6 @@ module.exports = {
       buytokenamount: {
         type: Sequelize.INTEGER
       },
-      contractwallet: {
-        type: Sequelize.STRING
-      },
       status: {
         type: Sequelize.INTEGER
       },
