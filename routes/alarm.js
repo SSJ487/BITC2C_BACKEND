@@ -37,7 +37,7 @@ function create(socketId, UserId) {
         }
     }).then((user) => {
         console.log("user: ", user);
-        if (user.length()==0) {
+        if (user.length <= 0) {
             console.log("new create!!!!");
 
             models.Alarm.create({
