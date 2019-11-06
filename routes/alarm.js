@@ -30,13 +30,14 @@ router.post('/create', function (req, res, next) {
 
 // 로그인 버튼 누를시 동작
 function create(socketId, UserId) {
+    console.log("alarm creat@@@@###: ", UserId);
     models.Alarm.findAll({
         where: {
             UserId: UserId
         }
     }).then((user) => {
-        console.log(user);
-        if (!user) {
+        console.log("user: ", user);
+        if (user.length()==0) {
             console.log("new create!!!!");
 
             models.Alarm.create({

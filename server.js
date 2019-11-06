@@ -32,50 +32,61 @@ app.use('/alarm', alarm.router);
 
 //socket io 추가
 app.io = require('socket.io')(server, {
-  handlePreflightRequest: (req, res) => {
-    const headers = {
-      "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      "Access-Control-Allow-Origin": req.headers.origin, //or the specific origin you want to give access to,
-      "Access-Control-Allow-Credentials": true
-    };
-    res.writeHead(200, headers);
-    res.end();
-  }
+  pingInterval: 10000,
+  pingTimeout: 5000,
 });
 
-
+app.io.set()
 
 var clients = [];
+
+function registerUser(socket, user_id) {
+
+  // socket_id와 nickname 테이블을 셋업
+  console.log("???????@?@?@?: ", socket.id)
+
+  if (clients[user_id] != undefined) delete clients[user_id];
+
+  clients[user_id] = socket.id
+
+  console.log("!!!!!: ", clients[user_id])
+
+}
+
 
 app.io.on('connection', (socket) => {
 
   console.log("a user connected");
   console.log("socket ID: ", socket.id);
 
-  socket.emit('storeClientInfo');
-
   socket.on('storeClientInfo', (data) => {
-    var clientInfo = new Object();
-    console.log("User ID: ", data.id);
+    
+    console.log("User ID: ", data);
 
-    alarm.create(socket.id, data.id)
-    clientInfo.customId = data.Id;
-    clientInfo.clientId = socket.id;
+    // alarm.create(socket.id, data.id)
 
-    clients.push(clientInfo);
+    registerUser(socket, data);
+
   })
 
 
-  const req = socket.request;
-  //console.log('SOCKET.REQUEST = ',req);
-
-  socket.on('login', (data) => {
-    var clientInfo = new Object();
-    clientInfo.uid = data.uid;
-    clientInfo.id = socket.id;
-    clients.push(clientInfo);
+  socket.on('alarm', (msg) => {
+    console.log('socket alarm: ', msg);
+    socket.emit('alarm', "안녕")
   });
-  
+
+  socket.on('trading', (data) => {
+    console.log('????: ', data)
+    console.log('trading opponent: ', clients[data.opponentID]);
+    console.log('my trading: ', clients[data.userId]);
+
+    alarm.create(clients[data.opponentID], data.opponentID)
+    alarm.create(clients[data.userId], data.userId)
+
+    socket.emit('alarm', "안녕!")
+    socket.to(clients[data.opponentID]).emit('alarm', "안녕!")
+
+  });
 
 
   socket.on('disconnect', (msg) => {
