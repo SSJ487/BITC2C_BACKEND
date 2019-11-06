@@ -28,8 +28,8 @@ router.post('/create', function (req, res, next) {
         })
 });
 
-// 로그인 버튼 누를시 동작
-function create(socketId, UserId) {
+// 버튼 누를시 동작
+function create(socketId, UserId, tableId) {
     console.log("alarm creat@@@@###: ", UserId);
     models.Alarm.findAll({
         where: {
@@ -44,6 +44,7 @@ function create(socketId, UserId) {
                 status: '0',
                 socketId: socketId,
                 UserId: UserId,
+                tableId: tableId
             })
                 .then(result => {
                     res.send(JSON.stringify(result));
@@ -68,19 +69,39 @@ function create(socketId, UserId) {
                     UserId: UserId
                 }
             }).then(result => {
-                    res.send(JSON.stringify(result));
-                })
-                .catch(err => {
+                console.log("socket update done!!!")
 
-                    var error = JSON.stringify(err);
-                    error = JSON.parse(error);
-
-                    if (error.name == "SequelizeUniqueConstraintError") {
-                        res.send("Userid 주소 중복 에러!!!");
-                    } else if (error.name == "SequelizeForeignKeyConstraintError") {
-                        res.send("외래키 제약 에러!!!");
+                models.Alarm.findOne({
+                    where: {
+                        UserId: UserId,
+                        tableId: tableId
                     }
+                }).then((data) => {
+                    console.log("find user, tableid: ", data)
+                    if (data == null) {
+                        models.Alarm.create({
+                            status: '0',
+                            socketId: socketId,
+                            UserId: UserId,
+                            tableId: tableId
+                        }).then((data) => {
+                            console.log("new create other tableid!!!!");
+                        })
+                    }
+
                 })
+                    .catch(err => {
+
+                        var error = JSON.stringify(err);
+                        error = JSON.parse(error);
+
+                        if (error.name == "SequelizeUniqueConstraintError") {
+                            res.send("Userid 주소 중복 에러!!!");
+                        } else if (error.name == "SequelizeForeignKeyConstraintError") {
+                            res.send("외래키 제약 에러!!!");
+                        }
+                    })
+            })
         }
     })
 };
@@ -93,4 +114,4 @@ function find(UserId) {
     })
 };
 
-module.exports = {router, create, find};
+module.exports = { router, create, find };

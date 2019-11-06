@@ -59,9 +59,6 @@ router.get('/wallet', function (req, res) {
             UserId: req.param('id')
         }
     }).then((wallet) => {
-        router.post
-
-        ("wallet: ",wallet);
         if (!wallet) {
             res.status(404)('유저 지갑이 없습니다.');
         } else {

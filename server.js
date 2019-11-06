@@ -77,12 +77,13 @@ app.io.on('connection', (socket) => {
   });
 
   socket.on('trading', (data) => {
-    console.log('????: ', data)
+    
     console.log('trading opponent: ', clients[data.opponentID]);
     console.log('my trading: ', clients[data.userId]);
+    console.log('tableid: ', data.tableId)
 
-    alarm.create(clients[data.opponentID], data.opponentID)
-    alarm.create(clients[data.userId], data.userId)
+    alarm.create(clients[data.opponentID], data.opponentID, data.tableId)
+    alarm.create(clients[data.userId], data.userId, data.tableId)
 
     socket.emit('alarm', "안녕!")
     socket.to(clients[data.opponentID]).emit('alarm', "안녕!")
