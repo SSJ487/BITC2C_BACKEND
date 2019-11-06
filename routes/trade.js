@@ -25,32 +25,22 @@ router.get("/orderling",(req,res)=>{
 
 //디테일 화면 진행상태 변경 POST
 router.post('/exchange',function(req,res){
-    const token = req.headers.authorization.split(' ')[1]
+
     const boardId = req.body.id;
-   
+    const userId = req.body.userid
     //console.log(boardId);
-    let decoded = jwt.verify(token, secretObj.secret);
-    // console.log(decoded);
-    if (decoded) {
-        //board ID값을 이용하여 front에서 type에 따라 렌더화면 변경
-        models.TBoard.findOne({
-            where: {
-                id: boardId
-            }
-        }).then((user) => {
-            res.send(user.method)
-        })
-    } else {
-        res.send("no")
-    }
+    console.log('exchange',userId)
 
     models.TBoard.update({
         status: 1,
+        buyerId: userId
     },{
         where: {
             id: boardId
         }
-    }).then((user) => {
+    }).then((data) => {
+        console.log('exchange = ',data)
+        res.json(data)
     })
 
 })

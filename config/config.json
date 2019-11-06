@@ -22,8 +22,8 @@
   },
   "production": {
     "username": "root",
-    "password": "4444",
-    "database": "scv",
+    "password": "1q2w3e4r",
+    "database": "question",
     "host": "127.0.0.1",
     "dialect": "mysql"
   }
