@@ -1,28 +1,28 @@
 {
   "local": {
-    "username": "kim",
-    "password": "kim",
+    "username": "root",
+    "password": "4444",
     "database": "test",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "development": {
-    "username": "kim",
-    "password": "kim",
+    "username": "root",
+    "password": "4444",
     "database": "test",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "test": {
-    "username": "kim",
-    "password": "kim",
+    "username": "root",
+    "password": "4444",
     "database": "test",
     "host": "127.0.0.1",
     "dialect": "mysql"
   },
   "production": {
-    "username": "kim",
-    "password": "kim",
+    "username": "root",
+    "password": "4444",
     "database": "test",
     "host": "127.0.0.1",
     "dialect": "mysql"
