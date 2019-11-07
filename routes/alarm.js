@@ -30,7 +30,6 @@ router.post('/create', function (req, res, next) {
 
 
 router.get('/data', function (req, res) {
-    console.log("adfadf   ", req.param('id'))
     models.Alarm.findAll({
         where: {
             UserId: req.param('id')
