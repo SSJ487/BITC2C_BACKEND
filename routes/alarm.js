@@ -28,6 +28,30 @@ router.post('/create', function (req, res, next) {
         })
 });
 
+
+router.get('/data', function (req, res) {
+    console.log("adfadf   ", req.param('id'))
+    models.Alarm.findAll({
+        where: {
+            UserId: req.param('id')
+        },
+        order: [
+            ['createdAt', 'DESC' ]
+        ]
+    }).then((data) => {
+        ("alarm data: ", data);
+        if (data.length <= 0) {
+            res.status(404).send('Alarm data is not exist');
+        } else {
+
+            res.json(data)
+        }
+    }).catch((e) => {
+        res.status(401).send(e)
+    })
+});
+
+
 // 버튼 누를시 동작
 function create(socketId, UserId, tableId) {
     console.log("alarm creat@@@@###: ", UserId);

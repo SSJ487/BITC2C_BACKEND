@@ -3,7 +3,7 @@ var router = express.Router();
 const models = require('../models');
 const sequelize = require("sequelize");
 const Op = sequelize.Op;
-
+const web3 = require('../module/web3');
 // 유저 정보만 가져옴
 router.get('/user', function (req, res) {
     models.User.findOne({
@@ -28,7 +28,15 @@ router.get('/user', function (req, res) {
         res.status(401).send(e)
     })
 });
+router.get('/getbalance',function(req,res){
+    const addr = req.param('address')
+    console.log('addr = ? get aba =',addr)
+    web3.getbalance(addr).then(balance =>{
 
+        res.json(balance);
+    })
+
+})
 // 해당 userId가 들어간 거래정보들 가져옴
 router.get('/tboard', function (req, res) {
     models.TBoard.findAll({
@@ -59,6 +67,10 @@ router.get('/wallet', function (req, res) {
             UserId: req.param('id')
         }
     }).then((wallet) => {
+<<<<<<< HEAD
+
+=======
+>>>>>>> ec6003a7baca605dfb537197d9a7860450ffe960
         if (!wallet) {
             res.status(404)('유저 지갑이 없습니다.');
         } else {
