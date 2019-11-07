@@ -10,4 +10,9 @@ function createwallet(password){
     return web3.eth.personal.newAccount(password)
 }
 
-module.exports ={createwallet}
+function getbalance(address){
+
+    return web3.eth.getBalance(address)
+}
+
+module.exports ={createwallet,getbalance}
