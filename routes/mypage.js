@@ -28,6 +28,7 @@ router.get('/user', function (req, res) {
         res.status(401).send(e)
     })
 });
+
 router.get('/getbalance',function(req,res){
     const addr = req.param('address')
     console.log('addr = ? get aba =',addr)
@@ -67,10 +68,7 @@ router.get('/wallet', function (req, res) {
             UserId: req.param('id')
         }
     }).then((wallet) => {
-<<<<<<< HEAD
 
-=======
->>>>>>> ec6003a7baca605dfb537197d9a7860450ffe960
         if (!wallet) {
             res.status(404)('유저 지갑이 없습니다.');
         } else {
