@@ -82,7 +82,6 @@ router.post('/create', function (req, res, next) {
 })
 
 router.get('/detail', (req, res) => {
-    
     models.TBoard.findOne({
         where: {
             id: req.query.id

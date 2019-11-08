@@ -1,12 +1,12 @@
 var express = require('express');
 const models = require('../models');
 var router = express.Router();
+const decode = require('../module/decode')
 
 
 // 포스트맨으로 데이터 던질때 이용
 router.post('/create', function (req, res, next) {
     let body = req.body;
-
     models.Alarm.create({
         status: '0',
         socketId: req.body.socketId,
@@ -27,6 +27,31 @@ router.post('/create', function (req, res, next) {
             }
         })
 });
+
+
+router.get('/data', function (req, res) {
+    const user = decode.decode(req)
+    console.log("adfadf   ", user)
+    models.Alarm.findAll({
+        where: {
+            UserId: user.id,
+            status : 0
+        },
+        order: [
+            ['createdAt', 'DESC' ]
+        ]
+    }).then((data) => {
+        ("alarm data: ", data);
+        if (data.length <= 0) {
+            res.status(404).send('Alarm data is not exist');
+        } else {
+            res.json(data)
+        }
+    }).catch((e) => {
+        res.status(401).send(e)
+    })
+});
+
 
 // 버튼 누를시 동작
 function create(socketId, UserId, tableId) {

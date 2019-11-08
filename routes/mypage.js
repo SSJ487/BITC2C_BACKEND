@@ -28,7 +28,6 @@ router.get('/user', function (req, res) {
         res.status(401).send(e)
     })
 });
-
 router.get('/getbalance',function(req,res){
     const addr = req.param('address')
     console.log('addr = ? get aba =',addr)
@@ -59,7 +58,7 @@ router.get('/tboard', function (req, res) {
             res.json(board);
         }
     })
-});
+})
 
 // 유저의 자산 코인별로 가져옴
 router.get('/wallet', function (req, res) {
@@ -68,7 +67,6 @@ router.get('/wallet', function (req, res) {
             UserId: req.param('id')
         }
     }).then((wallet) => {
-
         if (!wallet) {
             res.status(404)('유저 지갑이 없습니다.');
         } else {
