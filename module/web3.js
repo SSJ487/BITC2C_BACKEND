@@ -9,7 +9,8 @@ const fs = require('fs');
 var web3Provider = new Web3.providers.HttpProvider('http://192.168.1.179:22000');
 var web3 = new Web3(web3Provider);
 
-const tt_contract_json = fs.readFileSync('C:/Users/user/Desktop/Back/BITC2C_BACKEND/abi/BToken.json', 'utf-8');
+const tt_contract_json = fs.readFileSync('C:/Users/user/Desktop/프로젝트/backend/abi/Btoken.json', 'utf-8');
+
 const abi = JSON.parse(tt_contract_json);
 
 Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send;
