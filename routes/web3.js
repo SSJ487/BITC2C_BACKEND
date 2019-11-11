@@ -11,6 +11,12 @@ router.get('/test',(req,res)=>{
 
 })
 
+router.get('/balance',(req,res)=>{
+    console.log("asf");
+    res.json(web3.getbalance())
+
+})
+
 
 
 
