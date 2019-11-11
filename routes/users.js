@@ -49,11 +49,10 @@ router.post('/login', (req, res, next) => {
             emailcheck: '1'
         }
     }).then((user) => {
-      
+        console.log(user)
         if (!user) {
-            res.redirect('/')
+            res.status(404).send("가입되지 않은 유저")
         } else {
-
             console.log("else dlsl")
             const expires = "50m"
 

@@ -11,8 +11,7 @@ function createwallet(password){
 }
 
 function getbalance(address){
-
     return web3.eth.getBalance(address)
 }
 
-module.exports ={createwallet,getbalance}
+module.exports ={createwallet, getbalance}
