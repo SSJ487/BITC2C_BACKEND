@@ -54,41 +54,18 @@ router.get('/data', function (req, res) {
 
 router.get('/list', function (req, res) {
     const user = decode.decode(req)
-    models.Alarm.findAll({
-        where: {
-            UserId: user.id,
-        },
-        order: [
-            ['createdAt', 'DESC']
-        ]
-    }).then((data) => {
-        ("alarm data: ", data);
-        if (data.length <= 0) {
-            res.status(404).send('Alarm data is not exist');
-        } else {
-            res.json(data)
-        }
-    }).catch((e) => {
-        res.status(401).send(e)
+    var query = 'SElECT * FROM test.tboards as A ,test.alarms as B ' +
+        'where(A.id = B.tableId) and B.UserId = :Id '
+    var values = {
+        Id: user.id
+    }
+    models.sequelize.query(query, { replacements: values }).spread((results, metadata) => {
+        res.json(results)
+    }, (err) => {
+        res.status(404).send(err);
     })
-});
+})
 
-router.get('/tabledata', function (req, res) {
-    models.TBoard.findOne({
-        where: {
-            Id: req.param("tableId")
-        }
-    }).then((data) => {
-        ("alarm data: ", data);
-        if (!data) {
-            res.status(404).send('table is not exist');
-        } else {
-            res.json(data)
-        }
-    }).catch((e) => {
-        res.status(401).send(e)
-    })
-});
 
 // 버튼 누를시 동작
 function create(socketId, UserId, tableId) {
