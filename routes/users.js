@@ -55,7 +55,6 @@ router.post('/login', (req, res, next) => {
         } else {
             console.log("else dlsl")
             const expires = "50m"
-
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (result == true) {
                     let authToken = jwt.sign({

@@ -28,14 +28,13 @@ router.get('/user', function (req, res) {
         res.status(401).send(e)
     })
 });
+
 router.get('/getbalance',function(req,res){
     const addr = req.param('address')
-    console.log('addr = ? get aba =',addr)
-    web3.getbalance(addr).then(balance =>{
-
+    web3.getbalance(addr).then((balance) =>{
+        console.log("return", balance)
         res.json(balance);
     })
-
 })
 // 해당 userId가 들어간 거래정보들 가져옴
 router.get('/tboard', function (req, res) {
