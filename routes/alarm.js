@@ -1,12 +1,12 @@
 var express = require('express');
 const models = require('../models');
 var router = express.Router();
+const decode = require('../module/decode')
 
 
 // 포스트맨으로 데이터 던질때 이용
 router.post('/create', function (req, res, next) {
     let body = req.body;
-
     models.Alarm.create({
         status: '0',
         socketId: req.body.socketId,
@@ -30,9 +30,11 @@ router.post('/create', function (req, res, next) {
 
 
 router.get('/data', function (req, res) {
+    const user = decode.decode(req)
     models.Alarm.findAll({
         where: {
-            UserId: req.param('id')
+            UserId: user.id,
+            status : 0
         },
         order: [
             ['createdAt', 'DESC' ]
@@ -42,7 +44,6 @@ router.get('/data', function (req, res) {
         if (data.length <= 0) {
             res.status(404).send('Alarm data is not exist');
         } else {
-
             res.json(data)
         }
     }).catch((e) => {
@@ -50,6 +51,44 @@ router.get('/data', function (req, res) {
     })
 });
 
+
+router.get('/list', function (req, res) {
+    const user = decode.decode(req)
+    models.Alarm.findAll({
+        where: {
+            UserId: user.id,
+        },
+        order: [
+            ['createdAt', 'DESC']
+        ]
+    }).then((data) => {
+        ("alarm data: ", data);
+        if (data.length <= 0) {
+            res.status(404).send('Alarm data is not exist');
+        } else {
+            res.json(data)
+        }
+    }).catch((e) => {
+        res.status(401).send(e)
+    })
+});
+
+router.get('/tabledata', function (req, res) {
+    models.TBoard.findOne({
+        where: {
+            Id: req.param("tableId")
+        }
+    }).then((data) => {
+        ("alarm data: ", data);
+        if (!data) {
+            res.status(404).send('table is not exist');
+        } else {
+            res.json(data)
+        }
+    }).catch((e) => {
+        res.status(401).send(e)
+    })
+});
 
 // 버튼 누를시 동작
 function create(socketId, UserId, tableId) {

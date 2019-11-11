@@ -58,7 +58,7 @@ router.get('/tboard', function (req, res) {
             res.json(board);
         }
     })
-});
+})
 
 // 유저의 자산 코인별로 가져옴
 router.get('/wallet', function (req, res) {
