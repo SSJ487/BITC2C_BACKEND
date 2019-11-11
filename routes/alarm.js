@@ -1,32 +1,32 @@
-var express = require('express')
-const models = require('../models')
-var router = express.Router()
+var express = require('express');
+const models = require('../models');
+var router = express.Router();
 const decode = require('../module/decode')
 
 
 // 포스트맨으로 데이터 던질때 이용
 router.post('/create', function (req, res, next) {
-    let body = req.body
+    let body = req.body;
     models.Alarm.create({
         status: '0',
         socketId: req.body.socketId,
         UserId: req.body.UserId,
     })
         .then(result => {
-            res.send(JSON.stringify(result))
+            res.send(JSON.stringify(result));
         })
         .catch(err => {
 
-            var error = JSON.stringify(err)
-            error = JSON.parse(error)
+            var error = JSON.stringify(err);
+            error = JSON.parse(error);
 
             if (error.name == "SequelizeUniqueConstraintError") {
-                res.send("wallet 주소 중복 에러!!!")
+                res.send("wallet 주소 중복 에러!!!");
             } else if (error.name == "SequelizeForeignKeyConstraintError") {
-                res.send("외래키 제약 에러!!!")
+                res.send("외래키 제약 에러!!!");
             }
         })
-})
+});
 
 
 router.get('/data', function (req, res) {
@@ -34,68 +34,50 @@ router.get('/data', function (req, res) {
     models.Alarm.findAll({
         where: {
             UserId: user.id,
-            status: 0
+            status : 0
         },
         order: [
-            ['createdAt', 'DESC']
+            ['createdAt', 'DESC' ]
         ]
     }).then((data) => {
-        res.json(data)
+        ("alarm data: ", data);
+        if (data.length <= 0) {
+            res.status(404).send('Alarm data is not exist');
+        } else {
+            res.json(data)
+        }
     }).catch((e) => {
         res.status(401).send(e)
     })
-})
+});
 
 
 router.get('/list', function (req, res) {
     const user = decode.decode(req)
-    models.Alarm.findAll({
-        where: {
-            UserId: user.id,
-        },
-        order: [
-            ['createdAt', 'DESC']
-        ]
-    }).then((data) => {
-        ("alarm data: ", data)
-        if (data.length <= 0) {
-            res.status(404).send('Alarm data is not exist')
-        } else {
-            res.json(data)
-        }
-    }).catch((e) => {
-        res.status(401).send(e)
+    var query = 'SElECT * FROM test.tboards as A ,test.alarms as B ' +
+        'where(A.id = B.tableId) and B.UserId = :Id '
+    var values = {
+        Id: user.id
+    }
+    models.sequelize.query(query, { replacements: values }).spread((results, metadata) => {
+        res.json(results)
+    }, (err) => {
+        res.status(404).send(err);
     })
 })
 
-router.get('/tabledata', function (req, res) {
-    models.TBoard.findOne({
-        where: {
-            Id: req.param("tableId")
-        }
-    }).then((data) => {
-        ("alarm data: ", data)
-        if (!data) {
-            res.status(404).send('table is not exist')
-        } else {
-            res.json(data)
-        }
-    }).catch((e) => {
-        res.status(401).send(e)
-    })
-})
 
 // 버튼 누를시 동작
 function create(socketId, UserId, tableId) {
-    console.log("alarm creat@@@@###: ", UserId)
+    console.log("alarm creat@@@@###: ", UserId);
     models.Alarm.findAll({
         where: {
             UserId: UserId
         }
     }).then((user) => {
-        console.log("user: ", user)
+        console.log("user: ", user);
         if (user.length <= 0) {
-            console.log("new create!!!!")
+            console.log("new create!!!!");
 
             models.Alarm.create({
                 status: '0',
@@ -104,21 +86,21 @@ function create(socketId, UserId, tableId) {
                 tableId: tableId
             })
                 .then(result => {
-                    res.send(JSON.stringify(result))
+                    res.send(JSON.stringify(result));
                 })
                 .catch(err => {
 
-                    var error = JSON.stringify(err)
-                    error = JSON.parse(error)
+                    var error = JSON.stringify(err);
+                    error = JSON.parse(error);
 
                     if (error.name == "SequelizeUniqueConstraintError") {
-                        res.send("Userid 주소 중복 에러!!!")
+                        res.send("Userid 주소 중복 에러!!!");
                     } else if (error.name == "SequelizeForeignKeyConstraintError") {
-                        res.send("외래키 제약 에러!!!")
+                        res.send("외래키 제약 에러!!!");
                     }
                 })
         } else {
-            console.log("alarm update socketID!!!!")
+            console.log("alarm update socketID!!!!");
             models.Alarm.update({
                 socketId: socketId
             }, {
@@ -142,26 +124,26 @@ function create(socketId, UserId, tableId) {
                             UserId: UserId,
                             tableId: tableId
                         }).then((data) => {
-                            console.log("new create other tableid!!!!")
+                            console.log("new create other tableid!!!!");
                         })
                     }
 
                 })
                     .catch(err => {
 
-                        var error = JSON.stringify(err)
-                        error = JSON.parse(error)
+                        var error = JSON.stringify(err);
+                        error = JSON.parse(error);
 
                         if (error.name == "SequelizeUniqueConstraintError") {
-                            res.send("Userid 주소 중복 에러!!!")
+                            res.send("Userid 주소 중복 에러!!!");
                         } else if (error.name == "SequelizeForeignKeyConstraintError") {
-                            res.send("외래키 제약 에러!!!")
+                            res.send("외래키 제약 에러!!!");
                         }
                     })
             })
         }
     })
-}
+};
 
 function find(UserId) {
     return models.Alarm.findOne({
@@ -169,6 +151,6 @@ function find(UserId) {
             UserId: UserId
         }
     })
-}
+};
 
-module.exports = {router, create, find}
+module.exports = { router, create, find };
