@@ -49,14 +49,12 @@ router.post('/login', (req, res, next) => {
             emailcheck: '1'
         }
     }).then((user) => {
-      
+        console.log(user)
         if (!user) {
-            res.redirect('/')
+            res.status(404).send("가입되지 않은 유저")
         } else {
-
             console.log("else dlsl")
             const expires = "50m"
-
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (result == true) {
                     let authToken = jwt.sign({
@@ -115,6 +113,7 @@ router.post('/create', function (req, res, next) {
                             console.log("데이터 추가 완료")
                             res.send(JSON.stringify(body))
                             emailcreate(email)
+                            web3.unlockAccount(addr, body.password)
                         })
 
                     })

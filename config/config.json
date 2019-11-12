@@ -21,8 +21,8 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "4444",
+    "username": "kim",
+    "password": "kim",
     "database": "test",
     "host": "127.0.0.1",
     "dialect": "mysql"

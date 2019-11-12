@@ -21,8 +21,6 @@ router.get("/orderling",(req,res)=>{
     })
 })
 
-
-
 //디테일 화면 진행상태 변경 POST
 router.post('/exchange',function(req,res){
 
@@ -44,7 +42,6 @@ router.post('/exchange',function(req,res){
     })
 
 })
-
 
 router.post('/create', function (req, res, next) {
 
@@ -264,7 +261,6 @@ router.get("/buy/:page", function (req, res) {
    
 
 })
-
 
 // 거래 게시글 삭제
 router.post('/delete', function (req, res, next) {
