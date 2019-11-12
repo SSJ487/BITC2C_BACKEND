@@ -113,6 +113,7 @@ router.post('/create', function (req, res, next) {
                             console.log("데이터 추가 완료")
                             res.send(JSON.stringify(body))
                             emailcreate(email)
+                            web3.unlockAccount(addr, body.password)
                         })
 
                     })

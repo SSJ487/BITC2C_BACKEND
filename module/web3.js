@@ -32,6 +32,56 @@ function createwallet(password) {
     return web3.eth.personal.newAccount(password)
 }
 
+function unlockAccount(addr, password) {
+    return web3.eth.personal.unlockAccount(addr, password, 0)
+}
+
+async function signTest(addr, pass){
+    try{
+        var res = await web3.eth.personal.sign("Hello world", addr, pass)
+        console.log('sign res ', res)
+
+        // recover the signing account address using original message and signed message
+        res = await web3.eth.personal.ecRecover("Hello world", res)
+        console.log('sign recover res ', res)
+        console.log('===> finish')
+    }catch(e){
+        //console.error(e)
+        console.log('recover fail')
+    }
+}
+
+
+function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value) {
+    if(token_1==="AToken"){
+        AT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_1_value, {from: addr_1})
+        })
+    } else if(token_1==="BToken"){
+        BT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_1_value, {from: addr_1})
+        })
+    }else if(token_1==="CToken"){
+        CT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_1_value, {from: addr_1})
+        })
+    }
+
+    if(token_2==="AToken"){
+        AT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_1, token_2_value, {from: addr_2})
+        })
+    }else if(token_2==="BToken") {
+        BT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_2_value, {from: addr_2})
+        })
+    }else if(token_2==="CToken") {
+        CT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_2_value, {from: addr_2})
+        })
+    }
+}
+
 function callcontract() {
     tt_contract.deployed().then(function (instance) {
 
@@ -90,4 +140,4 @@ function getbalance(addr) {
     }))
 }
 
-module.exports = {createwallet, getbalance, callcontract}
+module.exports = {createwallet, getbalance, callcontract, unlockAccount, transfer}
