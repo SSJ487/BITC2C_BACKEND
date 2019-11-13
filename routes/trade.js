@@ -3,6 +3,7 @@ const models = require('../models');
 const router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
+const web3 = require('../module/web3');
 
 
 router.get("/orderling",(req,res)=>{
@@ -21,14 +22,13 @@ router.get("/orderling",(req,res)=>{
     })
 })
 
-
-
 //디테일 화면 진행상태 변경 POST
 router.post('/exchange',function(req,res){
 
-    const boardId = req.body.id;
-    const userId = req.body.userid
+    const boardId = req.body.boardId;
+    const userId = req.body.userId
     //console.log(boardId);
+
     console.log('exchange',userId)
 
     models.TBoard.update({
@@ -45,6 +45,29 @@ router.post('/exchange',function(req,res){
 
 })
 
+router.post('/confirm',(req,res)=>{
+    const password = req.body.password;
+    const token = req.headers.authorization.split(' ')[1];
+
+    console.log('toekn ?',token);
+    console.log('confirm =' ,password)
+    //const boardId= req.param('boardId');
+    //console.log(boardId);
+    try {
+        let decoded = jwt.verify(token, secretObj.secret)
+        if (decoded) {
+            res.send(decoded)
+        }
+    } catch (e) {
+        res.status(401).send(e.message)
+    }
+
+
+
+
+
+})
+
 
 router.post('/create', function (req, res, next) {
 
@@ -57,7 +80,7 @@ router.post('/create', function (req, res, next) {
 
     let body = req.body;
     console.log('body=',body);
-    
+
     models.TBoard.create({
         selltoken: body.selltoken,
         buytoken: body.buytoken,
@@ -99,15 +122,15 @@ router.get("/index/:page", function (req, res) {
 
     let method = req.param('method')
     let level = req.param('order');
-    
+
     let order = "DESC";
-    
+
 
     if(level==="false"){
-        
+
         order="ASC";
     }
-   
+
     let pageNum = req.params.page;
     console.log(pageNum);
     let offset =0;
@@ -147,10 +170,10 @@ router.get("/index/:page", function (req, res) {
             console.log("fail")
         })
     }
-    
-       
-    
-    
+
+
+
+
 
 })
 
@@ -162,7 +185,7 @@ router.get("/sell/:page", function (req, res) {
     let level = req.param('order');
 
     if(level==="false"){
-        
+
         order="ASC";
     }
 
@@ -204,7 +227,7 @@ router.get("/sell/:page", function (req, res) {
             console.log("fail")
         })
     }
-    
+
 
 })
 
@@ -216,9 +239,9 @@ router.get("/buy/:page", function (req, res) {
 
     let order = "DESC";
 
-    
+
     if(level==="false"){
-        
+
         order="ASC";
     }
 
@@ -261,16 +284,15 @@ router.get("/buy/:page", function (req, res) {
         })
     }
 
-   
+
 
 })
-
 
 // 거래 게시글 삭제
 router.post('/delete', function (req, res, next) {
     models.TBoard.destroy({
         where: {
-            
+
         }
     })
         .then(result => {

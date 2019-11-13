@@ -31,7 +31,6 @@ router.post('/create', function (req, res, next) {
 
 router.get('/data', function (req, res) {
     const user = decode.decode(req)
-    console.log("adfadf   ", user)
     models.Alarm.findAll({
         where: {
             UserId: user.id,
@@ -51,6 +50,21 @@ router.get('/data', function (req, res) {
         res.status(401).send(e)
     })
 });
+
+
+router.get('/list', function (req, res) {
+    const user = decode.decode(req)
+    var query = 'SElECT * FROM test.tboards as A ,test.alarms as B ' +
+        'where(A.id = B.tableId) and B.UserId = :Id '
+    var values = {
+        Id: user.id
+    }
+    models.sequelize.query(query, { replacements: values }).spread((results, metadata) => {
+        res.json(results)
+    }, (err) => {
+        res.status(404).send(err);
+    })
+})
 
 
 // 버튼 누를시 동작
