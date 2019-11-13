@@ -105,6 +105,9 @@ router.post('/create', function (req, res, next) {
                     emailcheck: 0
                 }).then(result => {
                     web3.createwallet(body.password).then((addr)=>{
+                        web3.unlockAccount(addr,body.password).then((result)=>{
+                            console.log("result =>",result)
+                        })
                         models.Wallet.create({
                             address:addr,
                             type:"ETH",
