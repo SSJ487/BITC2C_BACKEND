@@ -10,6 +10,8 @@ const fs = require('fs')
 
 var web3Provider = new Web3.providers.HttpProvider('http://192.168.1.179:22000')
 var web3 = new Web3(web3Provider)
+const web4 = require('../module/web3');
+
 
 router.get('/test',(req,res)=>{
     console.log("e");
@@ -33,6 +35,17 @@ router.post('/unlock',(req,res)=>{
 
 })
 
+router.post('/tokensign',(req,res)=>{
+    const addr = req.body.addr;
+    const password = req.body.password;
 
+    web4.signTest(addr,password).then((result)=>{
+        console.log(result);
+        res.json(result);
+    })
+
+ 
+
+})
 
 module.exports =router;
