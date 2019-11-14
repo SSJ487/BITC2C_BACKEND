@@ -47,11 +47,12 @@ async function signTest(addr, pass){
 
         // recover the signing account address using original message and signed message
         res = await web3.eth.personal.ecRecover("Hello world", res)
-        console.log('sign recover res ', res)
-        console.log('===> finish')
+
+        return true
     }catch(e){
         //console.error(e)
         console.log('recover fail')
+        return false
     }
 }
 
