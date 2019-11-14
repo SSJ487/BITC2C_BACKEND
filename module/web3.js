@@ -3,14 +3,18 @@ var contract = require("truffle-contract")
 const util = require('util')
 const assert = require('assert')
 const fs = require('fs')
+var path = require("path");
+path.join(process.cwd(),"AToken.json");
 
-var web3Provider = new Web3.providers.HttpProvider('http://192.168.1.179:22000')
+
+
+var web3Provider = new Web3.providers.HttpProvider('http://b3b11115.ngrok.io')
 var web3 = new Web3(web3Provider)
 
 
-const AT_contract_json = fs.readFileSync('/home/marf/workspace/work/bitc2c/BITC2C_BACKEND/abi/AToken.json', 'utf-8')
-const BT_contract_json = fs.readFileSync('/home/marf/workspace/work/bitc2c/BITC2C_BACKEND/abi/Btoken.json', 'utf-8')
-const CT_contract_json = fs.readFileSync('/home/marf/workspace/work/bitc2c/BITC2C_BACKEND/abi/Ctoken.json', 'utf-8')
+const AT_contract_json = fs.readFileSync(path.join(process.cwd(),"abi/AToken.json"), 'utf-8')
+const BT_contract_json = fs.readFileSync(path.join(process.cwd(),"abi/Btoken.json"), 'utf-8')
+const CT_contract_json = fs.readFileSync(path.join(process.cwd(),"abi/Ctoken.json"), 'utf-8')
 
 const ATabi = JSON.parse(AT_contract_json)
 const BTabi = JSON.parse(BT_contract_json)
@@ -140,4 +144,4 @@ function getbalance(addr) {
     }))
 }
 
-module.exports = {createwallet, getbalance, callcontract, unlockAccount, transfer}
+module.exports = {createwallet, getbalance, callcontract, unlockAccount, transfer,signTest}
