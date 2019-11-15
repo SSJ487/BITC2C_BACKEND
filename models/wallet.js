@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
       unique: true
     },
     UserId: DataTypes.INTEGER
-  }, { timestamp: false});
+  }, { timestamp: true });
   Wallet.associate = function (models) {
     Wallet.belongsTo(models.User, {
       foreignKey: "UserId",

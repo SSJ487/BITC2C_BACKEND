@@ -4,27 +4,31 @@
     "password": "4444",
     "database": "test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+9:00"
   },
   "development": {
     "username": "root",
     "password": "4444",
     "database": "test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+9:00"
   },
   "test": {
     "username": "root",
     "password": "4444",
     "database": "test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+9:00"
   },
   "production": {
-    "username": "kim",
-    "password": "kim",
+    "username": "root",
+    "password": "4444",
     "database": "test",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "timezone": "+9:00"
   }
 }

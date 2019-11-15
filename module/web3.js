@@ -7,10 +7,9 @@ const fs = require('fs')
 var web3Provider = new Web3.providers.HttpProvider('http://192.168.1.179:22000')
 var web3 = new Web3(web3Provider)
 
-
-const AT_contract_json = fs.readFileSync('/home/marf/workspace/work/bitc2c/BITC2C_BACKEND/abi/AToken.json', 'utf-8')
-const BT_contract_json = fs.readFileSync('/home/marf/workspace/work/bitc2c/BITC2C_BACKEND/abi/Btoken.json', 'utf-8')
-const CT_contract_json = fs.readFileSync('/home/marf/workspace/work/bitc2c/BITC2C_BACKEND/abi/Ctoken.json', 'utf-8')
+const AT_contract_json = fs.readFileSync('C:/Users/user/Desktop/프로젝트/backend/abi/AToken.json', 'utf-8')
+const BT_contract_json = fs.readFileSync('C:/Users/user/Desktop/프로젝트/backend/abi/Btoken.json', 'utf-8')
+const CT_contract_json = fs.readFileSync('C:/Users/user/Desktop/프로젝트/backend/abi/Ctoken.json', 'utf-8')
 
 const ATabi = JSON.parse(AT_contract_json)
 const BTabi = JSON.parse(BT_contract_json)
