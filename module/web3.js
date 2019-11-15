@@ -11,10 +11,9 @@ path.join(process.cwd(),"AToken.json");
 var web3Provider = new Web3.providers.HttpProvider('http://b3b11115.ngrok.io')
 var web3 = new Web3(web3Provider)
 
-
-const AT_contract_json = fs.readFileSync(path.join(process.cwd(),"abi/AToken.json"), 'utf-8')
-const BT_contract_json = fs.readFileSync(path.join(process.cwd(),"abi/Btoken.json"), 'utf-8')
-const CT_contract_json = fs.readFileSync(path.join(process.cwd(),"abi/Ctoken.json"), 'utf-8')
+const AT_contract_json = fs.readFileSync('C:/Users/user/Desktop/프로젝트/backend/abi/AToken.json', 'utf-8')
+const BT_contract_json = fs.readFileSync('C:/Users/user/Desktop/프로젝트/backend/abi/Btoken.json', 'utf-8')
+const CT_contract_json = fs.readFileSync('C:/Users/user/Desktop/프로젝트/backend/abi/Ctoken.json', 'utf-8')
 
 const ATabi = JSON.parse(AT_contract_json)
 const BTabi = JSON.parse(BT_contract_json)
@@ -47,11 +46,12 @@ async function signTest(addr, pass){
 
         // recover the signing account address using original message and signed message
         res = await web3.eth.personal.ecRecover("Hello world", res)
-        console.log('sign recover res ', res)
-        console.log('===> finish')
+
+        return true
     }catch(e){
         //console.error(e)
         console.log('recover fail')
+        return false
     }
 }
 

@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     sellerId : DataTypes.STRING,
     buyerId : DataTypes.STRING,
     Expirydate :DataTypes.DATE
-  }, {});
+  }, { timestamp: true});
   // TBoard.associate = function (models) {
   //   TBoard.hasMany(models.Alarm);
   // };

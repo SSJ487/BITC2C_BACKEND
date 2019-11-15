@@ -9,6 +9,7 @@ const sequelize = require('./models/index').sequelize;
 const cookieParser = require('cookie-parser')
 
 const alarm = require('./routes/alarm');
+const chart = require('./routes/chart');
 var router = express.Router();
 
 var clients =[];
@@ -30,6 +31,7 @@ app.use('/mypage', require('./routes/mypage'));
 app.use('/pwd', require('./routes/pwd'));
 app.use('/alarm', alarm.router);
 app.use('/web3',require('./routes/web3'));
+app.use('/chart', chart.router);
 
 //socket io 추가
 app.io = require('socket.io')(server, {
@@ -77,14 +79,17 @@ app.io.on('connection', (socket) => {
   });
 
   socket.on('trading', (data) => {
+    
     console.log('trading opponent: ', clients[data.opponentID]);
     console.log('my trading: ', clients[data.userId]);
     console.log('tableid: ', data.tableId)
 
     alarm.create(clients[data.opponentID], data.opponentID, data.tableId)
     alarm.create(clients[data.userId], data.userId, data.tableId)
+
     socket.emit('alarm', "안녕!")
     socket.to(clients[data.opponentID]).emit('alarm', "안녕!")
+
   });
 
 
@@ -110,6 +115,22 @@ app.io.on('connection', (socket) => {
 
 });
 
+
+
+function timer(){
+  var loop = setInterval(()=> {
+    chart.chart('Atoken').then(result1 => {
+      chart.chart('Btoken').then(result2 => {
+        chart.chart('Ctoken').then(result3 => {
+          console.log("chartDB Update done ");
+        })
+      })
+    })
+  }, 50000)
+}
+
+
+timer();
 
 server.listen(5555, function () {
   console.log('Example app listening on port 5555!');

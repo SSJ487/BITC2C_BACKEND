@@ -1,28 +1,31 @@
 'use strict';
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Users', {
+    return queryInterface.createTable('Charts', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
-      },
-      email: {
-        unique: true,
+      }, 
+      type: {
         type: Sequelize.STRING
       },
-      password: {
+      begin: {
         type: Sequelize.STRING
       },
-      name: {
+      end: {
         type: Sequelize.STRING
       },
-      phone: {
+      low: {
         type: Sequelize.STRING
       },
-      point: {
-        type: Sequelize.INTEGER
+      high: {
+        type: Sequelize.STRING
+      },
+      date: {
+        type: Sequelize.STRING
       },
       createdAt: {
         allowNull: false,
@@ -32,22 +35,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      emailcheck:{
-        type: Sequelize.STRING
-      }
     }, {
-      classMethods: {
-        associate: function (models) {
-          // associations can be defined here
-          Users.hasMany(models.Wallets);
-        }
-      }
-    }, {
-        timestamp: true,
-        underscored: true
+      timestamp: true, 
+      underscored: true // foreignKey 에 CamelCase 대신 snake_case 를 사용하려면 underscored 를 true 로 지정한다.
     });
+
+e
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Users');
+    return queryInterface.dropTable('Charts');
   }
 };
