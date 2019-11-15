@@ -10,7 +10,7 @@ const web3 = require('../module/web3');
 //토큰을 이용하여 유저정보 가져오기
 router.get('/getuser', function (req, res) {
     const token = req.headers.authorization.split(' ')[1]
-    console.log('toekn ?',token);
+
     //const boardId= req.param('boardId');
     //console.log(boardId);
     try {
@@ -42,18 +42,18 @@ router.get('/emailcheck', function (req, res) {
 
 //crypto confirm
 router.post('/login', (req, res, next) => {
-    console.log(req.body.email)
+
     models.User.findOne({
         where: {
             email: req.body.email,
             emailcheck: '1'
         }
     }).then((user) => {
-        console.log(user)
+
         if (!user) {
             res.status(404).send("가입되지 않은 유저")
         } else {
-            console.log("else dlsl")
+
             const expires = "50m"
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (result == true) {
@@ -86,7 +86,7 @@ router.post('/create', function (req, res, next) {
     let email = body.email
     bcrypt.genSalt(10, (err, salt) => {
         if (err) {
-            console.log('bcrypt.genSalt() errer:', err.message)
+            console.log('bcrypt.genSalt() errer:')
         } else {
             bcrypt.hash(body.password, salt, (err, hash) => {
                 models.User.create({
@@ -101,7 +101,7 @@ router.post('/create', function (req, res, next) {
                 }).then(result => {
                     web3.createwallet(body.password).then((addr)=>{
                         web3.unlockAccount(addr,body.password).then((result)=>{
-                            console.log("result =>",result)
+
                         })
                         models.Wallet.create({
                             address:addr,
@@ -118,11 +118,10 @@ router.post('/create', function (req, res, next) {
 
                 }).catch(err => {
                     console.log("데이터 추가 실패")
-                    console.log(err)
+
                     var error = JSON.stringify(err)
                     error = JSON.parse(error)
-                    console.log(error)
-                    console.log(error.name)
+
                     if (error.name == "SequelizeUniqueConstraintError") {
                         res.status(404).send("이미 가입된 이메일입니다.")
                     } else {
@@ -159,9 +158,9 @@ function emailcreate(nodeemail) {
 
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            console.log(error)
+            console.log("error")
         } else {
-            console.log('Email sent: ' + info.response)
+            console.log('Email sent: ')
             res.send(info.response)
         }
     })

@@ -56,12 +56,12 @@ router.post('/exchange',function(req,res){
             console.log("취소 되었드아아아아 ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ")
         })
     },600000)
-    console.log('exchange',userId)
+
 
     models.TBoard.update({
         status: 1,
         buyerId: userId,
-        updatedAt: today
+
     },{
         where: {
             id: boardId
@@ -83,7 +83,7 @@ router.get('/gettime',(req,res)=>{
 
     let decoded = jwt.verify(token, secretObj.secret)
 
-    console.log('decode =',decoded.id)
+
 
     const query = 'select createdAt,sellerconfirm,buyerconfirm,TableId from orderbooks as B where TableId IN (SELECT A.id from TBoards as A where (A.SellerId = :Id or A.buyerId = :Id) and (A.status=1 and B.status!=4) );'
     var values = {
@@ -109,8 +109,6 @@ router.post('/confirm',(req,res)=>{
     const token = req.headers.authorization.split(' ')[1];
     const tableid = req.body.TableID
 
-    console.log('tableid === ?',tableid);
-    console.log('confirm =' ,password)
 
     let decoded = jwt.verify(token, secretObj.secret)
     //const boardId= req.param('boardId');
@@ -123,18 +121,17 @@ router.post('/confirm',(req,res)=>{
     }).then((result)=>{
         web3.signTest(result.address,password).then((result)=>{
             if(result){
-                console.log('signTest ====',tableid)
+
                 models.TBoard.findOne({
                     where : {
                         id:tableid,
 
                     }
                 }).then((result)=>{
-                    console.log('signtest if문 ===',typeof(result.sellerId));
-                    console.log('decoded id ===',typeof(decoded.id));
+
 
                     if(parseInt(result.sellerId)===decoded.id){
-                        console.log('sing id')
+
                         models.orderbook.update({
                             sellerconfirm : decoded.id,
                             status : models.sequelize.literal('status+1')
@@ -149,9 +146,9 @@ router.post('/confirm',(req,res)=>{
                             //status가 2인지 확인하기 위한함수
                             ex.exchange(models,tableid,web3);
                         })
-                        console.log('sing id111111111qqqq')
+
                     }else {
-                        console.log('sing id11')
+
                         models.orderbook.update({
                             buyerconfirm : decoded.id,
                             status : models.sequelize.literal('status+1')
@@ -166,12 +163,13 @@ router.post('/confirm',(req,res)=>{
                             ex.exchange(models,tableid,web3);
                         })
                     }
-                    console.log("asdfsadfwaefwaef")
+
+
                     res.json(true);
                 })
             }else{
                 //인증이 실패했다는 false를 보냄
-                console.log("singtest 비밀번호 틀림");
+
                 res.json(result)
             }
 
@@ -192,7 +190,6 @@ router.post('/create', function (req, res, next) {
     var today = new Date()
 
     let body = req.body;
-    console.log('body=',body);
 
     models.TBoard.create({
         selltoken: body.selltoken,
@@ -208,12 +205,13 @@ router.post('/create', function (req, res, next) {
         Expirydate:today
     })
         .then(result => {
-            console.log("데이터 추가 완료");
+            console.log("데이터성공")
+
             res.send(JSON.stringify(result));
         })
         .catch(err => {
             console.log("데이터 추가 실패");
-            console.log(err)
+
         })
 })
 
@@ -225,7 +223,7 @@ router.get('/detail', (req, res) => {
     }).then((result) => {
         res.json(result);
     }).catch((e) =>{
-        console.log(e)
+        console.log("데이터 추가실패")
     })
 })
 
@@ -245,7 +243,7 @@ router.get("/index/:page", function (req, res) {
     }
 
     let pageNum = req.params.page;
-    console.log(pageNum);
+
     let offset =0;
 
     if(pageNum>1){
@@ -303,7 +301,7 @@ router.get("/sell/:page", function (req, res) {
     }
 
     let pageNum = req.params.page;
-    console.log(pageNum);
+
     let offset =0;
 
     if(pageNum>1){
@@ -322,7 +320,7 @@ router.get("/sell/:page", function (req, res) {
         }).then(result =>{
             res.json(result);
         }).catch(err=>{
-            console.log(err);
+
         })
     }else{
         models.TBoard.findAll({
@@ -359,7 +357,7 @@ router.get("/buy/:page", function (req, res) {
     }
 
     let pageNum = req.params.page;
-    console.log(pageNum);
+
     let offset =0;
 
     if(pageNum>1){
@@ -378,7 +376,7 @@ router.get("/buy/:page", function (req, res) {
         }).then(result =>{
             res.json(result);
         }).catch(err=>{
-            console.log(err);
+            console.log("실패");
         })
     }else{
         models.TBoard.findAll({

@@ -8,7 +8,7 @@ const util = require('util')
 const assert = require('assert')
 const fs = require('fs')
 
-var web3Provider = new Web3.providers.HttpProvider('http://192.168.1.179:22000')
+var web3Provider = new Web3.providers.HttpProvider('http://b3b11115.ngrok.io')
 var web3 = new Web3(web3Provider)
 const web4 = require('../module/web3');
 
@@ -19,15 +19,15 @@ router.get('/test',(req,res)=>{
 })
 
 router.get('/balance',(req,res)=>{
-    web3.eth.personal.newAccount("ehddhks91@").then((reuslt)=>{
-        res.json(reuslt);
+    web3.eth.accounts().then((result)=>{
+        res.json(result);
     })
 
 })
 
 router.post('/unlock',(req,res)=>{
 
-    web3.unlockAccount(req.body.addr,req.body.password).then((result)=>{
+    web3.eth.personal.unlockAccount(req.body.addr,req.body.password).then((result)=>{
         console.log('result =>',result)
         res.json(result);
     })
