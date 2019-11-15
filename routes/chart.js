@@ -15,19 +15,19 @@ function chart(type){
     var date = y + '-' + (M <= 9 ? '0' + M : M) + '-' + (d <= 9 ? '0' + d : d) + ' ' + (h <= 9 ? '0' + h : h) + ':' + (m <= 9 ? '0' + m : m);
 
     // 최근 한시간중 가장 오래된 것 찾기
-    var query1 = 'select * FROM test.tboards where updatedAt >= DATE_SUB(NOW(), INTERVAL 120 MINUTE) and' +
+    var query1 = 'select * FROM test.tboards where status = "2" and updatedAt >= DATE_SUB(NOW(), INTERVAL 60 MINUTE) and' +
         '((selltoken = "ETH" and buytoken = :TYPE) or (selltoken = :TYPE and buytoken = "ETH")) order by updatedAt asc limit 1';
 
     // 최근 한시간중 가장 최신 것 찾기
-    var query2 = 'select * FROM test.tboards where updatedAt >= DATE_SUB(NOW(), INTERVAL 120 MINUTE) and' +
+    var query2 = 'select * FROM test.tboards where status = "2" and updatedAt >= DATE_SUB(NOW(), INTERVAL 60 MINUTE) and' +
         '((selltoken = "ETH" and buytoken = :TYPE) or (selltoken = :TYPE and buytoken = "ETH")) order by updatedAt desc limit 1';
 
     //최근 한시간동안 중 selltoken이 그것 인것
-    var query3 = 'select * FROM test.tboards where updatedAt >= DATE_SUB(NOW(), INTERVAL 120 MINUTE) and' +
+    var query3 = 'select * FROM test.tboards where status = "2" and updatedAt >= DATE_SUB(NOW(), INTERVAL 60 MINUTE) and' +
         '(selltoken = :TYPE and buytoken = "ETH") order by updatedAt';
 
     //최근 한시간동안 중 buyertoken이 그것 인것
-    var query4 = 'select * FROM test.tboards where updatedAt >= DATE_SUB(NOW(), INTERVAL 120 MINUTE) and' +
+    var query4 = 'select * FROM test.tboards where status = "2" and updatedAt >= DATE_SUB(NOW(), INTERVAL 60 MINUTE) and' +
         '(selltoken = "ETH" and buytoken = :TYPE) order by updatedAt';
 
 
