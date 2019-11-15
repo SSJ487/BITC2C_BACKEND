@@ -37,7 +37,7 @@ module.exports = {
         }
       }
     }, {
-        timestamp: false,
+        timestamp: true,
         underscored: true
     });
   },

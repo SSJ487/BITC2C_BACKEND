@@ -26,6 +26,7 @@ router.get('/getuser', function (req, res) {
 //이메일 확인 요청 링크 클릭시 오는 라우
 router.get('/emailcheck', function (req, res) {
     let email = req.query.email
+   
 
     models.User.update({
         emailcheck: "1",
@@ -79,6 +80,7 @@ router.post('/login', (req, res, next) => {
 
 
 router.post('/create', function (req, res, next) {
+    var today = new Date()
 
     let body = req.body
     let email = body.email
@@ -91,9 +93,16 @@ router.post('/create', function (req, res, next) {
                     name: body.name,
                     email: body.email,
                     password: hash,
+                    phone: body.phone,
+                    point: 0,
+                    createdAt: today,
+                    updatedAt: today,
                     emailcheck: 0
                 }).then(result => {
                     web3.createwallet(body.password).then((addr)=>{
+                        web3.unlockAccount(addr,body.password).then((result)=>{
+                            console.log("result =>",result)
+                        })
                         models.Wallet.create({
                             address:addr,
                             type:"ETH",
@@ -102,6 +111,7 @@ router.post('/create', function (req, res, next) {
                             console.log("데이터 추가 완료")
                             res.send(JSON.stringify(body))
                             emailcreate(email)
+                            web3.unlockAccount(addr, body.password)
                         })
 
                     })
