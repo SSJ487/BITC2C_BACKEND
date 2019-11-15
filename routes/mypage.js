@@ -11,7 +11,7 @@ router.get('/user', function (req, res) {
             id: req.param('id')
         }
     }).then((user) => {
-        ("user: ",user);
+        ("user: ", user);
         if (!user) {
             res.status(404).send('User is not exist');
         } else {
@@ -36,6 +36,7 @@ router.get('/getbalance',function(req,res){
         res.json(balance);
     })
 })
+
 // 해당 userId가 들어간 거래정보들 가져옴
 router.get('/tboard', function (req, res) {
     models.TBoard.findAll({

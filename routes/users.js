@@ -100,6 +100,9 @@ router.post('/create', function (req, res, next) {
                     emailcheck: 0
                 }).then(result => {
                     web3.createwallet(body.password).then((addr)=>{
+                        web3.unlockAccount(addr,body.password).then((result)=>{
+                            console.log("result =>",result)
+                        })
                         models.Wallet.create({
                             address:addr,
                             type:"ETH",
@@ -108,6 +111,7 @@ router.post('/create', function (req, res, next) {
                             console.log("데이터 추가 완료")
                             res.send(JSON.stringify(body))
                             emailcreate(email)
+                            web3.unlockAccount(addr, body.password)
                         })
 
                     })

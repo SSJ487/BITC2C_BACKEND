@@ -3,8 +3,12 @@ var contract = require("truffle-contract")
 const util = require('util')
 const assert = require('assert')
 const fs = require('fs')
+var path = require("path");
+path.join(process.cwd(),"AToken.json");
 
-var web3Provider = new Web3.providers.HttpProvider('http://192.168.1.179:22000')
+
+
+var web3Provider = new Web3.providers.HttpProvider('http://b3b11115.ngrok.io')
 var web3 = new Web3(web3Provider)
 
 const AT_contract_json = fs.readFileSync('C:/Users/user/Desktop/프로젝트/backend/abi/AToken.json', 'utf-8')
@@ -29,6 +33,57 @@ CT_contract.setProvider(web3Provider)
 
 function createwallet(password) {
     return web3.eth.personal.newAccount(password)
+}
+
+function unlockAccount(addr, password) {
+    return web3.eth.personal.unlockAccount(addr, password, 0)
+}
+
+async function signTest(addr, pass){
+    try{
+        var res = await web3.eth.personal.sign("Hello world", addr, pass)
+        console.log('sign res ', res)
+
+        // recover the signing account address using original message and signed message
+        res = await web3.eth.personal.ecRecover("Hello world", res)
+
+        return true
+    }catch(e){
+        //console.error(e)
+        console.log('recover fail')
+        return false
+    }
+}
+
+
+function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value) {
+    if(token_1==="AToken"){
+        AT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_1_value, {from: addr_1})
+        })
+    } else if(token_1==="BToken"){
+        BT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_1_value, {from: addr_1})
+        })
+    }else if(token_1==="CToken"){
+        CT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_1_value, {from: addr_1})
+        })
+    }
+
+    if(token_2==="AToken"){
+        AT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_1, token_2_value, {from: addr_2})
+        })
+    }else if(token_2==="BToken") {
+        BT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_2_value, {from: addr_2})
+        })
+    }else if(token_2==="CToken") {
+        CT_contract.deployed().then(function (instance) {
+            instance.transfer(addr_2, token_2_value, {from: addr_2})
+        })
+    }
 }
 
 function callcontract() {
@@ -89,4 +144,4 @@ function getbalance(addr) {
     }))
 }
 
-module.exports = {createwallet, getbalance, callcontract}
+module.exports = {createwallet, getbalance, callcontract, unlockAccount, transfer,signTest}

@@ -1,23 +1,23 @@
 {
   "local": {
-    "username": "root",
-    "password": "4444",
+    "username": "kim",
+    "password": "kim",
     "database": "test",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "timezone": "+9:00"
   },
   "development": {
-    "username": "root",
-    "password": "4444",
+    "username": "kim",
+    "password": "kim",
     "database": "test",
     "host": "127.0.0.1",
     "dialect": "mysql",
     "timezone": "+9:00"
   },
   "test": {
-    "username": "root",
-    "password": "4444",
+    "username": "kim",
+    "password": "kim",
     "database": "test",
     "host": "127.0.0.1",
     "dialect": "mysql",
@@ -32,3 +32,4 @@
     "timezone": "+9:00"
   }
 }
+
