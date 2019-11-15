@@ -9,14 +9,13 @@ router.post('/create', function (req, res, next) {
     let body = req.body;
     models.Alarm.create({
         status: '0',
-        socketId: req.body.socketId,
-        UserId: req.body.UserId,
+        socketId: body.socketId,
+        UserId: body.UserId,
     })
         .then(result => {
             res.send(JSON.stringify(result));
         })
         .catch(err => {
-
             var error = JSON.stringify(err);
             error = JSON.parse(error);
 
@@ -89,10 +88,8 @@ function create(socketId, UserId, tableId) {
                     res.send(JSON.stringify(result));
                 })
                 .catch(err => {
-
                     var error = JSON.stringify(err);
                     error = JSON.parse(error);
-
                     if (error.name == "SequelizeUniqueConstraintError") {
                         res.send("Userid 주소 중복 에러!!!");
                     } else if (error.name == "SequelizeForeignKeyConstraintError") {
@@ -109,7 +106,6 @@ function create(socketId, UserId, tableId) {
                 }
             }).then(result => {
                 console.log("socket update done!!!")
-
                 models.Alarm.findOne({
                     where: {
                         UserId: UserId,
