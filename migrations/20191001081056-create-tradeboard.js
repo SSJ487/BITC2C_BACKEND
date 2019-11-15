@@ -46,7 +46,7 @@ module.exports = {
       
     },
       {
-        timestamp: false, // timestamp 를 사용한다.
+        timestamp: true,
         underscored: true // foreignKey 에 CamelCase 대신 snake_case 를 사용하려면 underscored 를 true 로 지정한다.
       });
     

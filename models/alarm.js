@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
         socketId: DataTypes.STRING,
         UserId: DataTypes.INTEGER,
         tableId: DataTypes.INTEGER
-    }, { timestamp: false });
+    }, { timestamp: true });
     Alarm.associate = function (models) {
         Alarm.belongsTo(models.User, {
             foreignKey: "UserId",

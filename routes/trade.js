@@ -60,7 +60,8 @@ router.post('/exchange',function(req,res){
 
     models.TBoard.update({
         status: 1,
-        buyerId: userId
+        buyerId: userId,
+        updatedAt: today
     },{
         where: {
             id: boardId
@@ -188,14 +189,7 @@ router.post('/confirm',(req,res)=>{
 
 router.post('/create', function (req, res, next) {
 
-    var today = new Date();
-
-    // var dd = String(today.getDate()).padStart(2, '0');
-    // var mm = String(today.getMonth() + 1).padStart(2, '0');
-    // var yyyy = today.getFullYear();
-
-    //today = mm + '/' + dd + '/' + yyyy;
-
+    var today = new Date()
 
     let body = req.body;
     console.log('body=',body);

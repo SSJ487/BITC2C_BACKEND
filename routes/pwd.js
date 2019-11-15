@@ -36,13 +36,7 @@ router.post('/change', (req, res, next) => {
 function updatepw(email, newpassword){
     console.log(email, newpassword);
     var today = new Date();
-    var dd = String(today.getDate()).padStart(2, '0');
-    var mm = String(today.getMonth() + 1).padStart(2, '0');
-    var yyyy = today.getFullYear();
-    var string ="";
 
-
-    today = mm + '/' + dd + '/' + yyyy;
     bcrypt.genSalt(10, (err, salt) => {
         if (err) {
             console.log('bcrypt.genSalt() errer:', err.message)
