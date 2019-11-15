@@ -58,6 +58,8 @@ async function signTest(addr, pass){
 
 
 function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value) {
+
+
     if(token_1==="AToken"){
         AT_contract.deployed().then(function (instance) {
             instance.transfer(addr_2, token_1_value, {from: addr_1})

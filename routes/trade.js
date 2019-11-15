@@ -4,6 +4,8 @@ const router = express.Router();
 let jwt = require("jsonwebtoken");
 let secretObj = require("../config/jwt");
 const web3 = require('../module/web3');
+const ex = require('../module/exchange');
+
 
 
 router.get("/orderling",(req,res)=>{
@@ -30,7 +32,7 @@ router.post('/exchange',function(req,res){
     //console.log(boardId);
 
     var query = 'INSERT INTO orderbooks (TableId,status,sellerconfirm,buyerconfirm,selltoken,buytoken,selltokenamount,buytokenamount,createdAt,updatedAt) '
-    +'select A.id,0,0,0,A.selltoken,A.buytoken,A.selltokenamount,A.buytokenamount,DATE_ADD(now(),INTERVAL 1 MINUTE),now() FROM TBoards as A where A.id =:Boardid;';
+    +'select A.id,0,0,0,A.selltoken,A.buytoken,A.selltokenamount,A.buytokenamount,DATE_ADD(now(),INTERVAL 10 MINUTE),now() FROM TBoards as A where A.id =:Boardid;';
     var values = {
         Boardid: boardId
     }
@@ -82,14 +84,14 @@ router.get('/gettime',(req,res)=>{
 
     console.log('decode =',decoded.id)
 
-    const query = 'select createdAt,sellerconfirm,buyerconfirm,TableId from orderbooks as B where TableId IN (SELECT A.id from TBoards as A where (A.SellerId = 1 or A.buyerId = 1) and (A.status=1 and B.status!=4) );'
+    const query = 'select createdAt,sellerconfirm,buyerconfirm,TableId from orderbooks as B where TableId IN (SELECT A.id from TBoards as A where (A.SellerId = :Id or A.buyerId = :Id) and (A.status=1 and B.status!=4) );'
     var values = {
         Id: decoded.id
     }
     models.sequelize.query(query, { raw:true,replacements: values ,type:models.sequelize.QueryTypes.SELECT}).spread((results, metadata) => {
         let d1 = new Date()
         let time = ((Date.parse(results.createdAt))/1000) - (Date.parse(d1))/1000
-        const bal=[time,results.sellerconfirm,results.buyerconfirm,decoded.id,results.TableId];
+        let bal=[time,results.sellerconfirm,results.buyerconfirm,decoded.id,results.TableId];
         res.json(bal);
     }, (err) => {
         res.status(404).send(err);
@@ -123,31 +125,48 @@ router.post('/confirm',(req,res)=>{
                 console.log('signTest ====',tableid)
                 models.TBoard.findOne({
                     where : {
-                        id:tableid
+                        id:tableid,
+
                     }
                 }).then((result)=>{
-                    if(result.SellerId===decoded.id){
+                    console.log('signtest if문 ===',typeof(result.sellerId));
+                    console.log('decoded id ===',typeof(decoded.id));
+
+                    if(parseInt(result.sellerId)===decoded.id){
+                        console.log('sing id')
                         models.orderbook.update({
                             sellerconfirm : decoded.id,
                             status : models.sequelize.literal('status+1')
                         },{
 
                             where :{
-                                TableId : tableid
+                                TableId:tableid,
+                                [models.Sequelize.Op.or]:[{status:0},{status:1}]
                             }
 
+                        }).then(()=>{
+                            //status가 2인지 확인하기 위한함수
+                            ex.exchange(models,tableid,web3);
                         })
+                        console.log('sing id111111111qqqq')
                     }else {
+                        console.log('sing id11')
                         models.orderbook.update({
                             buyerconfirm : decoded.id,
                             status : models.sequelize.literal('status+1')
                         },{
 
                             where :{
-                                TableId : tableid
+                                TableId:tableid,
+                                [models.Sequelize.Op.or]:[{status:0},{status:1}]
+
                             }
+                        }).then(()=>{
+                            ex.exchange(models,tableid,web3);
                         })
                     }
+                    console.log("asdfsadfwaefwaef")
+                    res.json(true);
                 })
             }else{
                 //인증이 실패했다는 false를 보냄
