@@ -26,8 +26,6 @@ router.get('/getuser', function (req, res) {
 //이메일 확인 요청 링크 클릭시 오는 라우
 router.get('/emailcheck', function (req, res) {
     let email = req.query.email
-   
-
     models.User.update({
         emailcheck: "1",
     }, {
