@@ -8,9 +8,13 @@ var web3Provider = new Web3.providers.HttpProvider('http://192.168.1.179:22000')
 var web3 = new Web3(web3Provider)
 
 
-const AT_contract_json = fs.readFileSync('/home/marf/workspace/work/bitc2c/BITC2C_BACKEND/abi/AToken.json', 'utf-8')
-const BT_contract_json = fs.readFileSync('/home/marf/workspace/work/bitc2c/BITC2C_BACKEND/abi/Btoken.json', 'utf-8')
-const CT_contract_json = fs.readFileSync('/home/marf/workspace/work/bitc2c/BITC2C_BACKEND/abi/Ctoken.json', 'utf-8')
+const UserCrud_json = fs.readFileSync('/Users/johyeong/Documents/workplace/team3/backend/BITC2C_BACKEND/abi/UserCrud.json', 'utf-8')
+
+const AT_contract_json = fs.readFileSync('/Users/johyeong/Documents/workplace/team3/backend/BITC2C_BACKEND/abi/AToken.json', 'utf-8')
+const BT_contract_json = fs.readFileSync('/Users/johyeong/Documents/workplace/team3/backend/BITC2C_BACKEND/abi/Btoken.json', 'utf-8')
+const CT_contract_json = fs.readFileSync('/Users/johyeong/Documents/workplace/team3/backend/BITC2C_BACKEND/abi/Ctoken.json', 'utf-8')
+
+const U = JSON.parse(UserCrud_json)
 
 const ATabi = JSON.parse(AT_contract_json)
 const BTabi = JSON.parse(BT_contract_json)
@@ -19,31 +23,63 @@ const CTabi = JSON.parse(CT_contract_json)
 
 Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send
 
+const U_contract = contract(U)
+
 const AT_contract = contract(ATabi)
 const BT_contract = contract(BTabi)
 const CT_contract = contract(CTabi)
 
-
+U_contract.setProvider(web3Provider)
 AT_contract.setProvider(web3Provider)
 BT_contract.setProvider(web3Provider)
 CT_contract.setProvider(web3Provider)
 
-function createwallet(password) {
-    return web3.eth.personal.newAccount(password)
+function getUser(email) {
+    return U_contract.deployed()
+        .then(function (instance) {
+            instance.getInfo(email)
+                .then((res)=>{
+                    return res
+                })
+        })
 }
 
-function callcontract() {
-    tt_contract.deployed().then(function (instance) {
+function addUser(email, strName, strPassWord, strAccount, EmailCheck) {
+    return U_contract.deployed()
+        .then(function (instance) {
+            instance.addInfo(email, strName, strPassWord, strAccount, EmailCheck, {from: "0x68Fb207bccf6063fEA145188787d4388A11b7592"})
+                .then((res)=>{
+                    console.log(res)
+                    return ({a:"true"})
+                }).catch((e)=>{
+                    console.log(e)
+                    return (e)
+            })
+        })
+}
 
-        console.log('asdfasfe', instance.transfer("0x29296876bc0f39217c1869c0e6890bf8b028d8ce", 10, {from: myaddr}).then((data) => {
-            console.log('wefqef', data)
-        }))
-    }).then(function (value) {
-        console.log('result', value.toNumber())
+function updateUser(email, strName, strPassWord, strAccount, EmailCheck) {
+    return U_contract.deployed()
+        .then(function (instance) {
+            instance.updateInfo(email, strName, strPassWord, strAccount, EmailCheck, {from: "0x68Fb207bccf6063fEA145188787d4388A11b7592"})
+                .then((res)=>{
+                    return res
+                })
+        })
+}
 
-    }).catch(function (err) {
-        console.log(err.message)
-    })
+function deleteUser(email) {
+    return U_contract.deployed()
+        .then(function (instance) {
+            instance.removeInfo(email)
+                .then((res)=>{
+                    return res
+                })
+        })
+}
+
+function createwallet(password) {
+    return web3.eth.personal.newAccount(password)
 }
 
 function getbalance(addr) {
@@ -90,4 +126,4 @@ function getbalance(addr) {
     }))
 }
 
-module.exports = {createwallet, getbalance, callcontract}
+module.exports = {createwallet, getbalance, getUser, addUser, updateUser, deleteUser}
