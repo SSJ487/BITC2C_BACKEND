@@ -207,5 +207,4 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
 
 }
 
-module.exports = {createwallet, getbalance, unlockAccount, transfer, signTest}
-module.exports = {createwallet, getbalance, getUser, addUser, updateUser, deleteUser}
+module.exports = {createwallet, getbalance, unlockAccount, transfer, signTest, getUser, addUser, updateUser, deleteUser}
