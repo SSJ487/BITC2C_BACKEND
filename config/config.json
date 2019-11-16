@@ -4,35 +4,31 @@
     "password": "kim",
     "database": "test",
     "host": "0.tcp.ngrok.io",
-    "port" : 16713,
-    "dialect": "mysql",
-    "timezone": "+9:00"
+    "port": 16713,
+    "dialect": "mysql"
   },
   "development": {
     "username": "kim",
     "password": "kim",
     "database": "test",
     "host": "0.tcp.ngrok.io",
-    "port" : 16713,
-    "dialect": "mysql",
-    "timezone": "+9:00"
+    "port": 16713,
+    "dialect": "mysql"
   },
   "test": {
     "username": "kim",
     "password": "kim",
     "database": "test",
     "host": "0.tcp.ngrok.io",
-    "port" : 16713,
-    "dialect": "mysql",
-    "timezone": "+9:00"
+    "port": 16713,
+    "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": "4444",
+    "username": "kim",
+    "password": "kim",
     "database": "test",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
-    "timezone": "+9:00"
+    "host": "0.tcp.ngrok.io",
+    "dialect": "mysql"
   }
 }
 
