@@ -8,7 +8,7 @@ const server = require('http').createServer(app)
 const sequelize = require('./models/index').sequelize;
 const cookieParser = require('cookie-parser')
 
-const alarm = require('./routes/alarm');
+//const alarm = require('./routes/alarm');
 const chart = require('./routes/chart');
 var router = express.Router();
 
@@ -29,7 +29,7 @@ app.use('/trade', require('./routes/trade'));
 app.use('/wallet', require('./routes/wallet'));
 app.use('/mypage', require('./routes/mypage'));
 app.use('/pwd', require('./routes/pwd'));
-app.use('/alarm', alarm.router);
+//app.use('/alarm', alarm.router);
 app.use('/web3',require('./routes/web3'));
 app.use('/chart', chart.router);
 
