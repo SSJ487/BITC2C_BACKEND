@@ -105,12 +105,7 @@ function create(socketId, UserId, tableId) {
                     UserId: UserId
                 }
             }).then(result => {
-<<<<<<< HEAD
-
-
-=======
                 console.log("socket update done!!!")
->>>>>>> 1695ca5ef62cb81a46dc544755ba737e04fd3782
                 models.Alarm.findOne({
                     where: {
                         UserId: UserId,

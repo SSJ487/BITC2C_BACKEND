@@ -7,7 +7,6 @@ const web3 = require('../module/web3');
 const ex = require('../module/exchange');
 
 
-
 router.get("/orderling",(req,res)=>{
     const method = req.param('method')
     let order = "DESC";
@@ -32,30 +31,46 @@ router.post('/exchange',function(req,res){
     //console.log(boardId);
 
     var query = 'INSERT INTO orderbooks (TableId,status,sellerconfirm,buyerconfirm,selltoken,buytoken,selltokenamount,buytokenamount,createdAt,updatedAt) '
-    +'select A.id,0,0,0,A.selltoken,A.buytoken,A.selltokenamount,A.buytokenamount,DATE_ADD(now(),INTERVAL 10 MINUTE),now() FROM TBoards as A where A.id =:Boardid;';
+    +'select A.id,0,0,0,A.selltoken,A.buytoken,A.selltokenamount,A.buytokenamount,DATE_ADD(now(),INTERVAL 1 MINUTE),now() FROM TBoards as A where A.id =:Boardid;';
     var values = {
         Boardid: boardId
     }
     setTimeout(function () {
-        models.TBoard.update({
-            status:0,
-            buyerId:0
-        },{
-            where:{
-                id:boardId
-            }
-        }).then(()=>{
-            models.orderbook.update({
-                status:4
-            },{
-                where:{
-                    TableId:boardId
+        models.orderbook.findOne({
+            where :{
+                TableId:boardId,
+                status :{
+                    [models.Sequelize.Op.lt] :3
                 }
-            })
-        }).then(()=>{
-            console.log("취소 되었드아아아아 ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ")
+            }
+        }).then(result=>{
+            if(result.status===2){
+                return
+            }else{
+                models.TBoard.update({
+                    status:0,
+                    buyerId:0
+                },{
+                    where:{
+                        id:boardId
+                    }
+                }).then(()=>{
+                    models.orderbook.update({
+                        status:4
+                    },{
+                        where:{
+                            TableId:boardId
+                        }
+                    })
+                }).then(()=>{
+                console.log("취소되었다요")
+
+                })
+            }
         })
-    },600000)
+
+
+    },60000)
 
 
     models.TBoard.update({
@@ -85,15 +100,21 @@ router.get('/gettime',(req,res)=>{
 
 
 
-    const query = 'select createdAt,sellerconfirm,buyerconfirm,TableId from orderbooks as B where TableId IN (SELECT A.id from TBoards as A where (A.SellerId = :Id or A.buyerId = :Id) and (A.status=1 and B.status!=4) );'
+    const query = 'select createdAt,sellerconfirm,buyerconfirm,TableId from orderbooks as B where TableId IN (SELECT A.id from TBoards as A where (A.SellerId = :Id or A.buyerId = :Id) and (A.status=1 and B.status!=4 and B.status!=5) );'
     var values = {
         Id: decoded.id
     }
     models.sequelize.query(query, { raw:true,replacements: values ,type:models.sequelize.QueryTypes.SELECT}).spread((results, metadata) => {
+
+
         let d1 = new Date()
-        let time = ((Date.parse(results.createdAt))/1000) - (Date.parse(d1))/1000
-        let bal=[time,results.sellerconfirm,results.buyerconfirm,decoded.id,results.TableId];
-        res.json(bal);
+        ;
+        console.log('gettime ==',d1);
+        if(results!==undefined) {
+            let time = ((Date.parse(results.createdAt)) / 1000) - (Date.parse(d1)) / 1000
+            let bal = [time, results.sellerconfirm, results.buyerconfirm, decoded.id, results.TableId];
+            res.json(bal);
+        }
     }, (err) => {
         res.status(404).send(err);
     })
@@ -144,7 +165,21 @@ router.post('/confirm',(req,res)=>{
 
                         }).then(()=>{
                             //status가 2인지 확인하기 위한함수
-                            ex.exchange(models,tableid,web3);
+                            ex.exchange(models,tableid,web3).then((success)=>{
+                                console.log('success12 ========',success)
+                                if(success===2){
+                                    res.json({boolconfirm:true,balanceconfirm:true,transfer:true})
+                                }else if(success===1){
+
+
+                                    res.json({boolconfirm:false,balanceconfirm:false,transfer:false})
+
+                                }else{
+                                    res.json({boolconfirm:true,balanceconfirm:false,transfer:false})
+                                }
+                            })
+
+
                         })
 
                     }else {
@@ -160,12 +195,26 @@ router.post('/confirm',(req,res)=>{
 
                             }
                         }).then(()=>{
-                            ex.exchange(models,tableid,web3);
+                            //status가 2인지 확인하기 위한함수
+                            ex.exchange(models,tableid,web3).then((success)=>{
+                                console.log('success12 ========',success)
+                                if(success===2){
+                                    res.json({boolconfirm:true,balanceconfirm:true,transfer:true})
+                                }else if(success===1){
+
+
+                                    res.json({boolconfirm:false,balanceconfirm:false,transfer:false})
+
+                                }else{
+                                    res.json({boolconfirm:true,balanceconfirm:false,transfer:false})
+                                }
+                            })
+
                         })
                     }
 
 
-                    res.json(true);
+
                 })
             }else{
                 //인증이 실패했다는 false를 보냄
@@ -183,6 +232,7 @@ router.post('/confirm',(req,res)=>{
 
 
 })
+
 
 
 router.post('/create', function (req, res, next) {

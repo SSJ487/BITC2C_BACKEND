@@ -5,7 +5,7 @@ const assert = require('assert')
 const fs = require('fs')
 var path = require("path")
 path.join(process.cwd(), "abi/AToken.json")
-
+const BN = require('bn.js');
 
 var web3Provider = new Web3.providers.HttpProvider('http://b3b11115.ngrok.io')
 var web3 = new Web3(web3Provider)
@@ -14,8 +14,8 @@ var web3 = new Web3(web3Provider)
 const UserCrud_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
 
 const AT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
-const BT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
-const CT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
+const BT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/BToken.json"), 'utf-8')
+const CT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/CToken.json"), 'utf-8')
 
 const U = JSON.parse(UserCrud_json)
 
@@ -150,66 +150,79 @@ function getbalance(addr) {
 }
 
 
-<<<<<<< HEAD
-
-module.exports = {createwallet, getbalance, callcontract, unlockAccount, transfer,signTest}
-=======
 async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value) {
-    return new Promise(((resolve, reject) => {
-        const tokenName = ["AToken", "BToken", "CToken"]
-        const contracts = [AT_contract, BT_contract, CT_contract]
-        let contract_1
-        let contract_2
-        let userBal_1
-        let userBal_2
-        var BN = web3.utils.BN
+    const tokenName = ["Atoken", "Btoken", "Ctoken"]
+    const contracts = [AT_contract, BT_contract, CT_contract]
+    let contract_1
+    let contract_2
+    let userBal_1
+    let userBal_2
+    var BN = web3.utils.BN
 
-        for (let i; i < tokenName.length; i++) {
+
+    return new Promise(((resolve, reject) => {
+
+
+        console.log("시작하자 ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ")
+        for (let i=0; i < tokenName.length; i++) {
+
             if (token_1 === tokenName[i]) {
+
                 contract_1 = contracts[i]
                 contract_1.deployed()
                     .then(function (instance) {
                         instance.balanceOf(addr_1)
                             .then((data) => {
-                                userBal_1 = new BN(data).toNumber()
+                                console.log('BM ==',new BN(data).toString());
+                                userBal_1 = new BN(data).toString()
+                                for (let i=0; i < tokenName.length; i++) {
+                                    if (token_2 === tokenName[i]) {
+                                        contract_2 = contracts[i]
+                                        contract_2.deployed()
+                                            .then(function (instance) {
+                                                instance.balanceOf(addr_2)
+                                                    .then((data) => {
+                                                        console.log('BM22 ==', new BN(data).toString());
+                                                        userBal_2 = new BN(data).toString()
+                                                        resolve()
+                                                    })
+                                            })
+                                    }
+                                }
                             })
                     })
             }
-            if (token_2 === tokenName[i]) {
-                contract_2 = contracts[i]
-                contract_2.deployed()
+
+        }
+
+
+
+    })).then(()=>{
+
+        return new Promise((resolve, reject)=>{
+            if (token_1_value < parseInt(userBal_1) && token_2_value < parseInt(userBal_2)) {
+                console.log("트랜스퍼 들어오는가용?");
+                contract_1.deployed()
                     .then(function (instance) {
-                        instance.balanceOf(addr_2)
-                            .then((data) => {
-                                userBal_2 = new BN(data).toNumber()
+                        instance.transfer(addr_2, token_1_value, {from: addr_1})
+                        contract_2.deployed()
+                            .then(function (instance) {
+                                instance.transfer(addr_1, token_2_value, {from: addr_2})
+                                    .then(() => {
+                                        resolve(true);
+                                    })
                             })
                     })
+
+            } else {
+                resolve(false);
             }
-        }
+        })
 
 
-        if (token_1_value < userBal_1 && token_2_value < userBal_2) {
-            contract_1.deployed()
-                .then(function (instance) {
-                    instance.transfer(addr_2, token_1_value, {from: addr_1})
-                    contract_2.deployed()
-                        .then(function (instance) {
-                            instance.transfer(addr_1, token_2_value, {from: addr_2})
-                                .then(() => {
-                                    resolve(true)
-                                })
-                        })
-                })
-
-        } else {
-            reject("balance 부족")
-        }
-
-
-    }))
+    })
 
 
 }
 
 module.exports = {createwallet, getbalance, unlockAccount, transfer, signTest, getUser, addUser, updateUser, deleteUser}
->>>>>>> 1695ca5ef62cb81a46dc544755ba737e04fd3782
