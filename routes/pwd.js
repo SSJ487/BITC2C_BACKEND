@@ -13,15 +13,15 @@ router.post('/change', (req, res, next) => {
             email: req.body.email
         }
     }).then((user) => {
-        console.log(user);
+
         if (!user) {
-            console.log("NOBODY!!!!");
+
             res.redirect('/');
         } else {
-            console.log("FOUND ONE")
+
             bcrypt.compare(body.password, user.password, (err, result) => {
                 if (result == true) {
-                    console.log("true!!!!!!!!!");
+
 
                     res.send({data: updatepw(body.email, body.newpassword)});
                 }
@@ -34,15 +34,15 @@ router.post('/change', (req, res, next) => {
 })
 
 function updatepw(email, newpassword){
-    console.log(email, newpassword);
+
     var today = new Date();
 
     bcrypt.genSalt(10, (err, salt) => {
         if (err) {
-            console.log('bcrypt.genSalt() errer:', err.message)
+            console.log('bcrypt.genSalt() errer:')
         } else {
             bcrypt.hash(newpassword, salt, (err, hash) => {
-                console.log(hash);
+
 
                 models.User.update({
                     password: hash,
@@ -52,11 +52,11 @@ function updatepw(email, newpassword){
                         email: email,
                     }
                 }).then(result => {
-                    console.log(result, "pw 변경완료");
+                    console.log("pw 변경완료");
                     string = "변경완료";
                 }).catch(err => {
                     console.log("에러!!!!!!!!!!!!!!!!!!");
-                    console.log(err);
+
                     string = "변경실패";
                 });
             })
@@ -70,14 +70,14 @@ function updatepw(email, newpassword){
 //crypto confirm
 router.post('/forgot', (req, res, next) => {
     let body = req.body;
-    console.log(req.body.email)
+
     models.User.findOne({
         where: {
             email: body.email,
             name: body.name
         }
     }).then((user) => {
-        console.log(user);
+
         if (!user) {
             res.status(404).send("입력정보 오류!!!!");
         } else {
@@ -91,7 +91,7 @@ function savetmppw(email) {
     var tmppwd = randomString();
     bcrypt.genSalt(10, (err, salt) => {
         if (err) {
-            console.log('bcrypt.genSalt() errer:', err.message)
+            console.log('bcrypt.genSalt() errer:')
         } else {
             bcrypt.hash(tmppwd, salt, (err, hash) => {
                 models.User.update({
@@ -102,7 +102,7 @@ function savetmppw(email) {
                         email: email
                     }
                 }).then((result) => {
-                    console.log(result);
+
                     if (!result) {
                         res.send("임시비밀번호 저장 오류!!!!");
                     } else {
@@ -121,7 +121,7 @@ function savetmppw(email) {
             var rnum = Math.floor(Math.random() * chars.length);
             randomstring += chars.substring(rnum, rnum + 1);
         }
-        console.log(randomString);
+
         //document.randform.randomfield.value = randomstring;
         return randomstring;
     }
@@ -147,10 +147,10 @@ function savetmppw(email) {
 
         transporter.sendMail(mailOptions, function (error, info) {
             if (error) {
-                console.log(error);
+                console.log("senmail error");
             }
             else {
-                console.log('Email sent: ' + info.response);
+                console.log('Email sent: ');
                 res.send(info.response);
             }
         });

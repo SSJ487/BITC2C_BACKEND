@@ -79,8 +79,7 @@ function chart(type){
                     .then(result => {
                         resolve(result)
                     }).catch(err => {
-                        console.log("데이터 추가 실패");
-                        console.log(err)
+
                         resolve(err)
                     })
             }
@@ -124,8 +123,7 @@ function chart(type){
                     .then(result => {
                         resolve(result)
                     }).catch(err => {
-                        console.log("데이터 추가 실패");
-                        console.log(err)
+
                         resolve(err)
                     })
             }
@@ -133,7 +131,7 @@ function chart(type){
 
         // 해당 토큰이 sellertoken인 경우
         models.sequelize.query(query3, { replacements: values }).spread((results, metadata) => {
-            console.log("result: ", results)
+
             if (results.length > 0) {
                 min1 = (results[0].buytokenamount / results[0].selltokenamount).toFixed(5);
                 max1 = (results[0].buytokenamount / results[0].selltokenamount).toFixed(5);
@@ -175,8 +173,7 @@ function chart(type){
                     .then(result => {
                         resolve(result)
                     }).catch(err => {
-                        console.log("데이터 추가 실패");
-                        console.log(err)
+
                         resolve(err)
                     })
             }
@@ -185,7 +182,7 @@ function chart(type){
 
         // 해당 토큰이 buyertoken인 경우
         models.sequelize.query(query4, { replacements: values }).spread((results, metadata) => {
-            console.log("result: ", results)
+
             if (results.length > 0) {
                 min2 = (results[0].selltokenamount / results[0].buytokenamount).toFixed(5);
                 max2 = (results[0].selltokenamount / results[0].buytokenamount).toFixed(5);
@@ -226,8 +223,7 @@ function chart(type){
                     .then(result => {
                         resolve(result)
                     }).catch(err => {
-                        console.log("데이터 추가 실패");
-                        console.log(err)
+
                         resolve(err)
                     })
             }

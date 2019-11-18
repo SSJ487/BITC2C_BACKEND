@@ -99,3 +99,4 @@ changed.json
 
 config.json
 config
+config/jwt.js

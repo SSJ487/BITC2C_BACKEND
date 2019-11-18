@@ -31,6 +31,7 @@ app.use('/mypage', require('./routes/mypage'));
 app.use('/pwd', require('./routes/pwd'));
 app.use('/alarm', alarm.router);
 app.use('/web3',require('./routes/web3'));
+app.use('/test', require('./routes/test'));
 app.use('/chart', chart.router);
 
 //socket io 추가
@@ -46,25 +47,24 @@ var clients = [];
 function registerUser(socket, user_id) {
 
   // socket_id와 nickname 테이블을 셋업
-  console.log("???????@?@?@?: ", socket.id)
+
 
   if (clients[user_id] != undefined) delete clients[user_id];
 
   clients[user_id] = socket.id
 
-  console.log("!!!!!: ", clients[user_id])
+
 
 }
 
 
 app.io.on('connection', (socket) => {
 
-  console.log("a user connected");
-  console.log("socket ID: ", socket.id);
+
 
   socket.on('storeClientInfo', (data) => {
-    
-    console.log("User ID: ", data);
+
+
 
     // alarm.create(socket.id, data.id)
 
@@ -74,15 +74,13 @@ app.io.on('connection', (socket) => {
 
 
   socket.on('alarm', (msg) => {
-    console.log('socket alarm: ', msg);
+
     socket.emit('alarm', "안녕")
   });
 
   socket.on('trading', (data) => {
-    
-    console.log('trading opponent: ', clients[data.opponentID]);
-    console.log('my trading: ', clients[data.userId]);
-    console.log('tableid: ', data.tableId)
+
+
 
     alarm.create(clients[data.opponentID], data.opponentID, data.tableId)
     alarm.create(clients[data.userId], data.userId, data.tableId)
@@ -94,19 +92,16 @@ app.io.on('connection', (socket) => {
 
 
   socket.on('disconnect', (msg) => {
-    console.log('user disconnected: ', msg);
+    console.log('user disconnected: ');
   });
 
 
   // socket io 통신
   app.post('/alarm', function (req, res, next) {
-    console.log('alarm 통신 ', req.body.id)
+
     alarm.find(req.body.id).then((user) => {
       user = JSON.parse(JSON.stringify(user));
 
-      console.log("find alarm object", user)
-
-      console.log("found alarm object one: ", user.socketId);
 
       socket.to(user.socketId).emit('alarm', "안뇽하세용");
     })
@@ -122,7 +117,7 @@ function timer(){
     chart.chart('Atoken').then(result1 => {
       chart.chart('Btoken').then(result2 => {
         chart.chart('Ctoken').then(result3 => {
-          console.log("chartDB Update done ");
+
         })
       })
     })

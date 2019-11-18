@@ -32,7 +32,7 @@ router.get('/user', function (req, res) {
 router.get('/getbalance',function(req,res){
     const addr = req.param('address')
     web3.getbalance(addr).then((balance) =>{
-        console.log("return", balance)
+
         res.json(balance);
     })
 })
