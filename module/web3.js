@@ -12,8 +12,8 @@ var web3 = new Web3(web3Provider)
 const UserCrud_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
 
 const AT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
-const BT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/BToken.json"), 'utf-8')
-const CT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/CToken.json"), 'utf-8')
+const BT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/Btoken.json"), 'utf-8')
+const CT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/Ctoken.json"), 'utf-8')
 
 const U = JSON.parse(UserCrud_json)
 
@@ -146,54 +146,61 @@ function getbalance(addr) {
     }))
 }
 
-function tokenBal(tokenName, tokenArray, contract, contractArray, addr,BN) {
-    return new Promise(((resolve) => {
-        for (let i = 0; i < tokenArray.length; i++) {
-            if (tokenName === tokenArray[i]) {
-                contract = contractArray[i]
-                contract.deployed()
-                    .then(function (instance) {
-                        instance.balanceOf(addr)
-                            .then((data) => {
-                                resolve(new BN(data).toString())
-                            })
-                    })
-            }
+async function tokenBal(tokenName, tokenArray, contract, contractArray, addr, BN) {
+    for (let i = 0; i < tokenArray.length; i++) {
+        let result;
+        if (tokenName === tokenArray[i]) {
+            contract = contractArray[i]
+            await contract.deployed()
+                .then(async function (instance) {
+                    await instance.balanceOf(addr)
+                        .then((data) => {
+                            result = [new BN(data).toString(), contractArray[i]]
+                        })
+                })
         }
-
-    }))
+        return result
+    }
 }
 
-function tokenTransfer(contract, fromUser, toUser, amount) {
-    return new Promise((resolve => {
-        contract.deployed()
-            .then(function (instance) {
-                instance.transfer(toUser, amount, {from: fromUser})
-                    .then(() => resolve())
-            })
+async function tokenTransfer(contract, fromUser, toUser, amount) {
+    return await contract.deployed()
+        .then(async function (instance) {
+            await instance.transfer(toUser, amount, {from: fromUser})
+                .then(() => {
+                    console.log("token Tanse ffff asdfunction")
+                    return true
+                }).catch(() => {
+                    return false
+                })
+        }).then((result) => {
+            return result
+        })
 
-    }))
-}
-
-function tokenEthTransfer(ethAddr, ethBal, ethAmount, tokenAddr, tokenBal, TokenAmount, tokenContract) {
-    return new Promise((resolve) => {
-        if (ethAmount < parseInt(ethBal) && TokenAmount < parseInt(tokenBal)) {
-            web3.eth.sendTransaction({
-                from: ethAddr,
-                to: tokenAddr,
-                value: ethAmount
-            })
-                .then(() =>
-                    tokenTransfer(tokenContract, tokenAddr, ethAddr, TokenAmount)
-                        .then(() => resolve(true))
-                )
-        } else {
-            resolve(false)
-        }
-    })
 
 }
 
+async function tokenEthTransfer(ethAddr, ethBal, ethAmount, tokenAddr, tokenBal, TokenAmount, tokenContract) {
+    console.log("qwdqwdwdqwd")
+    console.log("ethAmount = ", ethAmount)
+    console.log("tokenAmount = ", TokenAmount)
+    console.log("ethbal = ", ethBal)
+    console.log("tokenbal = ", tokenBal)
+    if (ethAmount < parseInt(ethBal) && TokenAmount < parseInt(tokenBal)) {
+        console.log("tokenethtransfer")
+        await web3.eth.sendTransaction({
+            from: ethAddr,
+            to: tokenAddr,
+            value: ethAmount
+        })
+        console.log("toeknethrtarns====")
+        await tokenTransfer(tokenContract, tokenAddr, ethAddr, TokenAmount)
+        return true
+    } else {
+        console.log("token Eth Tra nnnnn")
+        return false
+    }
+}
 
 async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value) {
     const tokenName = ["Atoken", "Btoken", "Ctoken"]
@@ -203,17 +210,18 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
     let userBal_1
     let userBal_2
     var BN = web3.utils.BN
-    console.log("transfer ===========")
     if (token_1 !== "ETH" && token_2 !== "ETH") {
         console.log("transfer11 ===========")
         return new Promise(((resolve) => {
             tokenBal(token_1, tokenName, contract_1, contracts, addr_1, BN)
                 .then((bal) => {
-                    userBal_1 = bal
+                    userBal_1 = bal[0]
+                    contract_1 = bal[1]
                 })
             tokenBal(token_2, tokenName, contract_2, contracts, addr_2, BN)
                 .then((bal) => {
-                    userBal_2 = bal
+                    userBal_2 = bal[0]
+                    contract_2 = bal[1]
                 })
             if (userBal_1 !== null && userBal_2 !== null) {
                 resolve()
@@ -232,48 +240,56 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
                     }
                 })
             })
-
     } else if (token_1 === "ETH") {
         return new Promise((resolve => {
             web3.eth.getBalance(addr_1).then((bal) => {
+                console.log("bal ====", bal)
                 userBal_1 = bal
+                if (typeof (userBal_1) !== "undefined" && typeof (userBal_2) !== "undefined") {
+                    resolve()
+                }
             })
             tokenBal(token_2, tokenName, contract_2, contracts, addr_2, BN)
                 .then((bal) => {
-                    userBal_2 = bal
+                    console.log("tokenball ====", bal[0])
+                    userBal_2 = bal[0]
+                    contract_2 = bal[1]
+                    if (typeof (userBal_1) !== "undefined" && typeof (userBal_2) !== "undefined") {
+                        resolve()
+                    }
                 })
-            if (userBal_1 !== null && userBal_2 !== null) {
-                resolve()
-            }
         }))
             .then(() => {
-                new Promise(resolve => {
-                    console.log("asdqwdqwd =111=")
-                    resolve(tokenEthTransfer(addr_1, userBal_1, token_1_value, addr_2, userBal_2, token_2_value, contract_2))
-
+                console.log('asdfasdf11', userBal_2)
+                return new Promise((resolve, reject) => {
+                    resolve(tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_2))
                 })
+
             })
     } else if (token_2 === "ETH") {
         return new Promise((resolve => {
             web3.eth.getBalance(addr_2).then((bal) => {
                 userBal_2 = bal
+                if (userBal_1 !== null && userBal_2 !== null) {
+                    resolve()
+                }
             })
             tokenBal(token_1, tokenName, contract_1, contracts, addr_1, BN)
                 .then((bal) => {
-                    userBal_1 = bal
+                    userBal_1 = bal[0]
+                    contract_1 = bal[1]
+                    if (userBal_1 !== null && userBal_2 !== null) {
+                        resolve()
+                    }
                 })
-            if (userBal_1 !== null && userBal_2 !== null) {
-                resolve()
-            }
+
         }))
             .then(() => {
-                new Promise(resolve => {
-                    console.log("asdqwdqwd ==")
+                return new Promise((resolve, reject) => {
                     resolve(tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_1))
                 })
             })
     }
-
 }
 
 module.exports = {createwallet, getbalance, unlockAccount, transfer, signTest, getUser, addUser, updateUser, deleteUser}
