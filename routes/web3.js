@@ -41,58 +41,57 @@ BT_contract.setProvider(web3Provider)
 CT_contract.setProvider(web3Provider)
 
 
-router.get('/test',(req,res)=>{
+router.get('/test', (req, res) => {
     console.log("e");
-   res.json(web3.callcontract())
+    res.json(web3.callcontract())
 })
 
-router.get('/balance',(req,res)=>{
-    web3.eth.accounts().then((result)=>{
+router.get('/balance', (req, res) => {
+    web3.eth.accounts().then((result) => {
         res.json(result);
     })
 
 })
 
-router.post('/unlock',(req,res)=>{
+router.post('/unlock', (req, res) => {
 
-    web3.eth.personal.unlockAccount(req.body.addr,req.body.password).then((result)=>{
-        console.log('result =>',result)
+    web3.eth.personal.unlockAccount(req.body.addr, req.body.password).then((result) => {
+        console.log('result =>', result)
         res.json(result);
     })
 
 
 })
 
-router.post('/tokensign',(req,res)=>{
+router.post('/tokensign', (req, res) => {
     const addr = req.body.addr;
     const password = req.body.password;
 
-    web4.signTest(addr,password).then((result)=>{
+    web4.signTest(addr, password).then((result) => {
         console.log(result);
         res.json(result);
     })
 
- 
 
 })
 
-router.post('/transfer',(req,res)=>{
+router.post('/transfer', (req, res) => {
     const addr1 = req.body.addr1;
     const addr2 = req.body.addr2;
     const value = req.body.value;
 
-   console.log("addr1 = ",addr1);
-   console.log("addr2 = ",addr2);
-   console.log("value = ",value);
+    console.log("addr1 = ", addr1);
+    console.log("addr2 = ", addr2);
+    console.log("value = ", value);
 
-    AT_contract.deployed().then(instance =>{
-        instance.transfer(addr2,value,{from:addr1}).then(result=>{
+    AT_contract.deployed().then(instance => {
+        instance.transfer(addr2, value, {from: addr1}).then(result => {
 
         })
     })
     console.log("asdasdasdasdasd")
-    BT_contract.deployed().then(instance =>{
-        instance.transfer(addr2,value,{from:addr1}).then(result=>{
+    BT_contract.deployed().then(instance => {
+        instance.transfer(addr2, value, {from: addr1}).then(result => {
 
         })
     })
@@ -101,16 +100,16 @@ router.post('/transfer',(req,res)=>{
 
 })
 
-router.post('/getbalnace',(req,res)=>{
+router.post('/getbalnace', (req, res) => {
     var BN = web3.utils.BN
     const addr2 = req.body.addr2;
     let a = [];
-    AT_contract.deployed().then(instance=>{
-        instance.balanceOf(addr2).then((data)=>{
+    AT_contract.deployed().then(instance => {
+        instance.balanceOf(addr2).then((data) => {
             const bc = new BN(data).toString()
-                a.push(bc)
-            BT_contract.deployed().then(instance=>{
-                instance.balanceOf(addr2).then((data)=>{
+            a.push(bc)
+            BT_contract.deployed().then(instance => {
+                instance.balanceOf(addr2).then((data) => {
                     const ka = new BN(data).toString();
                     a.push(ka)
                     res.json(a);
@@ -123,100 +122,178 @@ router.post('/getbalnace',(req,res)=>{
 })
 
 
+function tokenBal(tokenName, tokenArray, contract, contractArray, addr, BN) {
+    return new Promise(((resolve) => {
+        for (let i = 0; i < tokenArray.length; i++) {
+            if (tokenName === tokenArray[i]) {
+                contract = contractArray[i]
+                contract.deployed()
+                    .then(function (instance) {
+                        instance.balanceOf(addr)
+                            .then((data) => {
+                                resolve([new BN(data).toString(), contractArray[i]])
+                            })
+                    })
+            }
+        }
 
-async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value) {
-    const tokenName = ["ETH","Atoken", "Btoken", "Ctoken"]
+    }))
+}
+
+async function tokenTransfer(contract, fromUser, toUser, amount) {
+    return await contract.deployed()
+        .then(async function (instance) {
+            await instance.transfer(toUser, amount, {from: fromUser})
+                .then(()=>{
+                    console.log("token Tanse ffff asdfunction")
+                    return true
+                }).catch(()=>{
+                    return false
+            })
+        })
+
+
+}
+
+async function tokenEthTransfer(ethAddr, ethBal, ethAmount, tokenAddr, tokenBal, TokenAmount, tokenContract) {
+
+    console.log("qwdqwdwdqwd");
+    console.log("ethAmount = ", ethAmount)
+    console.log("tokenAmount = ", TokenAmount)
+    console.log("ethbal = ", ethBal)
+    console.log("tokenbal = ", tokenBal)
+    if (ethAmount < parseInt(ethBal) && TokenAmount < parseInt(tokenBal)) {
+        console.log("tokenethtransfer")
+        await web3.eth.sendTransaction({
+            from: ethAddr,
+            to: tokenAddr,
+            value: ethAmount
+        })
+        console.log("toeknethrtarns====");
+        await tokenTransfer(tokenContract, tokenAddr, ethAddr, TokenAmount).then((res)=>{
+            const result = res
+            console.log(result)
+        })
+
+
+
+    } else {
+        console.log("token Eth Tra nnnnn")
+        return false
+    }
+
+
+}
+
+
+function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value) {
+    const tokenName = ["Atoken", "Btoken", "Ctoken"]
     const contracts = [AT_contract, BT_contract, CT_contract]
     let contract_1
     let contract_2
     let userBal_1
     let userBal_2
     var BN = web3.utils.BN
-    console.log('token_1_name type =',typeof (token_1))
-    console.log('token_2_name type =',typeof (tokenName[1]))
-
-    return new Promise(((resolve, reject) => {
-
-
-        console.log("시작하자 ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ")
-        if(token_1==="ETH" || token_2==="ETH"){
-
-        }
-
-        for (let i=0; i < tokenName.length; i++) {
-
-            if (token_1 === tokenName[i]) {
-                console.log('token_1_name =',(token_1))
-                console.log('token_2_name  =',(tokenName[i]))
-                console.log("시작하자 ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ")
-                contract_1 = contracts[i]
-                contract_1.deployed()
-                    .then(function (instance) {
-                        instance.balanceOf(addr_1)
-                            .then((data) => {
-                                console.log('BM ==',new BN(data).toString());
-                                userBal_1 = new BN(data).toString()
-                                for (let i=0; i < tokenName.length; i++) {
-                                    if (token_2 === tokenName[i]) {
-                                        contract_2 = contracts[i]
-                                        contract_2.deployed()
-                                            .then(function (instance) {
-                                                instance.balanceOf(addr_2)
-                                                    .then((data) => {
-                                                        console.log('BM22 ==', new BN(data).toString());
-                                                        userBal_2 = new BN(data).toString()
-                                                        resolve()
-                                                    })
-                                            })
-                                    }
-                                }
-                            })
-                    })
+    console.log("transfer ===========")
+    if (token_1 !== "ETH" && token_2 !== "ETH") {
+        console.log("transfer11 ===========")
+        return new Promise(((resolve) => {
+            tokenBal(token_1, tokenName, contract_1, contracts, addr_1, BN)
+                .then((bal) => {
+                    userBal_1 = bal[0]
+                    contract_1 = bal[1]
+                })
+            tokenBal(token_2, tokenName, contract_2, contracts, addr_2, BN)
+                .then((bal) => {
+                    userBal_2 = bal[0]
+                    contract_2 = bal[1]
+                })
+            if (userBal_1 !== null && userBal_2 !== null) {
+                resolve()
             }
+        }))
+            .then(() => {
+                return new Promise((resolve) => {
+                    if (token_1_value < parseInt(userBal_1) && token_2_value < parseInt(userBal_2)) {
+                        tokenTransfer(contract_1, addr_1, addr_2, token_1_value)
+                            .then(() =>
+                                tokenTransfer(contract_2, addr_2, addr_1, token_2_value)
+                                    .then(() => resolve(true))
+                            )
+                    } else {
+                        resolve(false)
+                    }
+                })
+            })
 
-        }
+    } else if (token_1 === "ETH") {
+        return new Promise((resolve => {
+            web3.eth.getBalance(addr_1).then((bal) => {
+                console.log("bal ====", bal)
+                userBal_1 = bal
+                if (typeof (userBal_1) !== "undefined" && typeof (userBal_2) !== "undefined") {
+                    resolve()
+                }
+            })
+            tokenBal(token_2, tokenName, contract_2, contracts, addr_2, BN)
+                .then((bal) => {
+                    console.log("tokenball ====", bal[0])
+                    userBal_2 = bal[0]
+                    contract_2 = bal[1]
+                    if (typeof (userBal_1) !== "undefined" && typeof (userBal_2) !== "undefined") {
+                        resolve()
+                    }
 
-
-
-    })).then(()=>{
-        console.log('token_1_value type =',typeof (token_1_value))
-        console.log('token_2_value type =',typeof (token_2_value))
-        console.log('userBal_1 type =',typeof (userBal_1))
-        console.log('userBal_2 type =',typeof (userBal_2))
-        console.log('userBal_1 parse =',parseInt(userBal_1))
-        console.log('userBal_2 parse =',parseInt(userBal_2))
-
-        if (token_1_value < parseInt(userBal_1) && token_2_value < parseInt(userBal_2)) {
-            console.log("트랜스퍼 들어오는가용?");
-            contract_1.deployed()
-                .then(function (instance) {
-                    instance.transfer(addr_2, token_1_value, {from: addr_1})
-                    contract_2.deployed()
-                        .then(function (instance) {
-                            instance.transfer(addr_1, token_2_value, {from: addr_2})
-                                .then(() => {
-                                    return true;
-                                })
-                        })
                 })
 
-        } else {
-        return false;
-        }
-    })
+        }))
+            .then(() => {
+                console.log('asdfasdf11', userBal_2)
+                return new Promise((resolve, reject) => {
+                    resolve(tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_2))
+                })
 
+            })
+    } else if (token_2 === "ETH") {
+        return new Promise((resolve => {
+            web3.eth.getBalance(addr_2).then((bal) => {
+                userBal_2 = bal
+                if (userBal_1 !== null && userBal_2 !== null) {
+                    resolve()
+                }
+            })
+            tokenBal(token_1, tokenName, contract_1, contracts, addr_1, BN)
+                .then((bal) => {
+                    userBal_1 = bal[0]
+                    contract_1 = bal[1]
+                    if (userBal_1 !== null && userBal_2 !== null) {
+                        resolve()
+                    }
+                })
+
+        }))
+            .then(() => {
+                return new Promise((resolve, reject) => {
+                    resolve(tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_1))
+                })
+
+            })
+    }
 
 }
 
-router.post('/test',(req,res)=>{
+router.post('/test', (req, res) => {
     addr_1 = req.body.addr1;
     addr_2 = req.body.addr2;
     token_1 = req.body.token_1;
     token_2 = req.body.token_2;
     token_1_value = req.body.token_1_value;
     token_2_value = req.body.token_2_value;
-    transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value)
+    transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value).then((result) => {
+        console.log('test////', result);
+        res.json(result);
+    })
 })
 
 
-module.exports =router;
+module.exports = router;

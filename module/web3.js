@@ -146,7 +146,7 @@ function getbalance(addr) {
     }))
 }
 
-function tokenBal(tokenName, tokenArray, contract, contractArray, addr) {
+function tokenBal(tokenName, tokenArray, contract, contractArray, addr,BN) {
     return new Promise(((resolve) => {
         for (let i = 0; i < tokenArray.length; i++) {
             if (tokenName === tokenArray[i]) {
@@ -203,8 +203,9 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
     let userBal_1
     let userBal_2
     var BN = web3.utils.BN
-
-    if (token_1 !== "ETC" && token_2 !== "ETC") {
+    console.log("transfer ===========")
+    if (token_1 !== "ETH" && token_2 !== "ETH") {
+        console.log("transfer11 ===========")
         return new Promise(((resolve) => {
             tokenBal(token_1, tokenName, contract_1, contracts, addr_1, BN)
                 .then((bal) => {
@@ -247,8 +248,9 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
         }))
             .then(() => {
                 new Promise(resolve => {
-                    tokenEthTransfer(addr_1, userBal_1, token_1_value, addr_2, userBal_2, token_2_value, contract_2)
-                        .then((result)=> resolve(result))
+                    console.log("asdqwdqwd =111=")
+                    resolve(tokenEthTransfer(addr_1, userBal_1, token_1_value, addr_2, userBal_2, token_2_value, contract_2))
+
                 })
             })
     } else if (token_2 === "ETH") {
@@ -266,8 +268,8 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
         }))
             .then(() => {
                 new Promise(resolve => {
-                    tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_1)
-                        .then((result)=> resolve(result))
+                    console.log("asdqwdqwd ==")
+                    resolve(tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_1))
                 })
             })
     }

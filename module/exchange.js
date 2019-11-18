@@ -15,8 +15,8 @@ function exchange(models,tableid,web3) {
             if(result.status ===2){
                 const query = 'select A.address as selladdr ,B.address as buyaddr ,C.selltoken as selltoken,C.buytoken as buytoken,C.selltokenamount as sellamount,C.buytokenamount as buyamount from Wallets as A ,Wallets as B ,orderbooks as C where A.UserId = sellerconfirm and B.UserId = buyerconfirm';
                 models.sequelize.query(query,{type:models.sequelize.QueryTypes.SELECT}).spread((results)=>{
-                    web3.transfer(results.selladdr,results.selltoken,results.sellamount,results.buyaddr,results.buytoken,results.buyamount, password).then(bool=>{
-                        console.log("booooolllllllllll",bool);
+                    web3.transfer(results.selladdr,results.selltoken,results.sellamount,results.buyaddr,results.buytoken,results.buyamount).then(bool=>{
+                        console.log("booooolllllllllll======",bool);
                         if(bool){
                             models.orderbook.update({
                                 status:3
