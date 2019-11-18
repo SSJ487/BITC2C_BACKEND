@@ -86,13 +86,13 @@ router.post('/transfer',(req,res)=>{
    console.log("value = ",value);
 
     AT_contract.deployed().then(instance =>{
-        instance.transfer(addr2,40000,{from:addr1}).then(result=>{
+        instance.transfer(addr2,value,{from:addr1}).then(result=>{
 
         })
     })
     console.log("asdasdasdasdasd")
     BT_contract.deployed().then(instance =>{
-        instance.transfer(addr2,20000,{from:addr1}).then(result=>{
+        instance.transfer(addr2,value,{from:addr1}).then(result=>{
 
         })
     })

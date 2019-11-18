@@ -31,7 +31,7 @@ router.post('/exchange',function(req,res){
     //console.log(boardId);
 
     var query = 'INSERT INTO orderbooks (TableId,status,sellerconfirm,buyerconfirm,selltoken,buytoken,selltokenamount,buytokenamount,createdAt,updatedAt) '
-    +'select A.id,0,0,0,A.selltoken,A.buytoken,A.selltokenamount,A.buytokenamount,DATE_ADD(now(),INTERVAL 1 MINUTE),now() FROM TBoards as A where A.id =:Boardid;';
+    +'select A.id,0,0,0,A.selltoken,A.buytoken,A.selltokenamount,A.buytokenamount,DATE_ADD(now(),INTERVAL 3 MINUTE),now() FROM TBoards as A where A.id =:Boardid;';
     var values = {
         Boardid: boardId
     }
@@ -44,6 +44,8 @@ router.post('/exchange',function(req,res){
                 }
             }
         }).then(result=>{
+            if(result===null||result===undefined) return;
+
             if(result.status===2){
                 return
             }else{
@@ -70,7 +72,7 @@ router.post('/exchange',function(req,res){
         })
 
 
-    },60000)
+    },180000)
 
 
     models.TBoard.update({
@@ -219,7 +221,7 @@ router.post('/confirm',(req,res)=>{
             }else{
                 //인증이 실패했다는 false를 보냄
 
-                res.json(result)
+                res.json({boolconfirm:true,balanceconfirm:false,transfer:false})
             }
 
         })
