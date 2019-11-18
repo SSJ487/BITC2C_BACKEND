@@ -83,9 +83,8 @@ router.post('/exchange',function(req,res){
         where: {
             id: boardId
         }
-    }).then((data) => {
-
-        models.sequelize.query(query, { replacements: values }).spread((results, metadata) => {
+    }).then(() => {
+        models.sequelize.query(query, { replacements: values }).spread((results) => {
             res.json(results)
         }, (err) => {
             res.status(404).send(err);
@@ -106,7 +105,7 @@ router.get('/gettime',(req,res)=>{
     var values = {
         Id: decoded.id
     }
-    models.sequelize.query(query, { raw:true,replacements: values ,type:models.sequelize.QueryTypes.SELECT}).spread((results, metadata) => {
+    models.sequelize.query(query, { raw:true,replacements: values ,type:models.sequelize.QueryTypes.SELECT}).spread((results) => {
 
 
         let d1 = new Date()
@@ -122,10 +121,6 @@ router.get('/gettime',(req,res)=>{
     })
 
 })
-//판매자인지 구매자인지 확인
-router.post('/sellandbuy',(req,res)=>{
-
-})
 
 router.post('/confirm',(req,res)=>{
     const password = req.body.password;
@@ -139,22 +134,17 @@ router.post('/confirm',(req,res)=>{
     models.Wallet.findOne({
         where: {
             UserId: decoded.id
-
         }
     }).then((result)=>{
         web3.signTest(result.address,password).then((result)=>{
             if(result){
-
                 models.TBoard.findOne({
                     where : {
                         id:tableid,
 
                     }
                 }).then((result)=>{
-
-
                     if(parseInt(result.sellerId)===decoded.id){
-
                         models.orderbook.update({
                             sellerconfirm : decoded.id,
                             status : models.sequelize.literal('status+1')
@@ -164,7 +154,6 @@ router.post('/confirm',(req,res)=>{
                                 TableId:tableid,
                                 [models.Sequelize.Op.or]:[{status:0},{status:1}]
                             }
-
                         }).then(()=>{
                             //status가 2인지 확인하기 위한함수
                             ex.exchange(models,tableid,web3).then((success)=>{
@@ -172,25 +161,19 @@ router.post('/confirm',(req,res)=>{
                                 if(success===2){
                                     res.json({boolconfirm:true,balanceconfirm:true,transfer:true})
                                 }else if(success===1){
-
-
                                     res.json({boolconfirm:false,balanceconfirm:false,transfer:false})
 
                                 }else{
                                     res.json({boolconfirm:true,balanceconfirm:false,transfer:false})
                                 }
                             })
-
-
                         })
 
                     }else {
-
                         models.orderbook.update({
                             buyerconfirm : decoded.id,
                             status : models.sequelize.literal('status+1')
                         },{
-
                             where :{
                                 TableId:tableid,
                                 [models.Sequelize.Op.or]:[{status:0},{status:1}]
@@ -214,13 +197,9 @@ router.post('/confirm',(req,res)=>{
 
                         })
                     }
-
-
-
                 })
             }else{
                 //인증이 실패했다는 false를 보냄
-
                 res.json({boolconfirm:true,balanceconfirm:false,transfer:false})
             }
 
@@ -237,7 +216,7 @@ router.post('/confirm',(req,res)=>{
 
 
 
-router.post('/create', function (req, res, next) {
+router.post('/create', function (req, res) {
 
     var today = new Date()
 
@@ -261,7 +240,7 @@ router.post('/create', function (req, res, next) {
 
             res.send(JSON.stringify(result));
         })
-        .catch(err => {
+        .catch(() => {
             console.log("데이터 추가 실패");
 
         })
@@ -274,7 +253,7 @@ router.get('/detail', (req, res) => {
         }
     }).then((result) => {
         res.json(result);
-    }).catch((e) =>{
+    }).catch(() =>{
         console.log("데이터 추가실패")
     })
 })
@@ -313,7 +292,7 @@ router.get("/index/:page", function (req, res) {
             res.json(
                 result
             );
-        }).catch(err =>{
+        }).catch(() =>{
             console.log("fail")
         })
     }else{
@@ -329,7 +308,7 @@ router.get("/index/:page", function (req, res) {
             res.json(
                 result
             );
-        }).catch(err =>{
+        }).catch(() =>{
             console.log("fail")
         })
     }
@@ -371,8 +350,8 @@ router.get("/sell/:page", function (req, res) {
             order:[[method,order]]
         }).then(result =>{
             res.json(result);
-        }).catch(err=>{
-
+        }).catch((e)=>{
+            res.status(404).send(e)
         })
     }else{
         models.TBoard.findAll({
@@ -386,7 +365,7 @@ router.get("/sell/:page", function (req, res) {
             res.json(
                 result
             );
-        }).catch(err =>{
+        }).catch(() =>{
             console.log("fail")
         })
     }
@@ -427,7 +406,7 @@ router.get("/buy/:page", function (req, res) {
             order:[[method,order]]
         }).then(result =>{
             res.json(result);
-        }).catch(err=>{
+        }).catch(()=>{
             console.log("실패");
         })
     }else{
@@ -442,7 +421,7 @@ router.get("/buy/:page", function (req, res) {
             res.json(
                 result
             );
-        }).catch(err =>{
+        }).catch(() =>{
             console.log("fail")
         })
     }
@@ -452,7 +431,7 @@ router.get("/buy/:page", function (req, res) {
 })
 
 // 거래 게시글 삭제
-router.post('/delete', function (req, res, next) {
+router.post('/delete', function (req, res) {
     models.TBoard.destroy({
         where: {
 
@@ -462,7 +441,7 @@ router.post('/delete', function (req, res, next) {
             console.log("데이터 추가 완료");
             res.send(JSON.stringify(result));
         })
-        .catch(err => {
+        .catch(() => {
             console.log("데이터 추가 실패");
 
         })

@@ -1,11 +1,9 @@
 const Web3 = require('web3')
 var contract = require("truffle-contract")
-const util = require('util')
-const assert = require('assert')
 const fs = require('fs')
 var path = require("path")
 path.join(process.cwd(), "abi/AToken.json")
-const BN = require('bn.js');
+const BN = require('bn.js')
 
 var web3Provider = new Web3.providers.HttpProvider('http://b3b11115.ngrok.io')
 var web3 = new Web3(web3Provider)
@@ -41,7 +39,7 @@ function getUser(email) {
     return U_contract.deployed()
         .then(function (instance) {
             instance.getInfo(email)
-                .then((res)=>{
+                .then((res) => {
                     return res
                 })
         })
@@ -51,12 +49,12 @@ function addUser(email, strName, strPassWord, strAccount, EmailCheck) {
     return U_contract.deployed()
         .then(function (instance) {
             instance.addInfo(email, strName, strPassWord, strAccount, EmailCheck, {from: "0x68Fb207bccf6063fEA145188787d4388A11b7592"})
-                .then((res)=>{
+                .then((res) => {
                     console.log(res)
-                    return ({a:"true"})
-                }).catch((e)=>{
-                    console.log(e)
-                    return (e)
+                    return ({a: "true"})
+                }).catch((e) => {
+                console.log(e)
+                return (e)
             })
         })
 }
@@ -65,7 +63,7 @@ function updateUser(email, strName, strPassWord, strAccount, EmailCheck) {
     return U_contract.deployed()
         .then(function (instance) {
             instance.updateInfo(email, strName, strPassWord, strAccount, EmailCheck, {from: "0x68Fb207bccf6063fEA145188787d4388A11b7592"})
-                .then((res)=>{
+                .then((res) => {
                     return res
                 })
         })
@@ -75,7 +73,7 @@ function deleteUser(email) {
     return U_contract.deployed()
         .then(function (instance) {
             instance.removeInfo(email)
-                .then((res)=>{
+                .then((res) => {
                     return res
                 })
         })
@@ -95,7 +93,6 @@ async function signTest(addr, pass) {
         console.log('sign res ', res)
 
         // recover the signing account address using original message and signed message
-        res = await web3.eth.personal.ecRecover("Hello world", res)
 
         return true
     } catch (e) {
@@ -106,7 +103,7 @@ async function signTest(addr, pass) {
 }
 
 function getbalance(addr) {
-    return new Promise(((resolve, reject) => {
+    return new Promise(((resolve) => {
         let balances = [-1, -1, -1, -1]
         var BN = web3.utils.BN
         AT_contract.deployed().then(function (instance) {
@@ -149,6 +146,54 @@ function getbalance(addr) {
     }))
 }
 
+function tokenBal(tokenName, tokenArray, contract, contractArray, addr) {
+    return new Promise(((resolve) => {
+        for (let i = 0; i < tokenArray.length; i++) {
+            if (tokenName === tokenArray[i]) {
+                contract = contractArray[i]
+                contract.deployed()
+                    .then(function (instance) {
+                        instance.balanceOf(addr)
+                            .then((data) => {
+                                resolve(new BN(data).toString())
+                            })
+                    })
+            }
+        }
+
+    }))
+}
+
+function tokenTransfer(contract, fromUser, toUser, amount) {
+    return new Promise((resolve => {
+        contract.deployed()
+            .then(function (instance) {
+                instance.transfer(toUser, amount, {from: fromUser})
+                    .then(() => resolve())
+            })
+
+    }))
+}
+
+function tokenEthTransfer(ethAddr, ethBal, ethAmount, tokenAddr, tokenBal, TokenAmount, tokenContract) {
+    return new Promise((resolve) => {
+        if (ethAmount < parseInt(ethBal) && TokenAmount < parseInt(tokenBal)) {
+            web3.eth.sendTransaction({
+                from: ethAddr,
+                to: tokenAddr,
+                value: ethAmount
+            })
+                .then(() =>
+                    tokenTransfer(tokenContract, tokenAddr, ethAddr, TokenAmount)
+                        .then(() => resolve(true))
+                )
+        } else {
+            resolve(false)
+        }
+    })
+
+}
+
 
 async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value) {
     const tokenName = ["Atoken", "Btoken", "Ctoken"]
@@ -159,69 +204,73 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
     let userBal_2
     var BN = web3.utils.BN
 
-
-    return new Promise(((resolve, reject) => {
-
-
-        console.log("시작하자 ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ")
-        for (let i=0; i < tokenName.length; i++) {
-
-            if (token_1 === tokenName[i]) {
-
-                contract_1 = contracts[i]
-                contract_1.deployed()
-                    .then(function (instance) {
-                        instance.balanceOf(addr_1)
-                            .then((data) => {
-                                console.log('BM ==',new BN(data).toString());
-                                userBal_1 = new BN(data).toString()
-                                for (let i=0; i < tokenName.length; i++) {
-                                    if (token_2 === tokenName[i]) {
-                                        contract_2 = contracts[i]
-                                        contract_2.deployed()
-                                            .then(function (instance) {
-                                                instance.balanceOf(addr_2)
-                                                    .then((data) => {
-                                                        console.log('BM22 ==', new BN(data).toString());
-                                                        userBal_2 = new BN(data).toString()
-                                                        resolve()
-                                                    })
-                                            })
-                                    }
-                                }
-                            })
-                    })
+    if (token_1 !== "ETC" && token_2 !== "ETC") {
+        return new Promise(((resolve) => {
+            tokenBal(token_1, tokenName, contract_1, contracts, addr_1, BN)
+                .then((bal) => {
+                    userBal_1 = bal
+                })
+            tokenBal(token_2, tokenName, contract_2, contracts, addr_2, BN)
+                .then((bal) => {
+                    userBal_2 = bal
+                })
+            if (userBal_1 !== null && userBal_2 !== null) {
+                resolve()
             }
+        }))
+            .then(() => {
+                return new Promise((resolve) => {
+                    if (token_1_value < parseInt(userBal_1) && token_2_value < parseInt(userBal_2)) {
+                        tokenTransfer(contract_1, addr_1, addr_2, token_1_value)
+                            .then(() =>
+                                tokenTransfer(contract_2, addr_2, addr_1, token_2_value)
+                                    .then(() => resolve(true))
+                            )
+                    } else {
+                        resolve(false)
+                    }
+                })
+            })
 
-        }
-
-
-
-    })).then(()=>{
-
-        return new Promise((resolve, reject)=>{
-            if (token_1_value < parseInt(userBal_1) && token_2_value < parseInt(userBal_2)) {
-                console.log("트랜스퍼 들어오는가용?");
-                contract_1.deployed()
-                    .then(function (instance) {
-                        instance.transfer(addr_2, token_1_value, {from: addr_1})
-                        contract_2.deployed()
-                            .then(function (instance) {
-                                instance.transfer(addr_1, token_2_value, {from: addr_2})
-                                    .then(() => {
-                                        resolve(true);
-                                    })
-                            })
-                    })
-
-            } else {
-                resolve(false);
+    } else if (token_1 === "ETH") {
+        return new Promise((resolve => {
+            web3.eth.getBalance(addr_1).then((bal) => {
+                userBal_1 = bal
+            })
+            tokenBal(token_2, tokenName, contract_2, contracts, addr_2, BN)
+                .then((bal) => {
+                    userBal_2 = bal
+                })
+            if (userBal_1 !== null && userBal_2 !== null) {
+                resolve()
             }
-        })
-
-
-    })
-
+        }))
+            .then(() => {
+                new Promise(resolve => {
+                    tokenEthTransfer(addr_1, userBal_1, token_1_value, addr_2, userBal_2, token_2_value, contract_2)
+                        .then((result)=> resolve(result))
+                })
+            })
+    } else if (token_2 === "ETH") {
+        return new Promise((resolve => {
+            web3.eth.getBalance(addr_2).then((bal) => {
+                userBal_2 = bal
+            })
+            tokenBal(token_1, tokenName, contract_1, contracts, addr_1, BN)
+                .then((bal) => {
+                    userBal_1 = bal
+                })
+            if (userBal_1 !== null && userBal_2 !== null) {
+                resolve()
+            }
+        }))
+            .then(() => {
+                new Promise(resolve => {
+                    tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_1)
+                        .then((result)=> resolve(result))
+                })
+            })
+    }
 
 }
 
