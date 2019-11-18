@@ -60,6 +60,29 @@ router.get('/tboard', function (req, res) {
     })
 })
 
+
+router.get('/tboards',function(req,res){
+
+
+    const query = 'select A.selltoken,A.buytoken,A.status as tbst,B.status as orst,A.selltokenamount,A.buytokenamount,A.createdAt,B.createdAt from TBoards as A join orderbooks as B on (A.id=1 and B.TableId=1) and (A.SellerId || A.buyerId =:Id);'
+    var values = {
+        Id: req.param('id')
+    }
+    models.sequelize.query(query, { raw:true,replacements: values ,type:models.sequelize.QueryTypes.SELECT}).spread((results, metadata) => {
+
+
+        let d1 = new Date()
+        ;
+        console.log('gettime ==',d1);
+        if(results!==undefined) {
+            let time = ((Date.parse(results.createdAt)) / 1000) - (Date.parse(d1)) / 1000
+            let bal = [time, results.sellerconfirm, results.buyerconfirm, decoded.id, results.TableId];
+            res.json(bal);
+        }
+    }, (err) => {
+        res.status(404).send(err);
+    })
+})
 // 유저의 자산 코인별로 가져옴
 router.get('/wallet', function (req, res) {
     models.Wallet.findAll({

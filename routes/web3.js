@@ -125,7 +125,7 @@ router.post('/getbalnace',(req,res)=>{
 
 
 async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value) {
-    const tokenName = ["Atoken", "Btoken", "Ctoken"]
+    const tokenName = ["ETH","Atoken", "Btoken", "Ctoken"]
     const contracts = [AT_contract, BT_contract, CT_contract]
     let contract_1
     let contract_2
@@ -139,6 +139,10 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
 
 
         console.log("시작하자 ㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱㄱ")
+        if(token_1==="ETH" || token_2==="ETH"){
+
+        }
+
         for (let i=0; i < tokenName.length; i++) {
 
             if (token_1 === tokenName[i]) {
@@ -203,6 +207,7 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
 
 
 }
+
 router.post('/test',(req,res)=>{
     addr_1 = req.body.addr1;
     addr_2 = req.body.addr2;
