@@ -1,23 +1,23 @@
 {
   "local": {
-    "username": "root",
-    "password": "4444",
+    "username": "kim",
+    "password": "kim",
     "database": "test",
     "host": "0.tcp.ngrok.io",
     "port": 16713,
     "dialect": "mysql"
   },
   "development": {
-    "username": "root",
-    "password": "4444",
+    "username": "kim",
+    "password": "kim",
     "database": "test",
     "host": "0.tcp.ngrok.io",
     "port": 16713,
     "dialect": "mysql"
   },
   "test": {
-    "username": "root",
-    "password": "4444",
+    "username": "kim",
+    "password": "kim",
     "database": "test",
     "host": "0.tcp.ngrok.io",
     "port": 16713,

@@ -239,7 +239,7 @@ function chart(type){
 
 
 router.get('/getdata', function (req, res) {
-    var query = 'select type, begin, end, low, high, date FROM test.charts where type = :TYPE';
+    var query = 'select type, begin, end, low, high, date FROM test.Charts where type = :TYPE';
     var values = {
         TYPE: req.param('token')
     }

@@ -53,7 +53,7 @@ router.get('/data', function (req, res) {
 
 router.get('/list', function (req, res) {
     const user = decode.decode(req)
-    var query = 'SElECT * FROM test.tboards as A ,test.alarms as B ' +
+    var query = 'SElECT * FROM test.TBoards as A ,test.alarms as B ' +
         'where(A.id = B.tableId) and B.UserId = :Id '
     var values = {
         Id: user.id

@@ -132,7 +132,6 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
             }
         }
 
-
         if (token_1_value < userBal_1 && token_2_value < userBal_2) {
             contract_1.deployed()
                 .then(function (instance) {
