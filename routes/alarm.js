@@ -53,7 +53,7 @@ router.get('/data', function (req, res) {
 
 router.get('/list', function (req, res) {
     const user = decode.decode(req)
-    var query = 'SElECT * FROM test.TBoards as A ,test.Alarms as B ' +
+    var query = 'SElECT * FROM test.TBoards as A ,test.alarms as B ' +
         'where(A.id = B.tableId) and B.UserId = :Id '
     var values = {
         Id: user.id
@@ -68,15 +68,15 @@ router.get('/list', function (req, res) {
 
 // 버튼 누를시 동작
 function create(socketId, UserId, tableId) {
-
+    console.log("alarm creat@@@@###: ", UserId);
     models.Alarm.findAll({
         where: {
             UserId: UserId
         }
     }).then((user) => {
-
+        console.log("user: ", user);
         if (user.length <= 0) {
-
+            console.log("new create!!!!");
 
             models.Alarm.create({
                 status: '0',
@@ -97,7 +97,7 @@ function create(socketId, UserId, tableId) {
                     }
                 })
         } else {
-
+            console.log("alarm update socketID!!!!");
             models.Alarm.update({
                 socketId: socketId
             }, {
@@ -112,7 +112,7 @@ function create(socketId, UserId, tableId) {
                         tableId: tableId
                     }
                 }).then((data) => {
-
+                    console.log("find user, tableid: ", data)
                     if (data == null) {
                         models.Alarm.create({
                             status: '0',
