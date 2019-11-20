@@ -286,7 +286,8 @@ router.get("/index/:page", function (req, res) {
             limit:10,
             where:{
                 selltoken:sellcoin,
-                buytoken:buycoin
+                buytoken:buycoin,
+                status:0
             },
         }).then(result=>{
             res.json(
@@ -301,7 +302,8 @@ router.get("/index/:page", function (req, res) {
             limit:10,
             where:{
                 selltoken:sellcoin,
-                buytoken:buycoin
+                buytoken:buycoin,
+                status:0
             },
             order:[[method,order]]
         }).then(result=>{
