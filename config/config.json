@@ -1,34 +1,33 @@
 {
   "local": {
-    "username": "kim",
-    "password": "kim",
+    "username": "root",
+    "password": "4444",
     "database": "test",
-    "host": "0.tcp.ngrok.io",
-    "port": 16713,
+    "host": "127.0.0.1",
+    "port": 3306,
     "dialect": "mysql"
   },
   "development": {
-    "username": "kim",
-    "password": "kim",
+    "username": "root",
+    "password": "4444",
     "database": "test",
-    "host": "0.tcp.ngrok.io",
-    "port": 16713,
+    "host": "127.0.0.1",
+    "port": 3306,
     "dialect": "mysql"
   },
   "test": {
-    "username": "kim",
-    "password": "kim",
+    "username": "root",
+    "password": "4444",
     "database": "test",
-    "host": "0.tcp.ngrok.io",
-    "port": 16713,
+    "host": "127.0.0.1",
+    "port": 3306,
     "dialect": "mysql"
   },
   "production": {
-    "username": "kim",
-    "password": "kim",
+    "username": "root",
+    "password": "4444",
     "database": "test",
-    "host": "0.tcp.ngrok.io",
+    "host": "127.0.0.1",
     "dialect": "mysql"
   }
 }
-

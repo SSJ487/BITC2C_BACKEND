@@ -8,7 +8,7 @@ const decode = require('../module/decode')
 router.post('/create', function (req, res, next) {
     let body = req.body;
     models.Alarm.create({
-        status: '0',
+        status: '1',
         socketId: body.socketId,
         UserId: body.UserId,
     })
@@ -33,7 +33,7 @@ router.get('/data', function (req, res) {
     models.Alarm.findAll({
         where: {
             UserId: user.id,
-            status : 0
+            status: '1'
         },
         order: [
             ['createdAt', 'DESC' ]
@@ -65,6 +65,29 @@ router.get('/list', function (req, res) {
     })
 })
 
+router.post('/update', function (req, res) {
+    models.Alarm.update({
+        stautus: '2'
+    }, {
+        where: {
+            tableId: req.body.TableID,
+        }
+    }).then(result => {
+        console.log("상태 변경완료");
+
+    })
+})
+
+router.post('/delete', function (req, res) {
+    models.Alarm.destroy({
+        where: {
+            tableId: req.body.TableID,
+        }
+    }).then(result => {
+        console.log("삭제 완료");
+        console.log("취소되었다요")
+    })
+})
 
 // 버튼 누를시 동작
 function create(socketId, UserId, tableId) {
@@ -79,7 +102,7 @@ function create(socketId, UserId, tableId) {
             console.log("new create!!!!");
 
             models.Alarm.create({
-                status: '0',
+                status: '1',
                 socketId: socketId,
                 UserId: UserId,
                 tableId: tableId
