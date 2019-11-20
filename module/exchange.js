@@ -13,9 +13,14 @@ function exchange(models,tableid,web3) {
         }).then((result)=>{
             console.log('exchange =====',result.status)
             if(result.status ===2){
-                const query = 'select A.address as selladdr ,B.address as buyaddr ,C.selltoken as selltoken,C.buytoken as buytoken,C.selltokenamount as sellamount,C.buytokenamount as buyamount from Wallets as A ,Wallets as B ,orderbooks as C where A.UserId = sellerconfirm and B.UserId = buyerconfirm';
-                models.sequelize.query(query,{type:models.sequelize.QueryTypes.SELECT}).spread((results)=>{
-                    console.log(results)
+
+                const query = 'select A.address as selladdr ,B.address as buyaddr ,C.selltoken as selltoken,C.buytoken as buytoken,C.selltokenamount as sellamount,C.buytokenamount as buyamount from Wallets as A ,Wallets as B ,orderbooks as C where (A.UserId = :sellerconfirm and B.UserId = :buyerconfirm) and C.status<3' ;
+                var values = {
+                    sellerconfirm: result.sellerconfirm,
+                    buyerconfirm: result.buyerconfirm
+                }
+                models.sequelize.query(query,{replacements:values,type:models.sequelize.QueryTypes.SELECT}).spread((results)=>{
+                    console.log('result ttt===',results.selladdr,results.selltoken,results.sellamount,results.buyaddr,results.buytoken,results.buyamount)
                     web3.transfer(results.selladdr,results.selltoken,results.sellamount,results.buyaddr,results.buytoken,results.buyamount).then(bool=>{
                         console.log("booooolllllllllll======",bool);
                         if(bool){
