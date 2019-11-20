@@ -176,6 +176,7 @@ router.post('/confirm',(req,res)=>{
                             ex.exchange(models,tableid,web3).then((success)=>{
                                 console.log('success12 ========',success)
                                 if(success===2){
+
                                     res.json({boolconfirm:true,balanceconfirm:true,transfer:true})
                                 }else if(success===1){
                                     res.json({boolconfirm:false,balanceconfirm:false,transfer:false})

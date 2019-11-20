@@ -14,7 +14,7 @@ function exchange(models,tableid,web3) {
             console.log('exchange =====',result.status)
             if(result.status ===2){
 
-                const query = 'select A.address as selladdr ,B.address as buyaddr ,C.selltoken as selltoken,C.buytoken as buytoken,C.selltokenamount as sellamount,C.buytokenamount as buyamount from Wallets as A ,Wallets as B ,orderbooks as C where (A.UserId = :sellerconfirm or B.UserId = :buyerconfirm) and C.status<3' ;
+                const query = 'select A.address as selladdr ,B.address as buyaddr ,C.selltoken as selltoken,C.buytoken as buytoken,C.selltokenamount as sellamount,C.buytokenamount as buyamount from Wallets as A ,Wallets as B ,orderbooks as C where (A.UserId = :sellerconfirm and B.UserId = :buyerconfirm) and C.status<3' ;
                 var values = {
                     sellerconfirm: result.sellerconfirm,
                     buyerconfirm: result.buyerconfirm
