@@ -47,6 +47,16 @@ router.post('/exchange',function(req,res){
             if(result===null||result===undefined) return;
 
             if(result.status===2){
+                models.Alarm.update({
+                    stautus: '2'
+                }, {
+                    where: {
+                        tableId: boardId,
+                    }
+                }).then(result => {
+                    console.log("상태 변경완료");
+                    return;
+                })
                 return
             }else{
                 models.TBoard.update({
@@ -65,7 +75,14 @@ router.post('/exchange',function(req,res){
                         }
                     })
                 }).then(()=>{
-                console.log("취소되었다요")
+                    models.Alarm.destroy({
+                        where: {
+                            tableId: boardId,
+                        }
+                    }).then(result => {
+                        console.log("삭제 완료");
+                        console.log("취소되었다요")
+                    })
 
                 })
             }
