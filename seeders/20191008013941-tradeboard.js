@@ -91,8 +91,6 @@ module.exports = {
 
 
     for(let i =0;i<50;i++){
-
-
       let d3 =new Date(d1.getMinutes()+(60*i))
 
       let before
