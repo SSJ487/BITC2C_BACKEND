@@ -87,11 +87,11 @@ module.exports = {
       let d3 =new Date(d1.getMinutes()+(60*i))
 
 
-      let beginRandom = parseInt(Math.random() *(30000 -20000) +20000)
-      let endRandom = parseInt(Math.random() *(beginRandom -20000) +20000)
-      let lowRandom = parseInt(Math.random() *(30000 -20000) +20000)
-      let highRandom = parseInt(Math.random() *(lowRandom+200 -20000) +20000)
-
+      let beginRandom = parseInt(Math.random() *(30000 -10000) +10000)
+      let endRandom = parseInt(Math.random() *(beginRandom -10000) +10000)
+      let lowRandom = parseInt(Math.random() *(30000 -10000) +10000)
+      let highRandom = parseInt(Math.random() *(lowRandom+200 -10000) +10000)
+      const coindatarandom1=parseInt(Math.random() * (4-0)+0 )
 
       let temp =0;
       let temp1 =0;
