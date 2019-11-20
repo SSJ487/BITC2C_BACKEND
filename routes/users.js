@@ -42,18 +42,17 @@ router.get('/emailcheck', function (req, res) {
 
 //crypto confirm
 router.post('/login', (req, res, next) => {
-
     models.User.findOne({
         where: {
             email: req.body.email,
             emailcheck: '1'
         }
     }).then((user) => {
-
+        console.log(user)
         if (!user) {
+            console.log("aaaa")
             res.status(404).send("가입되지 않은 유저")
         } else {
-
             const expires = "50m"
             bcrypt.compare(req.body.password, user.password, (err, result) => {
                 if (result == true) {

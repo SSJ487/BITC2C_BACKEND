@@ -3,14 +3,12 @@ var contract = require("truffle-contract")
 const fs = require('fs')
 var path = require("path")
 path.join(process.cwd(), "abi/AToken.json")
-const BN = require('bn.js')
 
 var web3Provider = new Web3.providers.HttpProvider('http://b3b11115.ngrok.io')
 var web3 = new Web3(web3Provider)
 
 
 const UserCrud_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
-
 const AT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
 const BT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/Btoken.json"), 'utf-8')
 const CT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/Ctoken.json"), 'utf-8')
@@ -168,7 +166,6 @@ async function tokenTransfer(contract, fromUser, toUser, amount) {
         .then(async function (instance) {
             await instance.transfer(toUser, amount, {from: fromUser})
                 .then(() => {
-                    console.log("token Tanse ffff asdfunction")
                     return true
                 }).catch(() => {
                     return false
@@ -176,28 +173,18 @@ async function tokenTransfer(contract, fromUser, toUser, amount) {
         }).then((result) => {
             return result
         })
-
-
 }
 
 async function tokenEthTransfer(ethAddr, ethBal, ethAmount, tokenAddr, tokenBal, TokenAmount, tokenContract) {
-    console.log("qwdqwdwdqwd")
-    console.log("ethAmount = ", ethAmount)
-    console.log("tokenAmount = ", TokenAmount)
-    console.log("ethbal = ", ethBal)
-    console.log("tokenbal = ", tokenBal)
     if (ethAmount < parseInt(ethBal) && TokenAmount < parseInt(tokenBal)) {
-        console.log("tokenethtransfer")
         await web3.eth.sendTransaction({
             from: ethAddr,
             to: tokenAddr,
             value: ethAmount
         })
-        console.log("toeknethrtarns====")
         await tokenTransfer(tokenContract, tokenAddr, ethAddr, TokenAmount)
         return true
     } else {
-        console.log("token Eth Tra nnnnn")
         return false
     }
 }
@@ -211,7 +198,6 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
     let userBal_2
     var BN = web3.utils.BN
     if (token_1 !== "ETH" && token_2 !== "ETH") {
-        console.log("transfer11 ===========")
         return new Promise(((resolve) => {
             tokenBal(token_1, tokenName, contract_1, contracts, addr_1, BN)
                 .then((bal) => {
@@ -243,7 +229,6 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
     } else if (token_1 === "ETH") {
         return new Promise((resolve => {
             web3.eth.getBalance(addr_1).then((bal) => {
-                console.log("bal ====", bal)
                 userBal_1 = bal
                 if (typeof (userBal_1) !== "undefined" && typeof (userBal_2) !== "undefined") {
                     resolve()
@@ -251,7 +236,6 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
             })
             tokenBal(token_2, tokenName, contract_2, contracts, addr_2, BN)
                 .then((bal) => {
-                    console.log("tokenball ====", bal[0])
                     userBal_2 = bal[0]
                     contract_2 = bal[1]
                     if (typeof (userBal_1) !== "undefined" && typeof (userBal_2) !== "undefined") {
@@ -260,7 +244,6 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
                 })
         }))
             .then(() => {
-                console.log('asdfasdf11', userBal_2)
                 return new Promise((resolve, reject) => {
                     resolve(tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_2))
                 })

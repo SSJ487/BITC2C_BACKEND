@@ -6,8 +6,6 @@ var add_minutes =  function (dt, minutes) {
 
 function change(date1,date){
   let temp =0;
-
-
   return
 }
 
@@ -19,16 +17,26 @@ module.exports = {
     const coindata = ["Atoken","Btoken","Ctoken"];
 
     let d1 = new Date()
-    for(let i =0;i<250;i++){
-
-
+    for(let i =0;i<50;i++){
       let d3 =new Date(d1.getMinutes()+(60*i))
+      let before
+      if(i<10){
+        before = 100
+      } else if (i<20){
+        before = 90
+      }else if (i<30){
+        before = 80
+      }else if (i<40){
+        before = 70
+      }else {
+        before = 80
+      }
 
 
-      let beginRandom = parseInt(Math.random() *(30000 -10) +10)
-      let endRandom = parseInt(Math.random() *(30000 -10) +10)
-      let lowRandom = parseInt(Math.random() *(30000 -10) +10)
-      let highRandom = parseInt(Math.random() *(30000 -10) +10)
+      let beginRandom = parseInt(before)
+      let endRandom = parseInt(Math.random() *(before -10) +10)
+      let lowRandom = parseInt(Math.random() *(before -20) +20)
+      let highRandom = parseInt(Math.random() *(before -20) +20)
       const coindatarandom1=parseInt(Math.random() * (4-0)+0 )
 
       let temp =0;
@@ -64,10 +72,9 @@ module.exports = {
         temp4 = endRandom
         endRandom=lowRandom
         lowRandom=temp4
-
       }
 
-    
+
       let obj={
         type:"Atoken",
         begin:beginRandom,
@@ -81,16 +88,31 @@ module.exports = {
       }
       datas.push(obj)
     }
-    for(let i =0;i<250;i++){
+
+
+    for(let i =0;i<50;i++){
 
 
       let d3 =new Date(d1.getMinutes()+(60*i))
 
+      let before
+      if(i<10){
+        before = 100
+      } else if (i<20){
+        before = 90
+      }else if (i<30){
+        before = 80
+      }else if (i<40){
+        before = 70
+      }else {
+        before = 80
+      }
 
-      let beginRandom = parseInt(Math.random() *(30000 -10000) +10000)
-      let endRandom = parseInt(Math.random() *(beginRandom -10000) +10000)
-      let lowRandom = parseInt(Math.random() *(30000 -10000) +10000)
-      let highRandom = parseInt(Math.random() *(lowRandom+200 -10000) +10000)
+
+      let beginRandom = parseInt(before)
+      let endRandom = parseInt(Math.random() *(before -10) +10)
+      let lowRandom = parseInt(Math.random() *(before -20) +20)
+      let highRandom = parseInt(Math.random() *(before -20) +20)
       const coindatarandom1=parseInt(Math.random() * (4-0)+0 )
 
       let temp =0;
@@ -144,16 +166,29 @@ module.exports = {
       datas.push(obj)
     }
 
-    for(let i =0;i<250;i++){
+    for(let i =0;i<50;i++){
 
 
       let d3 =new Date(d1.getMinutes()+(60*i))
 
+      let before
+      if(i<10){
+        before = 100
+      } else if (i<20){
+        before = 90
+      }else if (i<30){
+        before = 80
+      }else if (i<40){
+        before = 70
+      }else {
+        before = 80
+      }
 
-      let beginRandom = parseInt(Math.random() *(30000 -10) +10)
-      let endRandom = parseInt(Math.random() *(30000 -10) +10)
-      let lowRandom = parseInt(Math.random() *(30000 -10) +10)
-      let highRandom = parseInt(Math.random() *(30000 -10) +10)
+
+      let beginRandom = parseInt(before)
+      let endRandom = parseInt(Math.random() *(before -10) +10)
+      let lowRandom = parseInt(Math.random() *(before -20) +20)
+      let highRandom = parseInt(Math.random() *(before -20) +20)
       const coindatarandom1=parseInt(Math.random() * (4-0)+0 )
 
       let temp =0;
