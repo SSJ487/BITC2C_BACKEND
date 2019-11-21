@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 const server = require('http').createServer(app)
-
+const models = require('../models');
 const sequelize = require('./models/index').sequelize;
 const cookieParser = require('cookie-parser')
 
@@ -90,7 +90,18 @@ app.io.on('connection', (socket) => {
 
   });
 
+  socket.on('success',(data)=>{
+    const query = 'select if(SellerId= :userid,buyerId,SellerId) from TBoards where id=tableid ;' ;
+                var values = {
+                  userid: data.userid,
+                  tableid: data.tableid
+                }
 
+
+                models.sequelize.query(query,{replacements:values,type:models.sequelize.QueryTypes.SELECT}).spread(()=>{
+                  
+                })
+  })
   socket.on('disconnect', (msg) => {
     console.log('user disconnected: ');
   });
