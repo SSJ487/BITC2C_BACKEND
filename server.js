@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 const server = require('http').createServer(app)
-const models = require('../models');
+const models = require('./models');
 const sequelize = require('./models/index').sequelize;
 const cookieParser = require('cookie-parser')
 
@@ -91,7 +91,8 @@ app.io.on('connection', (socket) => {
   });
 
   socket.on('success',(data)=>{
-    const query = 'select if(SellerId= :userid,buyerId,SellerId) from TBoards where id=tableid ;' ;
+    console.log('success rrrrrrrrr')
+    const query = 'select if(SellerId= :userid,buyerId,SellerId) as id from TBoards where id= :tableid ;' ;
                 var values = {
                   userid: data.userid,
                   tableid: data.tableid
@@ -99,7 +100,15 @@ app.io.on('connection', (socket) => {
 
 
                 models.sequelize.query(query,{replacements:values,type:models.sequelize.QueryTypes.SELECT}).spread((result)=>{
-                  socket.emit('complete')
+                  console.log('success innnnneeerrr',result.id)
+                  console.log('success innnnneeerrr', typeof(result.id))
+                  parseInt
+                  console.log('client id', clients[parseInt(result.id)])
+                  console.log('string client id ', clients[result.id])
+                  socket.to(clients[parseInt(result.id)]).emit('complete', "안녕!")
+                  console.log('success innnnneeerasdrr')
+                  
+                  
                 })
   })
   socket.on('disconnect', (msg) => {
