@@ -98,8 +98,8 @@ app.io.on('connection', (socket) => {
                 }
 
 
-                models.sequelize.query(query,{replacements:values,type:models.sequelize.QueryTypes.SELECT}).spread(()=>{
-                  
+                models.sequelize.query(query,{replacements:values,type:models.sequelize.QueryTypes.SELECT}).spread((result)=>{
+                  socket.emit('complete')
                 })
   })
   socket.on('disconnect', (msg) => {
