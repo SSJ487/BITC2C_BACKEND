@@ -52,7 +52,7 @@ function registerUser(socket, user_id) {
   if (clients[user_id] != undefined) delete clients[user_id];
 
   clients[user_id] = socket.id
-
+  console.log('clients ====',clients);
 
 
 }
