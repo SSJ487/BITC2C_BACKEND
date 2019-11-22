@@ -90,11 +90,16 @@ router.post('/transfer', (req, res) => {
         })
     })
     console.log("asdasdasdasdasd")
-    BT_contract.deployed().then(instance => {
-        instance.transfer(addr2, value, {from: addr1}).then(result => {
-
-        })
-    })
+    // BT_contract.deployed().then(instance => {
+    //     instance.transfer(addr2, value, {from: addr1}).then(result => {
+    //
+    //     })
+    // })
+    // CT_contract.deployed().then(instance => {
+    //     instance.transfer(addr2, value, {from: addr1}).then(result => {
+    //
+    //     })
+    // })
     console.log("asdasdasdasda111sd")
 
 

@@ -47,6 +47,16 @@ router.post('/exchange',function(req,res){
             if(result===null||result===undefined) return;
 
             if(result.status===2){
+                models.Alarm.update({
+                    stautus: '2'
+                }, {
+                    where: {
+                        tableId: boardId,
+                    }
+                }).then(result => {
+                    console.log("상태 변경완료");
+                    return;
+                })
                 return
             }else{
                 models.TBoard.update({
@@ -65,7 +75,14 @@ router.post('/exchange',function(req,res){
                         }
                     })
                 }).then(()=>{
-                console.log("취소되었다요")
+                    models.Alarm.destroy({
+                        where: {
+                            tableId: boardId,
+                        }
+                    }).then(result => {
+                        console.log("삭제 완료");
+                        console.log("취소되었다요")
+                    })
 
                 })
             }
@@ -159,6 +176,7 @@ router.post('/confirm',(req,res)=>{
                             ex.exchange(models,tableid,web3).then((success)=>{
                                 console.log('success12 ========',success)
                                 if(success===2){
+
                                     res.json({boolconfirm:true,balanceconfirm:true,transfer:true})
                                 }else if(success===1){
                                     res.json({boolconfirm:false,balanceconfirm:false,transfer:false})
@@ -184,7 +202,9 @@ router.post('/confirm',(req,res)=>{
                             ex.exchange(models,tableid,web3).then((success)=>{
                                 console.log('success12 ========',success)
                                 if(success===2){
+                                    
                                     res.json({boolconfirm:true,balanceconfirm:true,transfer:true})
+
                                 }else if(success===1){
 
 
@@ -286,7 +306,8 @@ router.get("/index/:page", function (req, res) {
             limit:10,
             where:{
                 selltoken:sellcoin,
-                buytoken:buycoin
+                buytoken:buycoin,
+                status:0
             },
         }).then(result=>{
             res.json(
@@ -301,7 +322,8 @@ router.get("/index/:page", function (req, res) {
             limit:10,
             where:{
                 selltoken:sellcoin,
-                buytoken:buycoin
+                buytoken:buycoin,
+                status:0
             },
             order:[[method,order]]
         }).then(result=>{
