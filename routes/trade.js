@@ -31,7 +31,7 @@ router.post('/exchange',function(req,res){
     //console.log(boardId);
 
     var query = 'INSERT INTO orderbooks (TableId,status,sellerconfirm,buyerconfirm,selltoken,buytoken,selltokenamount,buytokenamount,createdAt,updatedAt) '
-    +'select A.id,0,0,0,A.selltoken,A.buytoken,A.selltokenamount,A.buytokenamount,DATE_ADD(now(),INTERVAL 3 MINUTE),now() FROM TBoards as A where A.id =:Boardid;';
+    +'select A.id,0,0,0,A.selltoken,A.buytoken,A.selltokenamount,A.buytokenamount,DATE_ADD(now(),INTERVAL 30 MINUTE),now() FROM TBoards as A where A.id =:Boardid;';
     var values = {
         Boardid: boardId
     }
@@ -72,7 +72,7 @@ router.post('/exchange',function(req,res){
         })
 
 
-    },180000)
+    },18000000)
 
 
     models.TBoard.update({
