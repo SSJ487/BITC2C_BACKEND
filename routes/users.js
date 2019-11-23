@@ -10,12 +10,13 @@ const web3 = require('../module/web3');
 //토큰을 이용하여 유저정보 가져오기
 router.get('/getuser', function (req, res) {
     const token = req.headers.authorization.split(' ')[1]
-
+    console.log("token rrrrrrrr",token);
     //const boardId= req.param('boardId');
     //console.log(boardId);
     try {
         let decoded = jwt.verify(token, secretObj.secret)
         if (decoded) {
+            console.log('decode ====');
             res.send(decoded)
         }
     } catch (e) {

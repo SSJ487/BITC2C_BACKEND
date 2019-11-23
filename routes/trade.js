@@ -292,7 +292,7 @@ router.get("/index/:page", function (req, res) {
 
         order="ASC";
     }
-
+    console.log("method ===",method);
     let pageNum = req.params.page;
 
     let offset =0;
