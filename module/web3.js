@@ -107,8 +107,8 @@ function getbalance(addr) {
         AT_contract.deployed().then(function (instance) {
             instance.balanceOf(addr)
                 .then((data) => {
-                    console.log(BN(data).toNumber())
-                    balances[0] = new BN(data).toNumber()
+                    console.log(BN(data).toString())
+                    balances[0] = new BN(data).toString()
                     if (balances[0] !== -1 && balances[1] !== -1 && balances[2] !== -1 && balances[3] !== -1)
                         resolve(balances)
                 })
@@ -117,8 +117,8 @@ function getbalance(addr) {
         BT_contract.deployed().then(function (instance) {
             instance.balanceOf(addr)
                 .then((data) => {
-                    console.log(BN(data).toNumber())
-                    balances[1] = new BN(data).toNumber()
+                    console.log(BN(data).toString())
+                    balances[1] = new BN(data).toString()
                     if (balances[0] !== -1 && balances[1] !== -1 && balances[2] !== -1 && balances[3] !== -1)
                         resolve(balances)
                 })
@@ -127,8 +127,8 @@ function getbalance(addr) {
         CT_contract.deployed().then(function (instance) {
             instance.balanceOf(addr)
                 .then((data) => {
-                    console.log(BN(data).toNumber())
-                    balances[2] = new BN(data).toNumber()
+                    console.log(BN(data).toString())
+                    balances[2] = new BN(data).toString()
                     if (balances[0] !== -1 && balances[1] !== -1 && balances[2] !== -1 && balances[3] !== -1)
                         resolve(balances)
                 })
@@ -137,7 +137,7 @@ function getbalance(addr) {
         web3.eth.getBalance(addr)
             .then((data) => {
                 console.log(data)
-                balances[3] = new BN(data).toNumber()
+                balances[3] = new BN(data).toString()
                 if (balances[0] !== -1 && balances[1] !== -1 && balances[2] !== -1 && balances[3] !== -1)
                     resolve(balances)
             })
@@ -245,7 +245,7 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
         }))
             .then(() => {
                 return new Promise((resolve, reject) => {
-                    resolve(tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_2))
+                    resolve(tokenEthTransfer(addr_1, userBal_1, token_1_value, addr_2, userBal_2, token_2_value, contract_2))
                 })
 
             })
