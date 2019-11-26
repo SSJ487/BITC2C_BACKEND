@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
 const server = require('http').createServer(app)
-
+const models = require('./models');
 const sequelize = require('./models/index').sequelize;
 const cookieParser = require('cookie-parser')
 
@@ -48,12 +48,13 @@ function registerUser(socket, user_id) {
 
   // socket_id와 nickname 테이블을 셋업
 
-
+  console.log('cccccccccccc=======',clients)
   if (clients[user_id] != undefined) delete clients[user_id];
-
+  socket.userid=user_id;
   clients[user_id] = socket.id
-
-
+  console.log('sososo===',user_id)
+  console.log('clients ====',clients);
+  console.log('socket ====',socket.userid);
 
 }
 
@@ -64,7 +65,7 @@ app.io.on('connection', (socket) => {
 
   socket.on('storeClientInfo', (data) => {
 
-
+    console.log('store rrrrrrrrrrrr');
 
     // alarm.create(socket.id, data.id)
 
@@ -90,7 +91,28 @@ app.io.on('connection', (socket) => {
 
   });
 
+  socket.on('success',(data)=>{
+    console.log('success rrrrrrrrr')
+    const query = 'select if(SellerId= :userid,buyerId,SellerId) as id from TBoards where id= :tableid ;' ;
+                var values = {
+                  userid: data.userid,
+                  tableid: data.tableid
+                }
 
+
+                models.sequelize.query(query,{replacements:values,type:models.sequelize.QueryTypes.SELECT}).spread((result)=>{
+                  console.log('success innnnneeerrr',result.id)
+                  console.log('success innnnneeerrr', typeof(result.id))
+                  console.log('succ socket',socket.userid);
+                  parseInt
+                  console.log('client id', clients[parseInt(result.id)])
+                  console.log('string client id ', clients[result.id])
+                  socket.to(clients[result.id]).emit('complete', "안녕!")
+                  console.log('success innnnneeerasdrr')
+                  
+                  
+                })
+  })
   socket.on('disconnect', (msg) => {
     console.log('user disconnected: ');
   });

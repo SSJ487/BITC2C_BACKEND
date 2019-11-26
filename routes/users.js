@@ -10,12 +10,13 @@ const web3 = require('../module/web3');
 //토큰을 이용하여 유저정보 가져오기
 router.get('/getuser', function (req, res) {
     const token = req.headers.authorization.split(' ')[1]
-
+    console.log("token rrrrrrrr",token);
     //const boardId= req.param('boardId');
     //console.log(boardId);
     try {
         let decoded = jwt.verify(token, secretObj.secret)
         if (decoded) {
+            console.log('decode ====');
             res.send(decoded)
         }
     } catch (e) {
@@ -114,6 +115,7 @@ router.post('/create', function (req, res, next) {
                         })
 
                     })
+<<<<<<< Updated upstream
 
                 }).catch(err => {
                     console.log("데이터 추가 실패")
@@ -127,6 +129,29 @@ router.post('/create', function (req, res, next) {
                         res.status(404).send(error)
                     }
 
+=======
+                    .catch(err => {
+                        console.log("데이터 추가 실패")
+                        var error = JSON.stringify(err)
+                        error = JSON.parse(error)
+                        console.log(error.name)
+                        if (error.name == "SequelizeUniqueConstraintError") {
+                            res.status(406).send(error)
+                        } else {
+                            res.status(404).send(error)
+                        }
+                        // 회원가입 페이지로 이동
+                        // request.post({
+                        //   url: 'http://localhost:5555/register/',
+                        //   body: {
+                        //     email: email
+                        //   },
+                        //   json: true
+                        // }, function (err, response, body) {
+                        //   console.log(err);
+                        //   res.json(body);
+                        // });
+>>>>>>> Stashed changes
 
                     })
 

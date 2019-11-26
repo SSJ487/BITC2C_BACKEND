@@ -39,7 +39,7 @@ router.get('/data', function (req, res) {
             ['createdAt', 'DESC' ]
         ]
     }).then((data) => {
-        ("alarm data: ", data);
+       
         if (data.length <= 0) {
             res.status(404).send('Alarm data is not exist');
         } else {
@@ -53,8 +53,8 @@ router.get('/data', function (req, res) {
 
 router.get('/list', function (req, res) {
     const user = decode.decode(req)
-    var query = 'SElECT * FROM test.TBoards as A ,test.Alarms as B ' +
-        'where(A.id = B.tableId) and B.UserId = :Id '
+    var query = 'SElECT A.selltoken as selltoken,A.buytoken as buytoken ,A.status as status,A.selltokenamount as selltokenamount,A.buytokenamount as buytokenamount,B.createdAt as createdAt FROM test.TBoards as A ,test.Alarms as B where(A.id = B.tableId) and B.UserId = :Id and A.status!=2 order by B.createdAt DESC;'
+     
     var values = {
         Id: user.id
     }
