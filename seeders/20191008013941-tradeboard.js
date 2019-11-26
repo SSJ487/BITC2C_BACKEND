@@ -1,56 +1,216 @@
 'use strict';
 
+var add_minutes =  function (dt, minutes) {
+  return new Date(dt.getTime() + minutes*60000);
+}
+
+function change(date1,date){
+  let temp =0;
+
+
+  return
+}
+
 module.exports = {
   up: (queryInterface, Sequelize) => {
     let datas =[]
     let methodname;
 
-    const coindata = ["ETH","Atoken","Btoken","Ctoken"];
-    const coindata1 = ["ETH","Atoken","Btoken","Ctoken"];
+    const coindata = ["Atoken","Btoken","Ctoken"];
+
+    let d1 = new Date()
     for(let i =0;i<250;i++){
 
-      if(i%2==0){
-        methodname="sell";
-      }else{
-        methodname="buy";
-      }
-      
-      const priceRandom = parseInt(Math.random() * (10000000-10000)+10000)
-      const statusRandom = parseInt(Math.random() * (3-0)+0 )
-      const amountRandom = parseInt(Math.random() *(10000 -10) +10)
-      const amountRandom1 = parseInt(Math.random() *(10000 -10) +10)
+
+      let d3 =new Date(d1.getMinutes()+(60*i))
+
+
+      let beginRandom = parseInt(Math.random() *(30000 -10) +10)
+      let endRandom = parseInt(Math.random() *(30000 -10) +10)
+      let lowRandom = parseInt(Math.random() *(30000 -10) +10)
+      let highRandom = parseInt(Math.random() *(30000 -10) +10)
       const coindatarandom1=parseInt(Math.random() * (4-0)+0 )
-      const coindatarandom2=parseInt(Math.random() * (4-0)+0 )
-      const sellbuyrandom = parseInt(Math.random()*(2-0)+0);
-      let sellid =0;
-      let buyid =0;
-      if(sellbuyrandom===0){
-        sellid =1;
-        buyid =null;
-      }else{
-        buyid=1;
-        sellid=null;
+
+      let temp =0;
+      let temp1 =0;
+      let temp2 =0;
+      let temp3 = 0;
+      let temp4 =0;
+      if(highRandom<lowRandom){
+        temp = lowRandom;
+        lowRandom=highRandom;
+        highRandom=temp;
       }
+
+      if(beginRandom>highRandom){
+        temp1 = beginRandom
+        beginRandom=highRandom
+        highRandom=temp1
+
+      }
+      if(beginRandom<lowRandom){
+        temp2 = beginRandom
+        beginRandom=lowRandom
+        lowRandom=temp2
+
+      }
+      if(endRandom>highRandom){
+        temp3 = beginRandom
+        endRandom=highRandom
+        highRandom=temp1
+
+      }
+      if(endRandom<lowRandom){
+        temp4 = endRandom
+        endRandom=lowRandom
+        lowRandom=temp4
+
+      }
+
     
       let obj={
-        selltoken:coindata[coindatarandom1],
-        buytoken:coindata1[coindatarandom2],
-        selltokenamount:amountRandom,
-        buytokenamount:amountRandom1,
-        contractwallet:"asdfasdf",
-        status:statusRandom,
+        type:"Atoken",
+        begin:beginRandom,
+        end:endRandom,
+        low:lowRandom,
+        high:highRandom,
+        date: add_minutes(new Date(), (60*i) ),
         createdAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
         updatedAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
-        SellerId:sellid,
-        buyerId:buyid,
-        Expirydate:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+
       }
       datas.push(obj)
     }
-    return queryInterface.bulkInsert('TBoards',datas,{});
+    for(let i =0;i<250;i++){
+
+
+      let d3 =new Date(d1.getMinutes()+(60*i))
+
+
+      let beginRandom = parseInt(Math.random() *(30000 -10000) +10000)
+      let endRandom = parseInt(Math.random() *(beginRandom -10000) +10000)
+      let lowRandom = parseInt(Math.random() *(30000 -10000) +10000)
+      let highRandom = parseInt(Math.random() *(lowRandom+200 -10000) +10000)
+      const coindatarandom1=parseInt(Math.random() * (4-0)+0 )
+
+      let temp =0;
+      let temp1 =0;
+      let temp2 =0;
+      let temp3 = 0;
+      let temp4 =0;
+      if(highRandom<lowRandom){
+        temp = lowRandom;
+        lowRandom=highRandom;
+        highRandom=temp;
+      }
+
+      if(beginRandom>highRandom){
+        temp1 = beginRandom
+        beginRandom=highRandom
+        highRandom=temp1
+
+      }
+      if(beginRandom<lowRandom){
+        temp2 = beginRandom
+        beginRandom=lowRandom
+        lowRandom=temp2
+
+      }
+      if(endRandom>highRandom){
+        temp3 = beginRandom
+        endRandom=highRandom
+        highRandom=temp1
+
+      }
+      if(endRandom<lowRandom){
+        temp4 = endRandom
+        endRandom=lowRandom
+        lowRandom=temp4
+
+      }
+
+
+      let obj={
+        type:"Ctoken",
+        begin:beginRandom,
+        end:endRandom,
+        low:lowRandom,
+        high:highRandom,
+        date: add_minutes(new Date(), (60*i) ),
+        createdAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+        updatedAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+
+      }
+      datas.push(obj)
+    }
+
+    for(let i =0;i<250;i++){
+
+
+      let d3 =new Date(d1.getMinutes()+(60*i))
+
+
+      let beginRandom = parseInt(Math.random() *(30000 -10) +10)
+      let endRandom = parseInt(Math.random() *(30000 -10) +10)
+      let lowRandom = parseInt(Math.random() *(30000 -10) +10)
+      let highRandom = parseInt(Math.random() *(30000 -10) +10)
+      const coindatarandom1=parseInt(Math.random() * (4-0)+0 )
+
+      let temp =0;
+      let temp1 =0;
+      let temp2 =0;
+      let temp3 = 0;
+      let temp4 =0;
+      if(highRandom<lowRandom){
+        temp = lowRandom;
+        lowRandom=highRandom;
+        highRandom=temp;
+      }
+
+      if(beginRandom>highRandom){
+        temp1 = beginRandom
+        beginRandom=highRandom
+        highRandom=temp1
+
+      }
+      if(beginRandom<lowRandom){
+        temp2 = beginRandom
+        beginRandom=lowRandom
+        lowRandom=temp2
+
+      }
+      if(endRandom>highRandom){
+        temp3 = beginRandom
+        endRandom=highRandom
+        highRandom=temp1
+
+      }
+      if(endRandom<lowRandom){
+        temp4 = endRandom
+        endRandom=lowRandom
+        lowRandom=temp4
+
+      }
+
+
+      let obj={
+        type:"Btoken",
+        begin:beginRandom,
+        end:endRandom,
+        low:lowRandom,
+        high:highRandom,
+        date: add_minutes(new Date(), (60*i) ),
+        createdAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+        updatedAt:new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''),
+
+      }
+      datas.push(obj)
+    }
+
+    return queryInterface.bulkInsert('Charts',datas,{});
   },
 
   down: (queryInterface, Sequelize) => {
-   return queryInterface.bulkDelete('TBoards',null,{});
+   return queryInterface.bulkDelete('Charts',null,{});
   }
 };

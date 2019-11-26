@@ -1,21 +1,14 @@
-const express = require('express')
-const router = express.Router()
-
 const Web3 = require('web3')
 var contract = require("truffle-contract")
-const util = require('util')
-const assert = require('assert')
 const fs = require('fs')
 var path = require("path")
 path.join(process.cwd(), "abi/AToken.json")
-
 
 var web3Provider = new Web3.providers.HttpProvider('http://b3b11115.ngrok.io')
 var web3 = new Web3(web3Provider)
 
 
 const UserCrud_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
-
 const AT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/AToken.json"), 'utf-8')
 const BT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/Btoken.json"), 'utf-8')
 const CT_contract_json = fs.readFileSync(path.join(process.cwd(), "abi/Ctoken.json"), 'utf-8')
@@ -40,90 +33,116 @@ AT_contract.setProvider(web3Provider)
 BT_contract.setProvider(web3Provider)
 CT_contract.setProvider(web3Provider)
 
-
-router.get('/test', (req, res) => {
-    console.log("e")
-    res.json(web3.callcontract())
-})
-
-router.get('/balance', (req, res) => {
-    web3.eth.accounts().then((result) => {
-        res.json(result)
-    })
-
-})
-
-router.post('/unlock', (req, res) => {
-
-    web3.eth.personal.unlockAccount(req.body.addr, req.body.password).then((result) => {
-        console.log('result =>', result)
-        res.json(result)
-    })
-
-
-})
-
-router.post('/tokensign', (req, res) => {
-    const addr = req.body.addr
-    const password = req.body.password
-
-    web4.signTest(addr, password).then((result) => {
-        console.log(result)
-        res.json(result)
-    })
-
-
-})
-
-router.post('/transfer', (req, res) => {
-    const addr1 = req.body.addr1
-    const addr2 = req.body.addr2
-    const value = req.body.value
-
-    console.log("addr1 = ", addr1)
-    console.log("addr2 = ", addr2)
-    console.log("value = ", value)
-
-    AT_contract.deployed().then(instance => {
-        instance.transfer(addr2, value, {from: addr1}).then(result => {
-
-        })
-    })
-    console.log("asdasdasdasdasd")
-    // BT_contract.deployed().then(instance => {
-    //     instance.transfer(addr2, value, {from: addr1}).then(result => {
-    //
-    //     })
-    // })
-    // CT_contract.deployed().then(instance => {
-    //     instance.transfer(addr2, value, {from: addr1}).then(result => {
-    //
-    //     })
-    // })
-    console.log("asdasdasdasda111sd")
-
-
-})
-
-router.post('/getbalnace', (req, res) => {
-    var BN = web3.utils.BN
-    const addr2 = req.body.addr2
-    let a = []
-    AT_contract.deployed().then(instance => {
-        instance.balanceOf(addr2).then((data) => {
-            const bc = new BN(data).toString()
-            a.push(bc)
-            BT_contract.deployed().then(instance => {
-                instance.balanceOf(addr2).then((data) => {
-                    const ka = new BN(data).toString()
-                    a.push(ka)
-                    res.json(a)
+function getUser(email) {
+    return U_contract.deployed()
+        .then(function (instance) {
+            instance.getInfo(email)
+                .then((res) => {
+                    return res
                 })
+        })
+}
+
+function addUser(email, strName, strPassWord, strAccount, EmailCheck) {
+    return U_contract.deployed()
+        .then(function (instance) {
+            instance.addInfo(email, strName, strPassWord, strAccount, EmailCheck, {from: "0x68Fb207bccf6063fEA145188787d4388A11b7592"})
+                .then((res) => {
+                    console.log(res)
+                    return ({a: "true"})
+                }).catch((e) => {
+                console.log(e)
+                return (e)
             })
         })
-    })
-})
+}
 
+function updateUser(email, strName, strPassWord, strAccount, EmailCheck) {
+    return U_contract.deployed()
+        .then(function (instance) {
+            instance.updateInfo(email, strName, strPassWord, strAccount, EmailCheck, {from: "0x68Fb207bccf6063fEA145188787d4388A11b7592"})
+                .then((res) => {
+                    return res
+                })
+        })
+}
+
+function deleteUser(email) {
+    return U_contract.deployed()
+        .then(function (instance) {
+            instance.removeInfo(email)
+                .then((res) => {
+                    return res
+                })
+        })
+}
+
+function createwallet(password) {
+    return web3.eth.personal.newAccount(password)
+}
+
+function unlockAccount(addr, password) {
+    return web3.eth.personal.unlockAccount(addr, password, 0)
+}
+
+async function signTest(addr, pass) {
+    try {
+        var res = await web3.eth.personal.sign("Hello world", addr, pass)
+        console.log('sign res ', res)
+
+        // recover the signing account address using original message and signed message
+
+        return true
+    } catch (e) {
+        //console.error(e)
+        console.log('recover fail')
+        return false
+    }
+}
+
+function getbalance(addr) {
+    return new Promise(((resolve) => {
+        let balances = [-1, -1, -1, -1]
+        var BN = web3.utils.BN
+        AT_contract.deployed().then(function (instance) {
+            instance.balanceOf(addr)
+                .then((data) => {
+                    console.log(BN(data).toString())
+                    balances[0] = new BN(data).toString()
+                    if (balances[0] !== -1 && balances[1] !== -1 && balances[2] !== -1 && balances[3] !== -1)
+                        resolve(balances)
+                })
+        })
+
+        BT_contract.deployed().then(function (instance) {
+            instance.balanceOf(addr)
+                .then((data) => {
+                    console.log(BN(data).toString())
+                    balances[1] = new BN(data).toString()
+                    if (balances[0] !== -1 && balances[1] !== -1 && balances[2] !== -1 && balances[3] !== -1)
+                        resolve(balances)
+                })
+        })
+
+        CT_contract.deployed().then(function (instance) {
+            instance.balanceOf(addr)
+                .then((data) => {
+                    console.log(BN(data).toString())
+                    balances[2] = new BN(data).toString()
+                    if (balances[0] !== -1 && balances[1] !== -1 && balances[2] !== -1 && balances[3] !== -1)
+                        resolve(balances)
+                })
+        })
+
+        web3.eth.getBalance(addr)
+            .then((data) => {
+                console.log(data)
+                balances[3] = new BN(data).toString()
+                if (balances[0] !== -1 && balances[1] !== -1 && balances[2] !== -1 && balances[3] !== -1)
+                    resolve(balances)
+            })
+    }))
+}
 
 async function tokenBal(tokenName, tokenArray, contract, contractArray, addr, BN) {
     for (let i = 0; i < tokenArray.length; i++) {
@@ -147,7 +166,6 @@ async function tokenTransfer(contract, fromUser, toUser, amount) {
         .then(async function (instance) {
             await instance.transfer(toUser, amount, {from: fromUser})
                 .then(() => {
-                    console.log("token Tanse ffff asdfunction")
                     return true
                 }).catch(() => {
                     return false
@@ -155,28 +173,18 @@ async function tokenTransfer(contract, fromUser, toUser, amount) {
         }).then((result) => {
             return result
         })
-
-
 }
 
 async function tokenEthTransfer(ethAddr, ethBal, ethAmount, tokenAddr, tokenBal, TokenAmount, tokenContract) {
-    console.log("qwdqwdwdqwd")
-    console.log("ethAmount = ", ethAmount)
-    console.log("tokenAmount = ", TokenAmount)
-    console.log("ethbal = ", ethBal)
-    console.log("tokenbal = ", tokenBal)
     if (ethAmount < parseInt(ethBal) && TokenAmount < parseInt(tokenBal)) {
-        console.log("tokenethtransfer")
         await web3.eth.sendTransaction({
             from: ethAddr,
             to: tokenAddr,
             value: ethAmount
         })
-        console.log("toeknethrtarns====")
         await tokenTransfer(tokenContract, tokenAddr, ethAddr, TokenAmount)
         return true
     } else {
-        console.log("token Eth Tra nnnnn")
         return false
     }
 }
@@ -190,7 +198,6 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
     let userBal_2
     var BN = web3.utils.BN
     if (token_1 !== "ETH" && token_2 !== "ETH") {
-        console.log("transfer11 ===========")
         return new Promise(((resolve) => {
             tokenBal(token_1, tokenName, contract_1, contracts, addr_1, BN)
                 .then((bal) => {
@@ -222,7 +229,6 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
     } else if (token_1 === "ETH") {
         return new Promise((resolve => {
             web3.eth.getBalance(addr_1).then((bal) => {
-                console.log("bal ====", bal)
                 userBal_1 = bal
                 if (typeof (userBal_1) !== "undefined" && typeof (userBal_2) !== "undefined") {
                     resolve()
@@ -230,7 +236,6 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
             })
             tokenBal(token_2, tokenName, contract_2, contracts, addr_2, BN)
                 .then((bal) => {
-                    console.log("tokenball ====", bal[0])
                     userBal_2 = bal[0]
                     contract_2 = bal[1]
                     if (typeof (userBal_1) !== "undefined" && typeof (userBal_2) !== "undefined") {
@@ -239,7 +244,6 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
                 })
         }))
             .then(() => {
-                console.log('asdfasdf11', userBal_2)
                 return new Promise((resolve, reject) => {
                     resolve(tokenEthTransfer(addr_2, userBal_2, token_2_value, addr_1, userBal_1, token_1_value, contract_2))
                 })
@@ -271,19 +275,4 @@ async function transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2
     }
 }
 
-router.post('/test', (req, res) => {
-    addr_1 = req.body.addr1
-    addr_2 = req.body.addr2
-    token_1 = req.body.token_1
-    token_2 = req.body.token_2
-    token_1_value = req.body.token_1_value
-    token_2_value = req.body.token_2_value
-
-    transfer(addr_1, token_1, token_1_value, addr_2, token_2, token_2_value).then((result) => {
-        console.log('test////', result)
-        res.json(result)
-    })
-})
-
-
-module.exports = router
+module.exports = {createwallet, getbalance, unlockAccount, transfer, signTest, getUser, addUser, updateUser, deleteUser}

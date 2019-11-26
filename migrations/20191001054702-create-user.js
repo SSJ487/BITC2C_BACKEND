@@ -9,6 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       email: {
+        unique: true,
         type: Sequelize.STRING
       },
       password: {
@@ -16,12 +17,6 @@ module.exports = {
       },
       name: {
         type: Sequelize.STRING
-      },
-      phone: {
-        type: Sequelize.STRING
-      },
-      point: {
-        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,
@@ -42,7 +37,7 @@ module.exports = {
         }
       }
     }, {
-        timestamp: false,
+        timestamp: true,
         underscored: true
     });
   },
