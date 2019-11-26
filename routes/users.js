@@ -115,6 +115,7 @@ router.post('/create', function (req, res, next) {
                         })
 
                     })
+<<<<<<< Updated upstream
 
                 }).catch(err => {
                     console.log("데이터 추가 실패")
@@ -128,6 +129,29 @@ router.post('/create', function (req, res, next) {
                         res.status(404).send(error)
                     }
 
+=======
+                    .catch(err => {
+                        console.log("데이터 추가 실패")
+                        var error = JSON.stringify(err)
+                        error = JSON.parse(error)
+                        console.log(error.name)
+                        if (error.name == "SequelizeUniqueConstraintError") {
+                            res.status(406).send(error)
+                        } else {
+                            res.status(404).send(error)
+                        }
+                        // 회원가입 페이지로 이동
+                        // request.post({
+                        //   url: 'http://localhost:5555/register/',
+                        //   body: {
+                        //     email: email
+                        //   },
+                        //   json: true
+                        // }, function (err, response, body) {
+                        //   console.log(err);
+                        //   res.json(body);
+                        // });
+>>>>>>> Stashed changes
 
                     })
 
